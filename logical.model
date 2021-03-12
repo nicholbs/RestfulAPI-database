@@ -1,9 +1,10 @@
 ski_types(type_id, Model, Type, Temperature, Grip, Size, Weight_class, Description, Historical, Photo_URL, MSRPP)
 Primary Key id
 
-skis(serial_nr,ski_type, manufactured_date)
-Primary key serial_nr
-Foregin key ski_type REFERENCES ski_types(type_id)
+skis(serial_nr, ski_type, manufactured_date, order_assigned)
+Primary Key serial_nr
+Foreign Key ski_type references ski_types(type_id)
+Foreign Key order_assigned references orders(order_nr)
 
 production_plans(type_id, day, quantity)
 Primary Key (ski_type, day)

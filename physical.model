@@ -17,8 +17,10 @@ CREATE TABLE skis (
 	serial_nr int NOT NULL,
 	ski_type int NOT NULL,
 	manufactured_date date,
+	order_assigned int,
 	PRIMARY KEY (product_nr),
-	FOREIGN KEY (ski_type) REFERENCES ski_types(type_id)
+	FOREIGN KEY (ski_type) REFERENCES ski_types(type_id),
+	FOREIGN KEY (order_assigned) REFERENCES orders(order_nr)
 )
 
 CREATE TABLE employees (
