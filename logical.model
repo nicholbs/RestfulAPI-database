@@ -1,0 +1,51 @@
+ski_types(type_id, Model, Type, Temperature, Grip, Size, Weight_class, Description, Historical, Photo_URL, MSRPP)
+Primary Key id
+
+skis(serial_nr,ski_type, manufactured_date)
+Primary key serial_nr
+Foregin key ski_type REFERENCES ski_types(type_id)
+
+production_plans(type_id, day, quantity)
+Primary Key (ski_type, day)
+Foreign Key Ski_type references Ski_types(type_id)
+
+employees(ID, Name, Department)
+Primary Key Name
+
+Customers(id, StartDate, EndDate, name)
+Primary Key id
+
+franchises(id, ShippingAddress, NegotiatedBuyingPrice)
+Primary Key id
+Foreign Key id references Customer(id)
+
+stores(id, Shipping address, NegotiatedPrice, Franchise)
+Primary Key id
+Foreign Key id references Customer(id)
+Foreign Key Franchise references Franchises(id)
+
+team_skiers(id, date of birth, club, numberOfSkis)
+Primary Key id
+Foreign Key id references Customer(id)
+
+transporters(Name)
+Primary Key Name
+
+shipments(Shipment_nr, recipient, Shipping_addr, Scheduled_pickup, State, Order_id, Transporter, Driver_id)
+Primary Key Shipment_nr
+Foreign Key Order_id references Orders(id)
+Foreign Key Transporter references Transporters(name)
+
+orders(Order_nr, Ski_types, Ski_quantity, Price, Status, Reference_nr, Customer_id, orders_startdate)
+Primary Key Order_nr
+Foreign Key Customer_id references Customers(id)
+Foreign Key Ski_type references Ski_types(type_id)
+
+order_history(Order_nr, State, Customer_rep, Changed_date)
+Primary Key Order_nr, State
+Foreign Key Order_nr references Orders(Order_nr)
+Foreign Key Customer_rep references Employee(id)
+
+order_aggregates (aggregate_id, customer_id)
+Primary Key aggregate_id
+Foreign Key customer_id references Customers(id)
