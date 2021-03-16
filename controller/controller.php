@@ -1,4 +1,5 @@
 <?php
+require_once 'db/publicModel.php';
 class controller{
     public function __construct(){
 
@@ -24,7 +25,9 @@ class controller{
         }
         //her kan vi vidresende til public endpoint
         elseif ($dividedUri[0]== "public"){
-            return $pu;
+            $publicEnd = new publicModel();
+            $res = $publicEnd ->getAllSkiTypes();
+            return $res;
         }
         else{
             return $test;
