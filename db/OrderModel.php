@@ -1,5 +1,6 @@
 <?php
 require_once 'DB.php';
+require_once 'AbstractModel.php';
 
 /**
  * Class OrderModel class for accessing used car data in database.
@@ -19,8 +20,17 @@ class OrderModel extends AbstractModel {
      *               array will be empty if there are no resources to be returned.
      * @throws APIException if the $query variable is incorrectly formatted
      */
-    function getCollection(array $query = null): array
+   function getCollection(array $query = null): array
+
     {
+        //echo("\n Hit kom jeg \n");
+        $kommando = $this ->db ->query("SELECT * FROM ski_types");
+        $resultatfradb =$kommando ->fetchAll();
+
+
+        //print_r($resultatfradb); //skriver ut hele arrayen.
+
+        return $resultatfradb;
         
     }
 
