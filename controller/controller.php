@@ -27,10 +27,9 @@ class controller{
             return $vi;
         }
         elseif ($dividedUri[0] == "order") {
-           // OrderModel::getCollection();
-            $res = new OrderModel();
-            $res -> getCollection();
-            return $res;
+            $p = new OrderModel();
+            $f= $p ->getCollection();
+            return $f;
 
 
         }
