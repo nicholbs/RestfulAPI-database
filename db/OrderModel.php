@@ -24,7 +24,7 @@ class OrderModel extends AbstractModel {
 
     {
         //echo("\n Hit kom jeg \n");
-        $kommando = $this ->db ->query("SELECT * FROM ski_types");
+        $kommando = $this ->db ->query("SELECT * FROM orders");
         $resultatfradb =$kommando ->fetchAll();
 
 

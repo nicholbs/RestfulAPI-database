@@ -27,11 +27,7 @@ class controller{
             return $vi;
         }
         elseif ($dividedUri[0] == "order") {
-            $p = new OrderModel();
-            $f= $p ->getCollection();
-            return $f;
-
-
+            return (new OrderModel())->getCollection();
         }
         //her kan vi vidresende til public endpoint
         elseif ($dividedUri[0]== "public"){
