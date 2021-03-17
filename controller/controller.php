@@ -1,6 +1,7 @@
 <?php
 require_once 'db/publicModel.php';
 require_once 'db/OrderModel.php';
+require_once 'StorekeeperModel.php';
 class controller{
     public function __construct(){
 
@@ -25,7 +26,10 @@ class controller{
                 break;
             case "orders": echo "orderS endpoint"; break;
             case "customer" : echo "customer endpoint"; break;
-            case "storekeeper": echo "storekeeper endpint"; break;
+            case "storekeeper": 
+                echo "storekeeper endpint"; 
+                
+                break;
             case "production-.plans": echo "production-plans";break;
             case "public":
                 $publicEnd = new publicModel();
