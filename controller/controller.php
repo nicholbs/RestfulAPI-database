@@ -22,9 +22,6 @@ class controller{
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
         switch ($witchEndpoint){
-            case "order":
-                return (new OrderModel())->getCollection();
-                break;
             case "orders": echo "orderS endpoint"; break;
             case "customer" : echo "customer endpoint"; break;
             case "storekeeper": 
