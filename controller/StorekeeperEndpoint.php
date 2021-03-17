@@ -1,6 +1,6 @@
 <?php
 //require_once 'RESTConstants.php';
-require_once 'db/OrderModel.php';
+require_once 'db/StorekeeperModel.php';
 
 class StorekeeperEndpoint
 {
@@ -21,7 +21,7 @@ class StorekeeperEndpoint
 
     private function retrieveOrders(): array
     {
-        return (new OrderModel())->getCollection();
+        return (new StorekeeperModel())->retrieveOrders();
     }
 
     private function createSki()
