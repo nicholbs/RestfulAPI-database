@@ -1,7 +1,8 @@
 <?php
 require_once 'db/publicModel.php';
 require_once 'db/OrderModel.php';
-require_once 'StorekeeperModel.php';
+require_once 'db/StorekeeperModel.php';
+require_once 'StorekeeperEndpoint.php';
 class controller{
     public function __construct(){
 
@@ -27,8 +28,8 @@ class controller{
             case "orders": echo "orderS endpoint"; break;
             case "customer" : echo "customer endpoint"; break;
             case "storekeeper": 
-                echo "storekeeper endpint"; 
-                
+                echo "storekeeper endpoint"; 
+                return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "production-.plans": echo "production-plans";break;
             case "public":

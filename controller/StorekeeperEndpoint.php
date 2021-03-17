@@ -2,9 +2,9 @@
 //require_once 'RESTConstants.php';
 require_once 'db/OrderModel.php';
 
-class DealersEndpoint
+class StorekeeperEndpoint
 {
-    public function handleRequest($uri,$requestType)
+    public function handleRequest($uri,$specificQuery,$requestType)
     {
         switch($uri[1])
         {
