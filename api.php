@@ -1,5 +1,5 @@
 <?php
-echo("\n Info: ");
+echo("\n Info: \n");
 require_once 'controller/controller.php';
 header('Content-Type: application/json'); //formaterer headerene til å bli json format
 
@@ -33,8 +33,8 @@ print_r($dividedUri);
 echo("\n Body content: \n");
 print_r($requestBodyJson);
 
-echo("\nHer ser vi rådata motatt i api.php filen: \n \n");
-print_r($_SERVER); //leser ut all info fra requeste
+//echo("\nHer ser vi rådata motatt i api.php filen: \n \n");
+//print_r($_SERVER); //leser ut all info fra requeste
 
 
 
