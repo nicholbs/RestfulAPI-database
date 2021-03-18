@@ -19,7 +19,7 @@ $requestBodyJson = json_decode($requestBody,true); // converting the body to JSO
 
 //sends the information to the controller
 $controller = new controller();
-$res = $controller ->request($dividedUri,$specificQuery,$requestType);
+$res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
 echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
 
 

@@ -1,8 +1,8 @@
 <?php
 //require_once 'RESTConstants.php';
-require_once 'db/StorekeeperModel.php';
+require_once 'db/customerRepModel.php';
 
-class StorekeeperEndpoint
+class customerRepEndpoint
 {
     public function handleRequest($uri,$specificQuery,$requestType,$requestBodyJson)
     {
@@ -10,22 +10,17 @@ class StorekeeperEndpoint
         {
             case 'orders':
                 if($requestType == 'GET')
-                    return $this->retrieveOrders();
+                return $this ->retrieveOrders();
                 break;
             case 'ski':
                 if($requestType == 'POST')
-                    $this->createSki();
+                    echo  "post customer-rep";
                 break;
         }
     }
-
     private function retrieveOrders(): array
     {
-        return (new StorekeeperModel())->retrieveOrders();
+        return (new customerRepModel())->retrieveOrders();
     }
 
-    private function createSki()
-    {
-
-    }
 }

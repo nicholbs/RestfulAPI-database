@@ -3,7 +3,11 @@ require_once 'db/publicModel.php';
 // require_once 'db/OrderModel.php';
 require_once 'db/StorekeeperModel.php';
 require_once 'StorekeeperEndpoint.php';
+<<<<<<< HEAD
 require_once 'CustomerEndpoint.php';
+=======
+require_once 'customerRepEndpoint.php';
+>>>>>>> 72c25864a7ba083d8a84ab65168fb805cdde91e1
 class controller{
     public function __construct(){
 
@@ -19,7 +23,7 @@ class controller{
      */
 
 
-    public  function request($dividedUri,$specificQuery,$requestType){
+    public  function request($dividedUri,$specificQuery,$requestType,$requestBodyJson){
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
         switch ($witchEndpoint){
@@ -30,13 +34,17 @@ class controller{
                 break;
             case "storekeeper": 
                 echo "storekeeper endpoint"; 
-                return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
+                return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
             case "production-.plans": echo "production-plans";break;
             case "public":
                 $publicEnd = new publicModel();
                 $res = $publicEnd ->getAllSkiTypes();
                 return $res;
+                break;
+            case "customer-rep":
+                //echo "vi er i customer-rep";
+                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
             default: return "error no url";
 
