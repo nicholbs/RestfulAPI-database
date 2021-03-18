@@ -21,23 +21,23 @@ class CustomerEndpoint
             //     break;
             case 'order':
                 if($requestType == 'GET')
-                    $this->getOrder();
+                    return $this->getOrder($uri[1], $uri[3]);
                 break;
             case 'order':
                 if($requestType == 'DELETE')
-                    $this->deleteOrder();
+                    return $this->deleteOrder($uri[1], $uri[3]);
                 break;
             case 'order':
                 if($requestType == 'POST')
-                    $this->createOrder();
+                return $this->createOrder($uri[1], $uri[3]);
                 break;
             case 'orders':
                 if($requestType == 'GET')
-                    $this->createSki();
+                return $this->createSki();
                 break;
             case 'orders':
                 if($requestType == 'POST')
-                    $this->createSki();
+                return $this->createSki();
                 break;
             case 'splitorder':
                 if($requestType == 'POST')
@@ -53,19 +53,19 @@ class CustomerEndpoint
     }
 
     // retrieve an order
-    private function getOrder()
+    private function getOrder($customerId, $orderNr)
     {
-        return (new CustomerModel())->retrieveCustomerOrder();
+        return (new CustomerModel())->retrieveCustomerOrder($customerId, $orderNr);
     }
     // delete an order
-    private function deleteOrder()
+    private function deleteOrder($customerId, $orderNr)
     {
-        return (new CustomerModel())->deleteCustomerOrder();
+        return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
     }
     // create an order
-    private function createOrder()
+    private function createOrder($customerId, $orderNr)
     {
-        return (new CustomerModel())->postCustomerOrder();
+        return (new CustomerModel())->postCustomerOrder($customerId, $orderNr);
     }
 
 
