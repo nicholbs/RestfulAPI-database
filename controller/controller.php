@@ -3,6 +3,7 @@ require_once 'db/publicModel.php';
 require_once 'db/OrderModel.php';
 require_once 'db/StorekeeperModel.php';
 require_once 'StorekeeperEndpoint.php';
+require_once 'customerRepEndpoint.php';
 class controller{
     public function __construct(){
 
@@ -33,6 +34,10 @@ class controller{
                 $publicEnd = new publicModel();
                 $res = $publicEnd ->getAllSkiTypes();
                 return $res;
+                break;
+            case "customer-rep":
+                //echo "vi er i customer-rep";
+                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             default: return "error no url";
 
