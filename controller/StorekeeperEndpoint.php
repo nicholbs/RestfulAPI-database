@@ -4,7 +4,7 @@ require_once 'db/StorekeeperModel.php';
 
 class StorekeeperEndpoint
 {
-    public function handleRequest($uri,$specificQuery,$requestType)
+    public function handleRequest($uri,$specificQuery,$requestType,$requestBodyJson)
     {
         switch($uri[1])
         {

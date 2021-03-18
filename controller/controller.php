@@ -19,7 +19,7 @@ class controller{
      */
 
 
-    public  function request($dividedUri,$specificQuery,$requestType){
+    public  function request($dividedUri,$specificQuery,$requestType,$requestBodyJson){
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
         switch ($witchEndpoint){
@@ -27,7 +27,7 @@ class controller{
             case "customer" : echo "customer endpoint"; break;
             case "storekeeper": 
                 echo "storekeeper endpoint"; 
-                return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
+                return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
             case "production-.plans": echo "production-plans";break;
             case "public":
@@ -37,7 +37,7 @@ class controller{
                 break;
             case "customer-rep":
                 //echo "vi er i customer-rep";
-                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType);
+                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
             default: return "error no url";
 
