@@ -6,8 +6,8 @@ class StorekeeperModel extends DB
 {
     public function retrieveOrders(): array
     {
-        $stmt = $this ->db ->query("SELECT * FROM orders");
-        $res =$stmt ->fetchAll();
+        $stmt = $this->db->query("SELECT * FROM orders");
+        $res = $stmt->fetchAll();
 
         return $res;
     }
