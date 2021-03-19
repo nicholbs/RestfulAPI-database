@@ -20,25 +20,29 @@ class CustomerEndpoint
             //         return $this->retrievePlan();
             //     break;
             case 'order':
-                if($requestType == 'GET')
+                if($requestType == 'GET') {
                     return $this->getOrder($uri[1], $uri[3]);
-                break;
-            case 'order':
-                if($requestType == 'DELETE')
+                }
+                if($requestType == 'DELETE') {
                     return $this->deleteOrder($uri[1], $uri[3]);
+                }
+                if($requestType == 'POST') {
+                    return $this->createOrder($uri[1], $uri[3]);
+                }
                 break;
-            case 'order':
-                if($requestType == 'POST')
-                return $this->createOrder($uri[1], $uri[3]);
-                break;
-            case 'orders':
-                if($requestType == 'GET')
-                return $this->createSki();
-                break;
-            case 'orders':
-                if($requestType == 'POST')
-                return $this->createSki();
-                break;
+            // // gir det noe mening å ha orders??
+            // // case 'orders':
+            // //     if($requestType == 'GET') {
+            // //         return $this->getOrders();
+            // //     }
+            // //     if($requestType == 'DELETE') {
+            // //         return $this->deleteOrders();
+            // //     }
+                
+            // //     if($requestType == 'POST') {
+            // //         return $this->createOrders();
+            // //     }
+            // //     break;
             case 'splitorder':
                 if($requestType == 'POST')
                     $this->createSki();
@@ -67,6 +71,23 @@ class CustomerEndpoint
     {
         return (new CustomerModel())->postCustomerOrder($customerId, $orderNr);
     }
+
+    // Trenger vi disse engang??
+    // // // retrieve orders
+    // // private function getOrders($customerId, $orderNr)
+    // // {
+    // //     return (new CustomerModel())->retrieveCustomerOrder($customerId, $orderNr);
+    // // }
+    // // // delete orders
+    // // private function deleteOrders($customerId, $orderNr)
+    // // {
+    // //     return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
+    // // }
+    // // // create orders
+    // // private function createOrders($customerId, $orderNr)
+    // // {
+    // //     return (new CustomerModel())->postCustomerOrder($customerId, $orderNr);
+    // // }
 
 
 
