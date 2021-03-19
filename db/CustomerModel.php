@@ -8,7 +8,9 @@ class CustomerModel extends DB
     public function retrieveProdPlan(): array
     {
         echo "retrieveProdPlan";
-        $stmt = $this ->db ->query("SELECT * FROM orders");
+        $stmt = $this ->db ->query('SELECT * FROM `production_plans` WHERE day >= DATE_ADD(
+            DATE_ADD(CURDATE(), INTERVAL - WEEKDAY(CURDATE()) DAY),
+            INTERVAL - 4 WEEK)');
         $res =$stmt ->fetchAll();
         
         return $res;
@@ -16,7 +18,7 @@ class CustomerModel extends DB
     
     
     // retrieve an order
-    public function retrieveCustomerOrder($customer_nr, $order_nr): array
+    public function retrieveCustomerOrder($customer_nr, $order_nr)
     {
         echo "\nretrieveCustomerOrder\n";
         echo $customer_nr;
@@ -37,38 +39,52 @@ class CustomerModel extends DB
     // delete an order
     public function deleteCustomerOrder($customer_nr, $order_nr)
     {
-        // echo "\ndeleteCustomerOrder\n";
-        // $sql = "DELETE FROM `orders` WHERE customer_id = {$customer_nr}";
-        // if ($this->db->query($sql) === TRUE) {
-        //     echo "Record deleted successfully";
-        //     return "Success";
-        // } else {
-        //     echo "Error deleting record";
-        //     return "Error";
-        //   }
+        echo "\ndeleteCustomerOrder\n";
+        $stmt = $this->db->prepare('DELETE FROM orders WHERE customer_id = ?');
+        $stmt->execute([$customer_nr]);
+        // $res = $stmt->fetch();
+        return "Success";
     }
     // create an order
     public function postCustomerOrder($customer_nr, $order_nr)
     {
         echo "\npostCustomerOrder\n";
-
+        echo $customer_nr;
+        echo $order_nr;
+        $stmt = $this->db->prepare('INSERT INTO orders(order_nr,customer_id) VALUES (?,?)');
+        $stmt->execute([$order_nr, $customer_nr]);
+        // $res = $stmt->fetch();
+        return "Success";
+        
     }
+    
 
+    // Gir det noe mening å ha orders??
     // get specific orders
     public function getCustomerOrders()
     {
+        echo "\ngetCustomerOrders\n";
+        
+    }
+    // create orders
+    public function deleteCustomerOrders()
+    {
+        echo "\ndeleteCustomerOrders\n";
         
     }
     // create orders
     public function createCustomerOrders()
     {
+        echo "\ncreateCustomerOrders\n";
         
-    }
+    }    
     
     
     // split an order
+    // trenger vi denn engang??
     public function splitOrder()
     {
+        echo "\nsplitCustomerOrders\n";
 
     }
 }

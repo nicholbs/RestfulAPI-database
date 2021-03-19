@@ -28,7 +28,7 @@ echo ("\n \nHer sjekker vi de forskjellige requestene: \n");
 echo("\n requestType: $requestType \n");
 echo("\n The URI: ");
 print_r($specificQuery);
-echo ("\n The divided uri into parts: ");
+echo ("\n The divided uri into parts: \n");
 print_r($dividedUri);
 echo("\n Body content: \n");
 print_r($requestBodyJson);
