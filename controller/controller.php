@@ -1,8 +1,9 @@
 <?php
 require_once 'db/publicModel.php';
-require_once 'db/OrderModel.php';
+// require_once 'db/OrderModel.php';
 require_once 'db/StorekeeperModel.php';
 require_once 'StorekeeperEndpoint.php';
+require_once 'CustomerEndpoint.php';
 require_once 'customerRepEndpoint.php';
 class controller{
     public function __construct(){
@@ -24,7 +25,10 @@ class controller{
 
         switch ($witchEndpoint){
             case "orders": echo "orderS endpoint"; break;
-            case "customer" : echo "customer endpoint"; break;
+            case "customer" : 
+                echo "customer endpoint\n";
+                return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
+                break;
             case "storekeeper": 
                 echo "storekeeper endpoint"; 
                 return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
