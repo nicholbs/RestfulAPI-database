@@ -7,7 +7,7 @@ class CustomerModel extends DB
     // get 4 week product plan
     public function retrieveProdPlan(): array
     {
-        echo "retrieveProdPlan";
+        // echo "retrieveProdPlan";
         $stmt = $this ->db ->query('SELECT * FROM `production_plans` WHERE day >= DATE_ADD(
             DATE_ADD(CURDATE(), INTERVAL - WEEKDAY(CURDATE()) DAY),
             INTERVAL - 4 WEEK)');
@@ -38,7 +38,7 @@ class CustomerModel extends DB
     // delete an order
     public function deleteCustomerOrder($customer_nr, $order_nr)
     {
-        echo "\ndeleteCustomerOrder\n";
+        // echo "\ndeleteCustomerOrder\n";
         $stmt = $this->db->prepare('DELETE FROM orders WHERE customer_id = ?');
         $stmt->execute([$customer_nr]);
         // $res = $stmt->fetch();
@@ -47,9 +47,9 @@ class CustomerModel extends DB
     // create an order
     public function postCustomerOrder($customer_nr, $order_nr)
     {
-        echo "\npostCustomerOrder\n";
-        echo $customer_nr;
-        echo $order_nr;
+        // echo "\npostCustomerOrder\n";
+        // echo $customer_nr;
+        // echo $order_nr;
         $stmt = $this->db->prepare('INSERT INTO orders(order_nr,customer_id) VALUES (?,?)');
         $stmt->execute([$order_nr, $customer_nr]);
         // $res = $stmt->fetch();

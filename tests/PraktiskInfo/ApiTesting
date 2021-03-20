@@ -1,0 +1,25 @@
+Link: https://codeception.com/docs/10-APITesting
+
+API TESTING
+The same way we tested a web site, Codeception allows you to test web services. 
+They are very hard to test manually, so it’s a really good idea to automate web service testing. 
+We have SOAP and REST as standards, which are represented in corresponding modules, which we will cover in this chapter.
+
+You should start by creating a new test suite, (which was not provided by the bootstrap command). We recommend calling it api and using the ApiTester class for it.
+- php vendor/bin/codecept generate:suite api
+
+REST API
+NOTE: REST API testing requires the codeception/module-rest package to be installed.
+
+The REST web service is accessed via HTTP with standard methods: GET, POST, PUT, DELETE. They allow users to receive and manipulate entities from the service. Accessing a WebService requires an HTTP client, so for using it you need the module PhpBrowser or one of framework modules set up. For example, we can use the Symfony module for Symfony2 applications in order to ignore web server and test web service internally.
+
+Configure modules in api.suite.yml:
+actor: ApiTester
+modules:
+    enabled:
+        - REST:
+            url: http://serviceapp/api/v1/
+            depends: PhpBrowser
+
+Once we have configured our new testing suite, we can create the first sample test:
+- php vendor/bin/codecept generate:cest api CreateUser

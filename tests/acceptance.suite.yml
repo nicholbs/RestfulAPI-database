@@ -8,6 +8,6 @@ actor: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-            url: http://localhost/idatg2204-prosjekt:80
+            url: http://localhost/idatg2204-prosjekt
         - \Helper\Acceptance
 step_decorators: ~        

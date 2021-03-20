@@ -5,6 +5,7 @@ require_once 'db/StorekeeperModel.php';
 require_once 'StorekeeperEndpoint.php';
 require_once 'CustomerEndpoint.php';
 require_once 'customerRepEndpoint.php';
+require_once 'TransporterEndpoint.php';
 class controller{
     public function __construct(){
 
@@ -28,6 +29,10 @@ class controller{
             case "customer" : 
                 // echo "customer endpoint\n";
                 return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
+                break;
+            case "shipment" : 
+                // echo "customer endpoint\n";
+                return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "storekeeper": 
                 echo "storekeeper endpoint"; 

@@ -6,6 +6,10 @@ modules:
         - REST:
             url: http://localhost/idatg2204-prosjekt
             depends: PhpBrowser
+        - Db:
+            dsn: 'mysql:host=localhost;dbname=ski_manufacturer'
+            user: 'root'
+            password: ''
 
 # actor: ApiTester
 # modules:
