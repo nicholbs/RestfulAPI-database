@@ -1,0 +1,13 @@
+Link: https://codeception.com/install
+
+COMPOSER (RECOMMENDED)
+Install a Composer to your project's root
+
+Run
+- composer require codeception/codeception --dev
+
+From now on Codeception (with installed PHPUnit) can be run as:
+- php vendor/bin/codecept
+
+Initialize your testing environment with
+- php vendor/bin/codecept bootstrap

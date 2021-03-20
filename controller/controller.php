@@ -26,7 +26,7 @@ class controller{
         switch ($witchEndpoint){
             case "orders": echo "orderS endpoint"; break;
             case "customer" : 
-                echo "customer endpoint\n";
+                // echo "customer endpoint\n";
                 return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "storekeeper": 

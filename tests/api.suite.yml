@@ -1,0 +1,17 @@
+actor: ApiTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://localhost/idatg2204-prosjekt
+        - REST:
+            url: http://localhost/idatg2204-prosjekt
+            depends: PhpBrowser
+
+# actor: ApiTester
+# modules:
+#     enabled:
+#         - \Helper\Api
+
+
+        # - PhpBrowser:
+        #     url: http://localhost

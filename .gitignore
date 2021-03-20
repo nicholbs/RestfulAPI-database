@@ -1,1 +1,10 @@
 .idea/
+
+#Når du kjører: composer require "codeception/codeception" --dev så lages følgende files som er egendefinerte:
+composer.json
+composer.lock
+
+
+#Når du kjører: php vendor/bin/codecept bootstrap så lages følgende files som er egendefinerte:
+codeception.yml
+vendor

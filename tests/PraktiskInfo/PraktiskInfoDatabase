@@ -1,0 +1,5 @@
+Link: https://codeception.com/docs/09-Data
+
+Det skal være mulig å gjøre at før hver test så skjer det en database dump.
+I praksis vil da alltid databasen inneholde de radene/tabellene osv vi ønsker den skal ha.
+Slipper å redigere på databasen hele tiden.

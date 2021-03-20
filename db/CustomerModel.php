@@ -20,11 +20,11 @@ class CustomerModel extends DB
     // retrieve an order
     public function retrieveCustomerOrder($customer_nr, $order_nr)
     {
-        echo "\nretrieveCustomerOrder\n";
-        echo $customer_nr;
-        echo "\n";
-        echo $order_nr;
-        echo "\n";
+        // // echo "\nretrieveCustomerOrder\n";
+        // // echo $customer_nr;
+        // // echo "\n";
+        // // echo $order_nr;
+        // // echo "\n";
         // 
         // $stmt = $this ->db ->prepare('SELECT * FROM `orders` WHERE `customer_id` = :customerId');
         $stmt = $this ->db ->prepare('SELECT * FROM `orders` WHERE `customer_id` = :customerId AND `order_nr` = :orderNr');
@@ -33,7 +33,6 @@ class CustomerModel extends DB
         $stmt->execute();
         
         $res =$stmt->fetchAll();
-        
         return $res;
     }
     // delete an order
