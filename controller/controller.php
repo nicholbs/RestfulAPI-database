@@ -42,8 +42,6 @@ class controller{
             case "production-.plans": echo "production-plans";break;
             case "public":
                return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
-              // $tester = new publicModel();
-               //return $svar= $tester ->getAllSkiTypes();
 
                 break;
             case "customer-rep":

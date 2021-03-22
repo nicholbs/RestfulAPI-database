@@ -10,14 +10,11 @@ class publicEndpoint
         {
             case 'skis':
                 if($requestType == 'GET')
-                   // return $this ->retrieveOrders();
-                    //echo "\n";
-                    return $specificQuery;
-
+                    return $this ->skifilter($specificQuery);
                 break;
             case 'test':
                 echo ("\n Vi er i test på skifilter");
-                $this ->skifilter($specificQuery);
+               return $this ->skifilter($specificQuery);
                 break;
         }
     }
@@ -39,7 +36,6 @@ class publicEndpoint
         }
         //If only the model filter is in use
         elseif (array_key_exists('model',$specificQuery) && $antQueryKeyelements ==1 ){
-            echo("\n vi er i model filter");
 
             return(new publicModel())->getSkiTypesModelFilter($specificQuery);
         }
