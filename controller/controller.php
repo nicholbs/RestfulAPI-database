@@ -6,6 +6,7 @@ require_once 'StorekeeperEndpoint.php';
 require_once 'CustomerEndpoint.php';
 require_once 'customerRepEndpoint.php';
 require_once 'TransporterEndpoint.php';
+require_once 'PublicEndpoint.php';
 class controller{
     public function __construct(){
 
@@ -40,9 +41,10 @@ class controller{
                 break;
             case "production-.plans": echo "production-plans";break;
             case "public":
-                $publicEnd = new publicModel();
-                $res = $publicEnd ->getAllSkiTypes();
-                return $res;
+                //$publicEnd = new publicModel();
+                //$res = $publicEnd ->getAllSkiTypes();
+                return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+                //return $res;
                 break;
             case "customer-rep":
                 //echo "vi er i customer-rep";
