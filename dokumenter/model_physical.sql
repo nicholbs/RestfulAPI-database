@@ -78,7 +78,7 @@ CREATE TABLE orders (
     price int NOT NULL,
     state ENUM ('new', 'open', 'skis-available') DEFAULT 'new',
     customer_id int NOT NULL,
-    placed_date date DEFAULT CURRENT_TIMESTAMP,
+    date_placed date DEFAULT CURRENT_TIMESTAMP,
     order_aggregate int,
     PRIMARY KEY (order_nr)
 );
@@ -232,9 +232,9 @@ VALUES ('Flyttegutta A/S'), ('Reposisjoneringspatruljen');
 INSERT INTO `order_aggregates`(`customer_id`)
 VALUES (2);
 
-INSERT INTO `orders`(`ski_type`, `ski_quantity`, `price`, `state`, `customer_id`, `order_aggregate`) VALUES
-(1, 100, 208000, 'new', 2, 1), (2, 50, 58500, 'new', 2, 1), (3, 30, 32175, 'open', 3, NULL), (2, 5, 7200, 'skis-available', 4, NULL),
-(1, 3, 9600, 'skis-available', 1, NULL);
+INSERT INTO `orders`(`ski_type`, `ski_quantity`, `price`, `state`, `customer_id`, `order_aggregate`, `date_placed`) VALUES
+(1, 100, 208000, 'new', 2, 1, '2021-03-22'), (2, 50, 58500, 'new', 2, 1, '2021-03-22'), (3, 30, 32175, 'open', 3, NULL, '2021-03-19'), 
+(2, 5, 7200, 'skis-available', 4, NULL, '2021-03-15'), (1, 3, 9600, 'skis-available', 1, NULL, '2021-03-17');
 
 INSERT INTO `order_history`(`order_nr`,`state`, `customer_rep`, `changed_date`) 
 VALUES (3, 'open', 1, '2021-03-12'), (4, 'open', 1, '2021-03-19'), (4, 'skis-available', 1, '2021-03-20'), (5, 'open', 1, '2021-03-22'),
