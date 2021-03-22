@@ -54,6 +54,7 @@ class CustomerEndpoint
     private function retrievePlan(): array
     {
         return (new CustomerModel())->retrieveProdPlan();
+        
     }
 
     // retrieve an order

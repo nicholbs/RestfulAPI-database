@@ -1,0 +1,64 @@
+Link: https://codeception.com/docs/03-AcceptanceTests
+
+For å lage en test skriv:
+- php vendor/bin/codecept generate:cest acceptance navnPåFil
+Da genereres "navnPåFil.php" og inni filen kjennetegnes følgende:
+_before 
+_after
+Som er metoder for å kjøre visse handlinger før og etter en test.
+Du står deretter fritt frem til å slette _before og _after om de ikke er nødvendig, i tillegg lage egne funksjoner for eks:
+class SigninCest
+{
+    public function signInSuccessfully(AcceptanceTester $I)
+    {
+        $I->amOnPage('/login');
+        $I->fillField('Username','davert');
+        $I->fillField('Password','qwerty');
+        $I->click('Login');
+        $I->see('Hello, davert');
+    }
+}
+
+Etter å ha laget en test kan du bruke "php vendor/bin/codecept generate:scenarios"
+Scenarios er utskrift av hva som skjer i scenario, denne har ikke noen stor effekt for vår del men utskriften kommer på _data folderen som:
+I amOnPage '/login'
+I fillField 'Username','davert'
+I fillField 'Password','qwerty'
+I click 'Login'
+I see 'Hello, davert'
+
+For å kjøre alle tester kjør kommandoen:
+- php vendor/bin/codecept run
+
+For å kjøre tester spesifikt i en av test folderene, og i tillegg få detaljert output:
+- php vendor/bin/codecept run acceptance --steps
+
+Et eksempel på fullstendig scenario av tester:
+class TaskCrudCest
+{
+    function _before(AcceptanceTester $I)
+    {
+        // will be executed at the beginning of each test
+        $I->amOnPage('/task');
+    }
+
+    function createTask(AcceptanceTester $I)
+    {
+       // todo: write test
+    }
+
+    function viewTask(AcceptanceTester $I)
+    {
+       // todo: write test
+    }
+
+    function updateTask(AcceptanceTester $I)
+    {
+        // todo: write test
+    }
+
+    function deleteTask(AcceptanceTester $I)
+    {
+       // todo: write test
+    }
+}
