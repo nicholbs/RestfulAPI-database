@@ -9,4 +9,4 @@ composer.lock
 codeception.yml
 vendor
 
-tests/api.suite.yml
+api.suite.yml
