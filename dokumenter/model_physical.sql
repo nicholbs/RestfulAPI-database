@@ -118,7 +118,7 @@ CREATE TABLE production_plans (
 
 ALTER TABLE skis 
 ADD CONSTRAINT skis_skitypes_fk 
-FOREIGN KEY (serial_nr) 
+FOREIGN KEY (ski_type) 
 REFERENCES ski_types(type_id) 
 ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -175,13 +175,13 @@ ADD CONSTRAINT order_history_orders_fk
 FOREIGN KEY(order_nr) 
 REFERENCES orders(order_nr) 
 ON DELETE CASCADE ON UPDATE CASCADE;
-/*
+
 ALTER TABLE order_history 
 ADD CONSTRAINT order_history_employees_fk 
 FOREIGN KEY(customer_rep) 
 REFERENCES employees(employee_id) 
-ON DELETE SET NULL ON UPDATE CASCADE;
-*/
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
 ALTER TABLE order_aggregates 
 ADD CONSTRAINT order_aggregates_customer_fk 
 FOREIGN KEY(customer_id) 
@@ -211,13 +211,6 @@ INSERT INTO `ski_types` (`model`, `type`, `temperature`, `grip`, `size`, `weight
 ('Redline', 'Classic', 'warm', 'Grippers', '167', '40-50', 'Slightly small skis.', '0', '1800'),
 ('Active Plain', 'Skate', 'cold', 'Handles', '197', '80-90', 'For big boys.', '1', '1650');
 
-INSERT INTO `skis`(`ski_type`, `manufactured_date`, `order_assigned`) VALUES
-(1, '2021-02-21', 5), (1, '2021-02-21', 5), (1, '2021-02-21', 5), (1, '2021-02-21', NULL), (1, '2021-02-21', NULL), (1, '2021-02-21', NULL),
-(1, '2021-02-21', NULL), (1, '2021-02-21', NULL), (1, '2021-02-21', NULL), (2, '2021-01-29', 4), (2, '2021-01-29', 4), (2, '2021-01-29', 4),
-(2, '2021-01-29', 4), (2, '2021-01-29', 4), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL),
-(3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL),
-(3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL);
-
 INSERT INTO `employees`(`first_name`, `last_name`, `department`)
 VALUES ('Sylvester', 'Sølvtunge', 'customer-rep'), ('Njalle', 'Nøysom', 'production_planner'), ('Didrik', 'Disk', 'storekeeper');
 
@@ -234,7 +227,10 @@ INSERT INTO `team_skiers`(`customer_id`, `birthdate`, `club`, `skis_per_year`)
 VALUES (1, '1963-04-21', 'Uteklubben', 5);
 
 INSERT INTO `transporters`(`name`)
-VALUES (`Flyttegutta A/S`), (`Reposisjoneringspatruljen`);
+VALUES ('Flyttegutta A/S'), ('Reposisjoneringspatruljen');
+
+INSERT INTO `order_aggregates`(`customer_id`)
+VALUES (2);
 
 INSERT INTO `orders`(`ski_type`, `ski_quantity`, `price`, `state`, `customer_id`, `order_aggregate`) VALUES
 (1, 100, 208000, 'new', 2, 1), (2, 50, 58500, 'new', 2, 1), (3, 30, 32175, 'open', 3, NULL), (2, 5, 7200, 'skis-available', 4, NULL),
@@ -242,10 +238,14 @@ INSERT INTO `orders`(`ski_type`, `ski_quantity`, `price`, `state`, `customer_id`
 
 INSERT INTO `order_history`(`order_nr`,`state`, `customer_rep`, `changed_date`) 
 VALUES (3, 'open', 1, '2021-03-12'), (4, 'open', 1, '2021-03-19'), (4, 'skis-available', 1, '2021-03-20'), (5, 'open', 1, '2021-03-22'),
-(5, 'open', 1, '2021-03-22');
-
-INSERT INTO `order_aggregates`(`customer_id`)
-VALUES (2);
+(5, 'skis-available', 1, '2021-03-22');
 
 INSERT INTO `shipments`(`customer_id`, `shipping_address`, `scheduled_pickup`, `state`, `order_nr`, `transporter`, `driver_id`)
 VALUES (4, 'Gaten 41', '2021-03-27', 'picked-up', 4, 'Reposisjoneringspatruljen', 123167), (1, 'Monsensgate 1', '2021-04-05', 'ready', 5, 'Flyttegutta A/S', 120943);
+
+INSERT INTO `skis`(`ski_type`, `manufactured_date`, `order_assigned`) VALUES
+(1, '2021-02-21', 5), (1, '2021-02-21', 5), (1, '2021-02-21', 5), (1, '2021-02-21', NULL), (1, '2021-02-21', NULL), (1, '2021-02-21', NULL),
+(1, '2021-02-21', NULL), (1, '2021-02-21', NULL), (1, '2021-02-21', NULL), (2, '2021-01-29', 4), (2, '2021-01-29', 4), (2, '2021-01-29', 4),
+(2, '2021-01-29', 4), (2, '2021-01-29', 4), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL),
+(3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL),
+(3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL);
