@@ -22,6 +22,15 @@ class publicModel extends DB {
 
     }//end of getAllSkies
 
+    /**
+     * This functions find all skis based on models
+     * @param $specificQuery - araay with model filter
+     */
+    public function getSkiTypesModelFilter($specificQuery){
+        echo ("\n In getSkiTypesModelFilter ");
+    }
+
+
 }//End of class public model
 
 //$test =  new publicModel();
