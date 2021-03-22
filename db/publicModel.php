@@ -88,6 +88,41 @@ class publicModel extends DB {
 
     }
 
+
+    public function getModelFilter($specificQuery,$filtertype) : array{
+        $modelsFilter = array(); //Used to save ach model thath shuld be filtred
+        $modelsFilter = explode(',',$specificQuery[$filtertype]); //divide the specific filter into an array
+
+
+        //First create the query string before prepare statement
+        //The first part of uery
+        $query = "SELECT * FROM `ski_types` WHERE $filtertype IN (:arg0";
+        //contactinate the arguments for the prepare statmnt
+        for($i=1; $i < count($modelsFilter); $i++){
+            $query .= ",:";
+            $query .="arg$i";
+        }
+        $query .= ')';
+
+
+        $statement = $this ->db -> prepare($query); //prepare the statment
+
+      //$statement ->bindValue(":arga",$filtertype);
+        //Binding values before execute
+        for($i=0; $i <count($modelsFilter); $i++){
+            $temp = ":arg$i";
+            $statement ->bindValue($temp,$modelsFilter[$i]);
+        }
+        $statement -> execute();
+        $result = $statement ->fetchAll();
+        print_r($result);
+        echo ("\ndette er ilter:" . $filtertype);
+
+        return($result);
+
+    }
+
 }//End of class public model
+
 
 

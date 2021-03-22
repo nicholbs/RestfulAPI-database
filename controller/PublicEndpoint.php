@@ -38,6 +38,7 @@ class publicEndpoint
         elseif (array_key_exists('model',$specificQuery) && $antQueryKeyelements ==1 ){
 
             return(new publicModel())->getSkiTypesModelFilter($specificQuery);
+           // return (new publicModel()) ->getModelFilter($specificQuery,'model');
         }
         //If only the grip filter is in use
         elseif (array_key_exists('grip',$specificQuery) && $antQueryKeyelements ==1){
