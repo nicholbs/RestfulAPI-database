@@ -22,8 +22,8 @@ $requestBodyJson = json_decode($requestBody,true); // converting the body to JSO
 // // echo("\n Info: \n");
 // // echo ("\n \nHer sjekker vi de forskjellige requestene: \n");
 // // echo("\n requestType: $requestType \n");
-// // echo("\n The URI: ");
-// // print_r($specificQuery);
+//echo("\n The URI: ");
+//print_r($specificQuery);
 // // echo ("\n The divided uri into parts: \n");
 // // print_r($dividedUri);
 // // echo("\n Body content: \n");

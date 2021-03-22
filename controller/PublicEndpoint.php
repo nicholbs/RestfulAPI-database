@@ -10,8 +10,9 @@ class publicEndpoint
         {
             case 'skis':
                 if($requestType == 'GET')
-                    return $this ->retrieveOrders();
-                    echo "skis i public endpint";
+                   return $this ->retrieveOrders();
+                    //echo "\n";
+                   // return $specificQuery;
                 break;
         }
     }
