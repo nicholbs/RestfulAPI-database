@@ -8,3 +8,5 @@ composer.lock
 #Når du kjører: php vendor/bin/codecept bootstrap så lages følgende files som er egendefinerte:
 codeception.yml
 vendor
+
+tests/api.suite.yml
