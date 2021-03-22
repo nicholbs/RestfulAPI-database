@@ -42,6 +42,7 @@ class publicEndpoint
         //If only the grip filter is in use
         elseif (array_key_exists('grip',$specificQuery) && $antQueryKeyelements ==1){
             echo("\nvi er i grip filter");
+            return(new publicModel())->getGripModelFilter($specificQuery);
         }
         //If the filter dosent exist
         else{
