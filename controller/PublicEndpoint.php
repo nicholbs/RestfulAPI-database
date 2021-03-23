@@ -32,7 +32,6 @@ class publicEndpoint
 
         //If both the model and grip filter is used
         if (array_key_exists('model',$specificQuery) && array_key_exists('grip',$specificQuery)){
-            echo ("\nmodel og grip filter finnes \n");
             return(new publicModel())->getAllFilter($specificQuery);
         }
         //If only the model filter is in use
@@ -43,7 +42,7 @@ class publicEndpoint
         }
         //If only the grip filter is in use
         elseif (array_key_exists('grip',$specificQuery) && $antQueryKeyelements ==1){
-            echo("\nvi er i grip filter");
+
             return(new publicModel())->getGripModelFilter($specificQuery);
         }
         //If the filter dosent exist
