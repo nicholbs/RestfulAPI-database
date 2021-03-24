@@ -41,7 +41,8 @@ class controller{
                 break;
             case "production-.plans": echo "production-plans";break;
             case "public":
-                return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+               return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+
                 break;
             case "customer-rep":
                 //echo "vi er i customer-rep";

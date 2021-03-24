@@ -10,15 +10,46 @@ class publicEndpoint
         {
             case 'skis':
                 if($requestType == 'GET')
-                   return $this ->retrieveOrders();
-                    //echo "\n";
-                   // return $specificQuery;
+                    return $this ->skifilter($specificQuery);
+                break;
+            case 'test':
+                echo ("\n Vi er i test på skifilter");
+               return $this ->skifilter($specificQuery);
                 break;
         }
     }
     private function retrieveOrders(): array
     {
         return (new publicModel())->getAllSkiTypes();
+    }
+
+    /**
+     * This function determ witch filter is used
+     * @param $specificQuery    - Its a array consist of the keys and valuses retrived from the query
+     */
+    public  function skifilter($specificQuery){
+        $antQueryKeyelements= count($specificQuery); //get the count on all key arguments passed to the filter
+
+        //If both the model and grip filter is used
+        if (array_key_exists('model',$specificQuery) && array_key_exists('grip',$specificQuery)){
+            return(new publicModel())->getAllFilter($specificQuery);
+        }
+        //If only the model filter is in use
+        elseif (array_key_exists('model',$specificQuery) && $antQueryKeyelements ==1 ){
+
+            return(new publicModel())->getSkiTypesModelFilter($specificQuery);
+           // return (new publicModel()) ->getModelFilter($specificQuery,'model');
+        }
+        //If only the grip filter is in use
+        elseif (array_key_exists('grip',$specificQuery) && $antQueryKeyelements ==1){
+
+            return(new publicModel())->getGripModelFilter($specificQuery);
+        }
+        //If the filter dosent exist
+        else{
+            echo ("\nFilter not found\n");
+        }
+
     }
 
 }

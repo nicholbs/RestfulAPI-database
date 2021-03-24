@@ -2,14 +2,17 @@ actor: ApiTester
 modules:
     enabled:
         - PhpBrowser:
-            url: http://localhost/idatg2204-prosjekt
+            url: http://localhost/prosjekt3
         - REST:
-            url: http://localhost/idatg2204-prosjekt
+            url: http://localhost/prosjekt3
             depends: PhpBrowser
         - Db:
-            dsn: 'mysql:host=localhost;dbname=ski_manufacturer'
+            dsn: 'mysql:host=localhost;dbname=testdb'
             user: 'root'
             password: ''
+            dump: 'tests/_data/testdb.sql'
+            populate: true
+            cleanup: true
 
 # actor: ApiTester
 # modules:
