@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `customers` (
   `customer_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `start_date` date DEFAULT current_timestamp(),
+  `start_date` date DEFAULT CURRENT_DATE,
   `end_date` date DEFAULT NULL,
   `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -100,7 +100,7 @@ CREATE TABLE `orders` (
   `price` int(11) NOT NULL,
   `state` enum('new','open','skis-available') DEFAULT 'new',
   `customer_id` int(11) NOT NULL,
-  `date_placed` date DEFAULT current_timestamp(),
+  `date_placed` date DEFAULT CURRENT_DATE,
   `order_aggregate` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -203,7 +203,7 @@ INSERT INTO `shipments` (`shipment_nr`, `customer_id`, `shipping_address`, `sche
 CREATE TABLE `skis` (
   `serial_nr` int(11) NOT NULL,
   `ski_type` int(11) NOT NULL,
-  `manufactured_date` date DEFAULT current_timestamp(),
+  `manufactured_date` date DEFAULT CURRENT_DATE,
   `order_assigned` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
