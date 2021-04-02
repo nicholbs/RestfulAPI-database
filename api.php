@@ -15,8 +15,17 @@ unset($specificQuery['request']); // removes request from specific Query.
 
 //Working with the body of the request
 $requestBody= file_get_contents('php://input'); //getting the body content
-$requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
 
+//linjen under er kommentert bort midlertidig og erstattet av if else rett under Odd 202010402
+//$requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
+
+//This code is directely copyed from Rune Hjertsvold repo:
+if(strlen($requestBody)>0){
+    $requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
+}
+else{
+    $requestBodyJson = array(); //Making an empty array
+}
 
 // // //Testing the server:
 // // echo("\n Info: \n");

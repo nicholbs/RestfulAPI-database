@@ -23,7 +23,7 @@ class controller{
      */
 
 
-    public  function request($dividedUri,$specificQuery,$requestType,$requestBodyJson){
+    public  function request(array $dividedUri,array $specificQuery,string $requestType,array $requestBodyJson){
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
         switch ($witchEndpoint){
