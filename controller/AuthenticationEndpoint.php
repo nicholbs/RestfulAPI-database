@@ -1,43 +1,56 @@
 <?php
-//require_once 'db/AuthenticationModel.php';
-require_once '../db/AuthenticationModel.php';
+require_once 'db/AuthenticationModel.php';
+//require_once '../db/AuthenticationModel.php';
 
 class AuthenticationEndpoint {
 
+    /**
+     * This function handles the authentication based on the endpoint uri
+     * @param string $token - string with the token, if the token not set The string contain notAuthenticated
+     * @param array $dividedUri - Arry with the URI
+     * @return bool - return true ore false based om
+     * @see AuthenticationModel() -> emplyeeAtuh() chek if the employee is allowed to ender the endpoint based on the token AND the department
+     * @see AuthenticationModel() -> costomerAuth()  chek if the customer is allowed to ender the endpoint based on a valid token
+     */
     public function handleEndpoint(string $token, array $dividedUri) : bool{
-        $endpoint=$dividedUri[0];
+        $endpoint=$dividedUri[0]; //Extracting the endpoint
+
+        //If the user don't provide a token we reset the requesturi to public, result will be not allowed if the user is accesing somthing else.
+        if($token == "notAuthenticated"){
+            $dividedUri[0] ="public";
+        }
         print($endpoint);
         switch ($dividedUri[0]){
             case "public":
                 return true;
                 break;
             case "customer" :
-                //do somthing
+                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
                 break;
             case "shipment" :
-                //do somthing2
+                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
                 break;
             case "storekeeper":
-                print("\nVi er i storkeeper sjekker");
+                //print("\nVi er i storkeeper sjekker");
                 return(new AuthenticationModel())->employeeAuth($endpoint,$token);
                 break;
             case "production-plans":
-                //do somthing 4
+                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
                 break;
             case "customer-rep":
-            //do somthing 5
+                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
                 break;
             case "customer-rep":
-            //Do somthing 6
+                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
                 break;
-            default: print ("\nDette gikk galt");
+            default: return false;
         }
 
     }
 
 
 } // end of AuthenticationModel class
-
+/**
 $a ="storekeeper";
 $b ="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
@@ -52,3 +65,4 @@ if($test -> handleEndpoint($b,$tabell)){
 else{
     print("\nStorkeeper ikke ok");
 }
+**/

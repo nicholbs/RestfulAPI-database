@@ -25,7 +25,50 @@ if(strlen($requestBody)>0){
 }
 else{
     $requestBodyJson = array(); //Making an empty array
+}//End of copy paste
+
+
+//chek if the request have a cookie
+if(array_key_exists('HTTP_COOKIE',$_SERVER)) {
+    echo("Key exist");
+    $tokenExt=explode('=',$_SERVER['HTTP_COOKIE']);
+    $token=$tokenExt[1];
+
 }
+else{ //if the request dosent have a cookie, we set the token to not authenticated
+    echo("key not exist");
+    $token="notAuthenticated";
+
+}
+
+//Ikke slett nedenunder, denne skal aktiveres så snart alle er klare for authentisering. Fungerende autentisering - Odd
+/**
+//procede with the request
+if((new controller())->authentication($dividedUri,$token)){
+    //print("\nVi er autnetisert \n");
+
+    //sends the information to the controller
+    $controller = new controller();
+    $res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+    echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
+}
+else{
+    print("\nForbudt request, du er ikke authentisert");
+}
+**/
+
+
+//Gammel metode, fjernes så snart vi er klar for authentisering
+//sends the information to the controller
+$controller = new controller();
+$res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
+
+
+
+
+
+
 
 // // //Testing the server:
 // // echo("\n Info: \n");
@@ -37,17 +80,18 @@ else{
 // // print_r($dividedUri);
 // // echo("\n Body content: \n");
 // // print_r($requestBodyJson);
-
+//echo("\n Cookie \n");
+//print($_SERVER['HTTP_COOKIE']);
 //echo("\nHer ser vi rådata motatt i api.php filen: \n \n");
 //print_r($_SERVER); //leser ut all info fra requeste
 
-
-
-//sends the information to the controller
-$controller = new controller();
-$res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
-echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
-
+//$cokieExt= array();
+//$alfa = $_SERVER['HTTP_COOKIE'];
+//print($alfa);
+//$cokieExt=explode('=',$_SERVER['HTTP_COOKIE']);
+//print_r($cokieExt);
+//echo(gettype($_SERVER['HTTP_COOKIE']));
+//$piss= (new controller())->authentication($dividedUri,$_SERVER['HTTP_COOKIE']);
 
 
 

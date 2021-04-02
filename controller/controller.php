@@ -37,7 +37,7 @@ class controller{
                 return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "storekeeper": 
-                echo "storekeeper endpoint"; 
+               // echo "storekeeper endpoint";
                 return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
             case "production-.plans": echo "production-plans";break;
@@ -60,7 +60,11 @@ class controller{
      * @param $token - The token provided from frontend
      * @param $dividedUri - The endpoint URI
      */
-    public function authentication($token, $dividedUri){
+    public function authentication(array $dividedUri, string $token) :bool{
+        //print("\n Vi er i authentisering");
+        //print("\n" . $token . "\n");
+        //return true;
+        return (new AuthenticationEndpoint()) ->handleEndpoint($token,$dividedUri);
 
     }
 
