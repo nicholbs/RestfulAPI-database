@@ -7,6 +7,7 @@ require_once 'CustomerEndpoint.php';
 require_once 'customerRepEndpoint.php';
 require_once 'TransporterEndpoint.php';
 require_once 'PublicEndpoint.php';
+require_once 'AuthenticationEndpoint.php';
 class controller{
     public function __construct(){
 
@@ -51,6 +52,15 @@ class controller{
             default: return "error no url";
 
         }
+
+    }
+
+    /**
+     * This function chek wethever the user is authenticated with a token and is allowed to access the specifed endpoint
+     * @param $token - The token provided from frontend
+     * @param $dividedUri - The endpoint URI
+     */
+    public function authentication($token, $dividedUri){
 
     }
 
