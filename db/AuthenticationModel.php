@@ -8,7 +8,7 @@ class AuthenticationModel extends DB {
      * @param $token
      * @param $dividedUri
      */
-    public function employeeAuth($department, $token){
+    public function employeeAuth($department, $token) :bool{
 
         $query= "SELECT COUNT(employee_id) AS NumberOfEmployee FROM employees WHERE department LIKE :dep AND token LIKE :token";
         $statement = $this ->db -> prepare($query); //prepare the statment
@@ -20,9 +20,20 @@ class AuthenticationModel extends DB {
         $result=$statement->fetchColumn();
         print_r($result);
 
+        //Send response based if the user has the token and is in the right department for accessing the endpoint.
+        if($result ==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
 }//End of AuthenticationModel class
+
+//Some testdata
+
 $a ="storekeeper";
 $b ="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
