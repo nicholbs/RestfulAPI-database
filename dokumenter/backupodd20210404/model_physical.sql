@@ -29,7 +29,7 @@ CREATE TABLE employees (
     employee_id int AUTO_INCREMENT,
     first_name varchar(255) NOT NULL,
     last_name varchar(255) NOT NULL,
-    department ENUM ('customer-rep', 'production-planner', 'storekeeper') NOT NULL,
+    department ENUM ('customer_rep', 'production-planner', 'storekeeper') NOT NULL,
     token varchar(255),
     PRIMARY KEY (employee_id)
 );
@@ -212,7 +212,7 @@ INSERT INTO `ski_types` (`model`, `type`, `temperature`, `grip`, `size`, `weight
 ('Active Plain', 'Skate', 'cold', 'Handles', '197', '80-90', 'For big boys.', '1', '1650');
 
 INSERT INTO `employees`(`first_name`, `last_name`, `department`)
-VALUES ('Sylvester', 'Sølvtunge', 'customer-rep'), ('Njalle', 'Nøysom', 'production-planner'), ('Didrik', 'Disk', 'storekeeper');
+VALUES ('Sylvester', 'Sølvtunge', 'customer-rep'), ('Njalle', 'Nøysom', 'production_planner'), ('Didrik', 'Disk', 'storekeeper');
 
 INSERT INTO `customers`(`name`, `start_date`) 
 VALUES ('Lars Monsen', '2021-03-15'), ('Snowy Plains Inc.', '2005-07-11'), ('Snowy Plains Asker', '2012-01-12'), ('Snegutta', '2018-09-19');
