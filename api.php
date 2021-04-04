@@ -30,13 +30,13 @@ else{
 
 //chek if the request have a cookie
 if(array_key_exists('HTTP_COOKIE',$_SERVER)) {
-    echo("Key exist");
+    //echo("Key exist");
     $tokenExt=explode('=',$_SERVER['HTTP_COOKIE']);
     $token=$tokenExt[1];
 
 }
 else{ //if the request dosent have a cookie, we set the token to not authenticated
-    echo("key not exist");
+    //echo("key not exist");
     $token="notAuthenticated";
 
 }
