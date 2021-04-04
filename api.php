@@ -19,7 +19,7 @@ $requestBody= file_get_contents('php://input'); //getting the body content
 //linjen under er kommentert bort midlertidig og erstattet av if else rett under Odd 202010402
 //$requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
 
-//This code is directely copyed from Rune Hjertsvold repo:
+//This code is directely copyed from Rune Hjertsvold repo, We have to give him credit:
 if(strlen($requestBody)>0){
     $requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
 }
