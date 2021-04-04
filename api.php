@@ -58,6 +58,7 @@ else{
 **/
 
 
+
 //Gammel metode, fjernes så snart vi er klar for authentisering
 //sends the information to the controller
 $controller = new controller();

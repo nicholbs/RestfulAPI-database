@@ -3,12 +3,15 @@ require_once 'DB.php';
 
 class AuthenticationModel extends DB {
 
+    //Pensjonert drøft sletting -odd
+
     /**
      * This class schek if a employee have the rights to access a specific endpoint
      * @param $token - the token provided from frontent / user
      * @param $department - what department/ first part of the uri the resource shuld access
      * @return bool - if the employee has a valid token AND is in the right department
      */
+    /**
     public function employeeAuth(string $department, string $token) :bool{
 
         $query= "SELECT COUNT(employee_id) AS NumberOfEmployee FROM employees WHERE department LIKE :dep AND token LIKE :token";
@@ -30,12 +33,16 @@ class AuthenticationModel extends DB {
         }
 
     }
+     * **/
+
+    //pensjonert drøft sletting -odd
 
     /**
      * This funnction chek if a customer has a valid token for accessing the API request
      * @param $token - the token provided from frontent / user
      * @return bool - return true/false based on the customer has a valid token
      */
+    /**
     public function customerAuth($token) :bool{
         $query="SELECT COUNT(customer_id) as customer FROM customers WHERE token LIKE :token";
 
@@ -53,6 +60,7 @@ class AuthenticationModel extends DB {
         }
 
     }
+     * */
 
     /**
      * This function find the usertype based on the token, If the user dosen't have a token we return notAuthenticated
@@ -70,7 +78,7 @@ class AuthenticationModel extends DB {
 
         //If there is exactely one match in the customer table, we habve found a valid hit,
         if($customerCount ==1 ){
-            echo("Customer funnet");
+           // echo("Customer funnet");
             return "customer"; //This will end the rest of the function so tath the employee code wil not run if there is a hit on customer
         }
 
@@ -85,7 +93,7 @@ class AuthenticationModel extends DB {
 
         //Chek if we get exactly one hit on the emplyee table.
         if($EmployeeCount ==1){
-            echo("employee found");
+            //echo("employee found");
             //If we get a hit we will get the department based on the token
             $queryEmployeeDepartment= "SELECT department FROM employees WHERE token LIKE :token";
             $statementEmployeeDepartment= $this ->db->prepare($queryEmployeeDepartment);

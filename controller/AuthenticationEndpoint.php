@@ -4,6 +4,7 @@ require_once 'db/AuthenticationModel.php';
 
 class AuthenticationEndpoint {
 
+    //Pensjonert drøft slettning -odd
     /**
      * This function handles the authentication based on the endpoint uri
      * @param string $token - string with the token, if the token not set The string contain notAuthenticated
@@ -12,7 +13,8 @@ class AuthenticationEndpoint {
      * @see AuthenticationModel() -> emplyeeAtuh() chek if the employee is allowed to ender the endpoint based on the token AND the department
      * @see AuthenticationModel() -> costomerAuth()  chek if the customer is allowed to ender the endpoint based on a valid token
      */
-    public function handleEndpoint(string $token, array $dividedUri) : bool{
+    /**
+    public function handleEndpoint2(string $token, array $dividedUri) : bool{
         $endpoint=$dividedUri[0]; //Extracting the endpoint
 
         //If the user don't provide a token we reset the requesturi to public, result will be not allowed if the user is accesing somthing else.
@@ -47,6 +49,7 @@ class AuthenticationEndpoint {
         }
 
     }
+     * **/
 
     /**
      * This function chek if the usertype is allowed to enter the specific API. See the comment under //Add more departments on who
@@ -75,7 +78,7 @@ class AuthenticationEndpoint {
         $productionPlans[]="production-plans";
 
 
-        //Cheking the request baset on the api uri and the ACL list and returns true if match
+        //Cheking the request baset on the api uri and the ACL list and returns true if the api and user match allow
 
         if(array_search($usertype,$orders) !== false && $dividedUri[0] == "orders"){
             echo("key exist");
@@ -112,14 +115,14 @@ class AuthenticationEndpoint {
      * @see AuthenticationModel()->findUsertype()
      * @see this-> aclList()
      */
-    public function handleEndpont2(string $token, array $dividedUri) :bool {
+    public function handleEndpoint(string $token, array $dividedUri) :bool {
 
         //Find what department ore if the user is a customer based on the token:
         $usertype = (new AuthenticationModel())->findUsertype($token);
         print("\n usertype: " . $usertype);
 
         //Send respons if the user is allowed to procede with the request
-        if($dividedUri[0] =="public"){
+        if($dividedUri[0] =="public"){ //Everyone shuld be allowed to access the public API.
             return true;
         }
         elseif ($this->aclList($usertype,$dividedUri)){
