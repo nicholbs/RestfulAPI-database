@@ -211,11 +211,11 @@ INSERT INTO `ski_types` (`model`, `type`, `temperature`, `grip`, `size`, `weight
 ('Redline', 'Classic', 'warm', 'Grippers', '167', '40-50', 'Slightly small skis.', '0', '1800'),
 ('Active Plain', 'Skate', 'cold', 'Handles', '197', '80-90', 'For big boys.', '1', '1650');
 
-INSERT INTO `employees`(`first_name`, `last_name`, `department`)
-VALUES ('Sylvester', 'Sølvtunge', 'customer-rep'), ('Njalle', 'Nøysom', 'production-planner'), ('Didrik', 'Disk', 'storekeeper');
+INSERT INTO `employees`(`first_name`, `last_name`, `department`, `token`)
+VALUES ('Sylvester', 'Sølvtunge', 'customer-rep','839d6517ec104e2c70ce1da1d86b1d89c5f547b666adcdd824456c9756c7e261'), ('Njalle', 'Nøysom', 'production-planner', '022224c9a11805494a77796d671bec4c5bae495af78e906694018dbbc39bf2cd'), ('Didrik', 'Disk', 'storekeeper', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 
-INSERT INTO `customers`(`name`, `start_date`) 
-VALUES ('Lars Monsen', '2021-03-15'), ('Snowy Plains Inc.', '2005-07-11'), ('Snowy Plains Asker', '2012-01-12'), ('Snegutta', '2018-09-19');
+INSERT INTO `customers`(`name`, `start_date`, `token`) 
+VALUES ('Lars Monsen', '2021-03-15', '2927ebdf56c20cbb90fbd85cac5be30d60e3dfb9f9c9eda869d0fdce36043a85'), ('Snowy Plains Inc.', '2005-07-11', '99f72d7e511685bae6517db832f1ee328538d8414470974ad53b94612fa7aa1e'), ('Snowy Plains Asker', '2012-01-12', '61973af54a323dd2d702219b86b494b0da247839eb1937ccff1e06e59e0934c3'), ('Snegutta', '2018-09-19', '03b936e1b6f4bf1399253dbd4b2ddae49170572f107d8c13304dca880e689545');
 
 INSERT INTO `franchises`(`customer_id`, `shipping_address`, `buying_price`) 
 VALUES (2, 'Bakgata 32', 0.65);
