@@ -54,7 +54,58 @@ class AuthenticationModel extends DB {
 
     }
 
+    /**
+     * This function find the usertype based on the token, If the user dosen't have a token we return notAuthenticated
+     * @param $token - token from the user /frontend
+     * @return string - return customer, department ore notAuthenticated if nothing is found from the token.
+     */
+    public function findUsertype($token) :string{
+
+        //Check if the token belongs to a customer:
+        $queryCustomerCount="SELECT COUNT(customer_id) as customer FROM customers WHERE token LIKE :token";
+        $statementCustomer = $this ->db -> prepare($queryCustomerCount); //prepare the statment
+        $statementCustomer ->bindValue(':token',$token);
+        $statementCustomer ->execute();
+        $customerCount=$statementCustomer->fetchColumn();
+
+        //If there is exactely one match in the customer table, we habve found a valid hit,
+        if($customerCount ==1 ){
+            echo("Customer funnet");
+            return "customer"; //This will end the rest of the function so tath the employee code wil not run if there is a hit on customer
+        }
+
+        //If the token not belongs to a customer, we chek if the token belongs to a employee
+
+        //Preper the data
+        $queryEmployee="SELECT COUNT(employee_id) AS NumberOfEmployee FROM employees WHERE token LIKE :token";
+        $statementEmployeeCount = $this ->db -> prepare($queryEmployee); //prepare the statment
+        $statementEmployeeCount ->bindValue(':token',$token);
+        $statementEmployeeCount ->execute();
+        $EmployeeCount=$statementEmployeeCount->fetchColumn();
+
+        //Chek if we get exactly one hit on the emplyee table.
+        if($EmployeeCount ==1){
+            echo("employee found");
+            //If we get a hit we will get the department based on the token
+            $queryEmployeeDepartment= "SELECT department FROM employees WHERE token LIKE :token";
+            $statementEmployeeDepartment= $this ->db->prepare($queryEmployeeDepartment);
+            $statementEmployeeDepartment ->bindValue(':token',$token);
+            $statementEmployeeDepartment ->execute();
+            $department = $statementEmployeeDepartment ->fetchAll(PDO::FETCH_COLUMN);
+            return $department[0]; //Returns the department as a string for the user with the specific token
+        }
+        //If we dosent have a hit in customer ore employee we return notAuthenticated
+        else{
+            return "notAuthenticated";
+        }
+
+
+    }
+
+
 }//End of AuthenticationModel class
+
+
 
 //Some testdata
 
@@ -87,4 +138,14 @@ else{
     print("\n Ikke authentisert");
 
 }
+ * **/
+
+/**
+
+$c="2927ebdf56c20cbb90fbd85cac5be30d60e3dfb9f9c9eda869d0fdce36043a85";
+$b ="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+$customer = new  AuthenticationModel();
+$f = $customer -> findUsertype($c);
+
+print("\nDette er avdelingen: " . $f);
  * **/
