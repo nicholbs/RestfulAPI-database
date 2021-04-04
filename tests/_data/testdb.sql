@@ -40,9 +40,9 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `name`, `start_date`, `end_date`, `token`) VALUES
-(1, 'Lars Monsen', '2021-03-15', NULL, NULL),
-(2, 'Snowy Plains Inc.', '2005-07-11', NULL, NULL),
-(3, 'Snowy Plains Asker', '2012-01-12', NULL, NULL),
+(1, 'Lars Monsen', '2021-03-15', NULL, '2927ebdf56c20cbb90fbd85cac5be30d60e3dfb9f9c9eda869d0fdce36043a85'),
+(2, 'Snowy Plains Inc.', '2005-07-11', NULL, '99f72d7e511685bae6517db832f1ee328538d8414470974ad53b94612fa7aa1e'),
+(3, 'Snowy Plains Asker', '2012-01-12', NULL, '61973af54a323dd2d702219b86b494b0da247839eb1937ccff1e06e59e0934c3'),
 (4, 'Snegutta', '2018-09-19', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -55,7 +55,7 @@ CREATE TABLE `employees` (
   `employee_id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
-  `department` enum('customer_rep','production-planner','storekeeper') NOT NULL,
+  `department` enum('customer-rep','production-planner','storekeeper') NOT NULL,
   `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -64,9 +64,9 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `department`, `token`) VALUES
-(1, 'Sylvester', 'Sølvtunge', '', NULL),
-(2, 'Njalle', 'Nøysom', '', NULL),
-(3, 'Didrik', 'Disk', 'storekeeper', NULL);
+(1, 'Sylvester', 'Sølvtunge', 'customer-rep', '839d6517ec104e2c70ce1da1d86b1d89c5f547b666adcdd824456c9756c7e261'),
+(2, 'Njalle', 'Nøysom', 'production-planner', '022224c9a11805494a77796d671bec4c5bae495af78e906694018dbbc39bf2cd'),
+(3, 'Didrik', 'Disk', 'storekeeper', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
 
 -- --------------------------------------------------------
 
