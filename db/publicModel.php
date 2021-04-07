@@ -23,82 +23,11 @@ class publicModel extends DB {
     }//end of getAllSkies
 
     /**
-     * This functions find all skis based on models
-     * @param $specificQuery - araay with model filter
-     */
-    public function getSkiTypesModelFilter($specificQuery) : array{
-        $modelsFilter = array(); //Used to save ach model thath shuld be filtred
-        $modelsFilter = explode(',',$specificQuery['model']); //divide the specific filter into an array
-
-        //First create the query string before prepare statement
-        //The first part of uery
-        $query = "SELECT * FROM `ski_types` WHERE model IN (:arg0";
-        //contactinate the arguments for the prepare statmnt
-        for($i=1; $i < count($modelsFilter); $i++){
-                $query .= ",:";
-                $query .="arg$i";
-        }
-        $query .= ')';
-
-        $statement = $this ->db -> prepare($query); //prepare the statment
-
-        //Binding values before execute
-        for($i=0; $i <count($modelsFilter); $i++){
-            $temp = ":arg$i";
-            $statement ->bindValue($temp,$modelsFilter[$i]);
-        }
-
-        $statement -> execute();
-        //$result = $statement ->fetchAll();
-        $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
-        return($result);
-
-    }//End of
-
-    /**
-     * This function  finds all skimodels based on grip filter
-     * @param $specificQuery
-     * @return array
-     */
-    public function getGripModelFilter($specificQuery) : array{
-        $modelsFilter = array(); //Used to save ach model thath shuld be filtred
-        $modelsFilter = explode(',',$specificQuery['grip']); //divide the specific filter into an array
-
-
-
-        //First create the query string before prepare statement
-        //The first part of uery
-        $query = "SELECT * FROM `ski_types` WHERE grip IN (:arg0";
-        //contactinate the arguments for the prepare statmnt
-        for($i=1; $i < count($modelsFilter); $i++){
-            $query .= ",:";
-            $query .="arg$i";
-        }
-        $query .= ')';
-
-        $statement = $this ->db -> prepare($query); //prepare the statment
-
-        //Binding values before execute
-        for($i=0; $i <count($modelsFilter); $i++){
-            $temp = ":arg$i";
-            $statement ->bindValue($temp,$modelsFilter[$i]);
-        }
-
-        $statement -> execute();
-       // $result = $statement ->fetchAll();
-        $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
-
-
-        return($result);
-
-    }
-
-    /**
      * This function finds skis based on model and grip filter
      * @param $specificQuery
      * @return array
      */
-    public function getAllFilter($specificQuery){
+    public function getAllFilter(array $specificQuery) : array{
         $modelsFilter = array(); //Used to save ach model thath shuld be filtred
         $gripFilter = array();
         $modelsFilter = explode(',',$specificQuery['model']); //divide the specific filter into an array
@@ -143,58 +72,50 @@ class publicModel extends DB {
 
 
     }
-    //ikke i bruk pr na
-    public function getModelFilter($specificQuery,$filtertype) : array{
+
+    /**
+     * Ths function finds all the skiis based on a certan filter criteria
+     * @param array $specificQuery - the end users filter of choise
+     * @param string $filtertype - a local variabel used in PublicEndpoint to tell this function if it is a model ore a grip filter in use.
+     * @return array - returns the results.
+     */
+    public function getAFilter(array $specificQuery,string $filtertype) : array
+    {
         $modelsFilter = array(); //Used to save ach model thath shuld be filtred
-        $modelsFilter = explode(',',$specificQuery[$filtertype]); //divide the specific filter into an array
+        //Using the if statment to do achek of the input of filtertype. In pdo you cant use bindings in the where closet so i do a valdaton in the if statment instead. $fiiltertype varaibel wil however not be directly in tuch with the enduser in anyway.
+        if ($filtertype == "model" || $filtertype == "grip") {
+            $modelsFilter = explode(',', $specificQuery[$filtertype]); //divide the specific filter into an array
 
 
-        //First create the query string before prepare statement
-        //The first part of uery
-        $query = "SELECT * FROM `ski_types` WHERE $filtertype IN (:arg0";
-        //contactinate the arguments for the prepare statmnt
-        for($i=1; $i < count($modelsFilter); $i++){
-            $query .= ",:";
-            $query .="arg$i";
+            //First create the query string before prepare statement
+            //The first part of uery
+            $query = "SELECT * FROM `ski_types` WHERE $filtertype IN (:arg0";
+            //contactinate the arguments for the prepare statmnt
+            for ($i = 1; $i < count($modelsFilter); $i++) {
+                $query .= ",:";
+                $query .= "arg$i";
+            }
+            $query .= ')';
+
+
+            $statement = $this->db->prepare($query); //prepare the statment
+
+            //$statement ->bindValue(":arga",$filtertype);
+            //Binding values before execute
+            for ($i = 0; $i < count($modelsFilter); $i++) {
+                $temp = ":arg$i";
+                $statement->bindValue($temp, $modelsFilter[$i]);
+            }
+            $statement->execute();
+            $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
+            return($result);
+
+
         }
-        $query .= ')';
-
-
-        $statement = $this ->db -> prepare($query); //prepare the statment
-
-      //$statement ->bindValue(":arga",$filtertype);
-        //Binding values before execute
-        for($i=0; $i <count($modelsFilter); $i++){
-            $temp = ":arg$i";
-            $statement ->bindValue($temp,$modelsFilter[$i]);
-        }
-        $statement -> execute();
-        $result = $statement ->fetchAll();
-        print_r($result);
-        echo ("\ndette er ilter:" . $filtertype);
-
-        return($result);
-
     }
 
 }//End of class public model
 
-/**
-$tabell = array();
-$tabell['model']="tester";
-$tabell['grip']="dd,aa";
-//print_r($tabell);
-
-$test = new publicModel();
-print_r($test ->getAllFilter($tabell));
-//print_r($test ->getSkiTypesModelFilterolodslett($tabell));
-//print_r($test ->getAllFilter($tabell));
-
-$tabell2 = array();
-$tabell2['model'] ="tester,dd";
-//print_r($test ->getSkiTypesModelFilter($tabell2));
-
-**/
 
 
 
