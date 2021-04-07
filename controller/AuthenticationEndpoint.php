@@ -3,53 +3,33 @@ require_once 'db/AuthenticationModel.php';
 //require_once '../db/AuthenticationModel.php';
 
 class AuthenticationEndpoint {
-
-    //Pensjonert drøft slettning -odd
     /**
      * This function handles the authentication based on the endpoint uri
-     * @param string $token - string with the token, if the token not set The string contain notAuthenticated
-     * @param array $dividedUri - Arry with the URI
-     * @return bool - return true ore false based om
-     * @see AuthenticationModel() -> emplyeeAtuh() chek if the employee is allowed to ender the endpoint based on the token AND the department
-     * @see AuthenticationModel() -> costomerAuth()  chek if the customer is allowed to ender the endpoint based on a valid token
+     * @param string $token - The token from the user/frontend
+     * @param array $dividedUri - The URI divided in an array
+     * @return bool - return ture ore false if the user is allowed to access the certan api.
+     *
+     * @see AuthenticationModel()->findUsertype()
+     * @see this-> aclList()
      */
-    /**
-    public function handleEndpoint2(string $token, array $dividedUri) : bool{
-        $endpoint=$dividedUri[0]; //Extracting the endpoint
+    public function handleEndpoint(string $token, array $dividedUri) :bool {
 
-        //If the user don't provide a token we reset the requesturi to public, result will be not allowed if the user is accesing somthing else.
-        if($token == "notAuthenticated"){
-            $dividedUri[0] ="public";
+        //Find what department ore if the user is a customer based on the token:
+        $usertype = (new AuthenticationModel())->findUsertype($token);
+        print("\n usertype: " . $usertype);
+
+        //Send respons if the user is allowed to procede with the request
+        if($dividedUri[0] =="public"){ //Everyone shuld be allowed to access the public API.
+            return true;
         }
-        print($endpoint);
-        switch ($dividedUri[0]){
-            case "public":
-                return true;
-                break;
-            case "customer" :
-                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
-                break;
-            case "shipment" :
-                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
-                break;
-            case "storekeeper":
-                //print("\nVi er i storkeeper sjekker");
-                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
-                break;
-            case "production-plans":
-                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
-                break;
-            case "customer-rep":
-                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
-                break;
-            case "customer-rep":
-                return(new AuthenticationModel())->employeeAuth($endpoint,$token);
-                break;
-            default: return false;
+        elseif ($this->aclList($usertype,$dividedUri)){
+            return true;
+        }
+        else{
+            return false;
         }
 
     }
-     * **/
 
     /**
      * This function chek if the usertype is allowed to enter the specific API. See the comment under //Add more departments on who
@@ -70,7 +50,7 @@ class AuthenticationEndpoint {
         $customerRep=array(); //represens the ACL of the customer-rep endpoint
 
 
-        //Add more departments based on who shuld have access to the given api
+        //Add more departments based on who shuld have access to the given api endpoint
         $orders[0]="customer";
         $customer[]="customer";
         $shipment[]="storekeeper";
@@ -106,77 +86,6 @@ class AuthenticationEndpoint {
 
     }
 
-    /**
-     * This function handles the authentication based on the endpoint uri
-     * @param string $token - The token from the user/frontend
-     * @param array $dividedUri - The URI divided in an array
-     * @return bool - return ture ore false if the user is allowed to access the certan api.
-     *
-     * @see AuthenticationModel()->findUsertype()
-     * @see this-> aclList()
-     */
-    public function handleEndpoint(string $token, array $dividedUri) :bool {
 
-        //Find what department ore if the user is a customer based on the token:
-        $usertype = (new AuthenticationModel())->findUsertype($token);
-        print("\n usertype: " . $usertype);
-
-        //Send respons if the user is allowed to procede with the request
-        if($dividedUri[0] =="public"){ //Everyone shuld be allowed to access the public API.
-            return true;
-        }
-        elseif ($this->aclList($usertype,$dividedUri)){
-            return true;
-        }
-        else{
-            return false;
-        }
-
-
-
-    }
 
 } // end of AuthenticationModel class
-/**
-$a ="storekeeper";
-$b ="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-
-$tabell = array();
-$tabell[0]="storekeeper";
-
-$test=new AuthenticationEndpoint();
-
-if($test -> handleEndpoint($b,$tabell)){
-    print("\n Storkeeper ok");
-}
-else{
-    print("\nStorkeeper ikke ok");
-}
-**/
-
-/**
-$a ="storekeeper";
-$b ="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-$c= "2927ebdf56c20cbb90fbd85cac5be30d60e3dfb9f9c9eda869d0fdce36043a85";
-$d="";
-
-$tabell = array();
-//$tabell[0]="storekeeper";
-$tabell[0]="public";
-
-
-$test = new  AuthenticationEndpoint();
-//$test ->aclList($tabell,$c);
-//$test ->handleEndpont2($c,$tabell);
-//$test ->aclList($a,$tabell);
-
-//$test ->handleEndpont2($c,$tabell);
-
-
-if($test ->handleEndpont2($d,$tabell)){
-    print("\nAlt ok du får fortsette! \n");
-}
-else{
-    print("\nNei du får ikke fortsette \n");
-}
-**/

@@ -59,11 +59,10 @@ class controller{
      * This function chek wethever the user is authenticated with a token and is allowed to access the specifed endpoint
      * @param $token - The token provided from frontend
      * @param $dividedUri - The endpoint URI
+     * @see authenticationEndpoint() -> handleEndpoint()
      */
     public function authentication(array $dividedUri, string $token) :bool{
-        //print("\n Vi er i authentisering");
-        //print("\n" . $token . "\n");
-        //return true;
+
         return (new AuthenticationEndpoint()) ->handleEndpoint($token,$dividedUri);
 
     }
