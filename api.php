@@ -72,34 +72,6 @@ echo json_encode($res); //send the respons back to frontend. Viser pr nå meldin
 
 
 
-// // //Testing the server:
-// // echo("\n Info: \n");
-// // echo ("\n \nHer sjekker vi de forskjellige requestene: \n");
-// // echo("\n requestType: $requestType \n");
-//echo("\n The URI: ");
-//print_r($specificQuery);
-// // echo ("\n The divided uri into parts: \n");
-// // print_r($dividedUri);
-// // echo("\n Body content: \n");
-// // print_r($requestBodyJson);
-//echo("\n Cookie \n");
-//print($_SERVER['HTTP_COOKIE']);
-//echo("\nHer ser vi rådata motatt i api.php filen: \n \n");
-//print_r($_SERVER); //leser ut all info fra requeste
-
-//$cokieExt= array();
-//$alfa = $_SERVER['HTTP_COOKIE'];
-//print($alfa);
-//$cokieExt=explode('=',$_SERVER['HTTP_COOKIE']);
-//print_r($cokieExt);
-//echo(gettype($_SERVER['HTTP_COOKIE']));
-//$piss= (new controller())->authentication($dividedUri,$_SERVER['HTTP_COOKIE']);
-
-
-
-
-
-
 
 
 
