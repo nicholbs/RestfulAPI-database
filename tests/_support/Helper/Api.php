@@ -6,5 +6,12 @@ namespace Helper;
 
 class Api extends \Codeception\Module
 {
+/**
+ * This function
+ * the code is taken from https://stackoverflow.com/questions/36334244/rest-module-get-set-cookies/36335651
+ */
+    public function getClient(){
+        return $this->getModule('REST')->client;
+    }
 
 }
