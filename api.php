@@ -53,11 +53,11 @@ if((new controller())->authentication($dividedUri,$token)){
     echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
 }
 else{
-    http_response_code(404); //sets the responseheader to 404
+    http_response_code(403); //sets the responseheader to 404
     print("\nForbudt request, du er ikke authentisert");
 }
-
 **/
+
 
 
 //Gammel metode, fjernes så snart vi er klar for authentisering
