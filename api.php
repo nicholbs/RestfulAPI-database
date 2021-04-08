@@ -33,30 +33,9 @@ else{
     $requestBodyJson = array(); //Making an empty array
 }//End of copy paste
 
-
-//chek if the request have a cookie
-/**if(array_key_exists('HTTP_COOKIE',$_SERVER)) {
-    //echo("Key exist");
-    $tokenExt=explode('=',$_SERVER['HTTP_COOKIE']);
-    $token=$tokenExt[1];
-
-}
- **/
-if($_COOKIE['token']){
-    $token="notAuthenticated";
-    $token=$_COOKIE['token'];
-
-
-}
-else{ //if the request dosent have a cookie, we set the token to not authenticated
-    //echo("key not exist");
-    $token="notAuthenticated";
-
-}
+$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : 'notAuthenticated';
 
 //Ikke slett nedenunder, denne skal aktiveres så snart alle er klare for authentisering. Fungerende autentisering - Odd
-
-
 //procede with the request
 if((new controller())->authentication($dividedUri,$token)){
     //print("\nVi er autnetisert \n");
@@ -74,13 +53,12 @@ else{
 
 
 
-/**
+
 //Gammel metode, fjernes så snart vi er klar for authentisering
 //sends the information to the controller
-$controller = new controller();
+/*$controller = new controller();
 $res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
-echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
-**/
+echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller*/
 
 
 
