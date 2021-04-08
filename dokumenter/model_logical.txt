@@ -44,9 +44,9 @@ Foreign Key Ski_type references Ski_types(type_id)
 
 order_history(Order_nr, State, Customer_rep, Changed_date)
 Primary Key Order_nr, State
-Foreign Key Order_nr references Orders(Order_nr)
-Foreign Key Customer_rep references Employee(id)
+Foreign Key Order_nr references orders(order_nr)
+Foreign Key Customer_rep references employees(employee_id)
 
 order_aggregates (aggregate_id, customer_id)
 Primary Key aggregate_id
-Foreign Key customer_id references Customers(id)
+Foreign Key customer_id references customers(customer_id)
