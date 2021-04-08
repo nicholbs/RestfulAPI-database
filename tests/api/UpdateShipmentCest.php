@@ -11,13 +11,13 @@ class UpdateShipmentCest
     }
 
     // tests
-    public function deleteCustomerOrder(ApiTester $I)
+    public function updateShipMent(ApiTester $I)
     {
     $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_STOREKEEPER);
     $I->getClient()->getCookieJar()->set($cookie);
     // $I->haveHttpHeader('accept', 'application/json');
     $I->haveHttpHeader('Content-Type', 'application/json');
-    $I->sendDelete('/shipment/1/state-to-shipped');
+    $I->sendPost('/shipment/1/state-to-shipped');
     $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
     // $I->seeResponseIsJson();
     $I->seeResponseContains('Success');
