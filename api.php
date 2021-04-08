@@ -48,7 +48,8 @@ else{ //if the request dosent have a cookie, we set the token to not authenticat
 }
 
 //Ikke slett nedenunder, denne skal aktiveres så snart alle er klare for authentisering. Fungerende autentisering - Odd
-/**
+
+
 //procede with the request
 if((new controller())->authentication($dividedUri,$token)){
     //print("\nVi er autnetisert \n");
@@ -60,18 +61,18 @@ if((new controller())->authentication($dividedUri,$token)){
 }
 else{
     http_response_code(403); //sets the responseheader to 404
-    print("\nForbudt request, du er ikke authentisert");
+    print("\nSYou are not allowed to acccess this resource, Please chek if the roken provided is ok ");
 }
-**/
 
 
 
+/**
 //Gammel metode, fjernes så snart vi er klar for authentisering
 //sends the information to the controller
 $controller = new controller();
 $res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
 echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
-
+**/
 
 
 
