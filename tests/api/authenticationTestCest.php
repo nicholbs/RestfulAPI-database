@@ -19,7 +19,7 @@ class authenticationTestCest
     }
 
     // tests
-    public function tryToTest(ApiTester $I)
+    public function _after(ApiTester $I)
     {
     }
 
@@ -28,12 +28,10 @@ class authenticationTestCest
      */
     public function storekeeperAuth(ApiTester $I){
        // $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', storekeeperToken );
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', storekeeperToken );
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/storekeeper/orders');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-
-
     }
 
     /**
@@ -41,7 +39,7 @@ class authenticationTestCest
      */
 
     public function StorekeeperUnauthorized(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', productionPlannerToken);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', productionPlannerToken);
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/storekeeper/orders');
         $I->seeResponseCodeIs(403);
@@ -52,9 +50,9 @@ class authenticationTestCest
      * This function tests if we can access the /orders api with a customer token
      */
     public  function ordersAuth(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', customerToken);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', customerToken);
         $I->getClient()->getCookieJar()->set($cookie);
-        $I->sendGet('//orders');
+        $I->sendGet('/orders');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
 
     }
@@ -62,7 +60,7 @@ class authenticationTestCest
      * This function tests thath we are not autorized to acess the endpoint from a production-planner
      */
     public function ordersUnauthorized(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', productionPlannerToken);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', productionPlannerToken);
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/storekeeper/orders');
         $I->seeResponseCodeIs(403);
@@ -71,7 +69,7 @@ class authenticationTestCest
      * This function tests if we can access the customer api with a customer token
      */
     public  function customersAuth(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', customerToken);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', customerToken);
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/customer');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
@@ -81,7 +79,7 @@ class authenticationTestCest
      * This function tests thath we are not autorized to acess the endpoint from a production-planner
      */
     public function customerUnauthorized(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', productionPlannerToken);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', productionPlannerToken);
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/customer');
         $I->seeResponseCodeIs(403);
@@ -90,7 +88,7 @@ class authenticationTestCest
      * This function tests if we can access the shipment api with a storekeeper token
      */
     public  function shipmentAuth(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', storekeeperToken);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', storekeeperToken);
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/shipment');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
@@ -100,7 +98,7 @@ class authenticationTestCest
      * This function tests thath we are not autorized to acess the endpoint from a production-planner
      */
     public function shipmentUnauthorized(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', productionPlannerToken);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', productionPlannerToken);
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/customer');
         $I->seeResponseCodeIs(403);
