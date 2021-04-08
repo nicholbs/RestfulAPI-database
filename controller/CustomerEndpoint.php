@@ -43,10 +43,10 @@ class CustomerEndpoint
             // //         return $this->createOrders();
             // //     }
             // //     break;
-            case 'splitorder':
-                if($requestType == 'POST')
-                    $this->createSki();
-                break;
+            // case 'splitorder':
+            //     if($requestType == 'POST')
+            //         $this->createSki();
+            //     break;
         }
     }
 

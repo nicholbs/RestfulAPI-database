@@ -39,8 +39,8 @@ class CustomerModel extends DB
     public function deleteCustomerOrder($customer_nr, $order_nr)
     {
         // echo "\ndeleteCustomerOrder\n";
-        $stmt = $this->db->prepare('DELETE FROM orders WHERE customer_id = ?');
-        $stmt->execute([$customer_nr]);
+        $stmt = $this->db->prepare('DELETE FROM orders WHERE order_nr = ?');
+        $stmt->execute([$order_nr]);
         // $res = $stmt->fetch();
         return "Success";
     }
@@ -50,8 +50,11 @@ class CustomerModel extends DB
         // echo "\npostCustomerOrder\n";
         // echo $customer_nr;
         // echo $order_nr;
-        $stmt = $this->db->prepare('INSERT INTO orders(order_nr,customer_id) VALUES (?,?)');
-        $stmt->execute([$order_nr, $customer_nr]);
+        $stmt = $this->db->prepare('INSERT INTO orders(customer_id, ski_type, price) VALUES (?,2,70)');
+        // $stmt->execute([$order_nr, $customer_nr]);
+        $stmt->execute([$customer_nr]);
+
+        // INSERT INTO orders(customer_id, ski_type, price) VALUES (4,2,69)
         // $res = $stmt->fetch();
         return "Success";
         

@@ -169,6 +169,14 @@ CREATE TABLE `production_plans` (
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO `production_plans`(`ski_type`, `day`, `quantity`) VALUES
+(3, '2021-03-12 00:00:00', 1),
+(4, '2021-01-19 00:00:00', 100),
+(4, '2021-03-20 00:00:00', 20),
+(5, '2021-04-22 00:00:00', 30),
+(5, '2021-02-22 00:00:00', 15);
+
+
 -- --------------------------------------------------------
 
 --
