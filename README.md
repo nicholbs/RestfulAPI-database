@@ -1,6 +1,6 @@
-# Installasjon og oppsett
+# Installation and setup
 
-Se manualen under dokumenter.
+See the manual located in the folder dokument
 
 # Gruppemedlemmer
 
