@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This file getting all the request from the webbroser, and respond to the request
+ *
+ * The code is inspired by Rune Hjelsvold from his api.php located on the repo: git@git.gvk.idi.ntnu.no:runehj/sample-rest-api-project.git
+ */
+
 require_once 'controller/controller.php';
 header('Content-Type: application/json'); //formaterer headerene til å bli json format
 
