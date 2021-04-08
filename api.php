@@ -35,10 +35,17 @@ else{
 
 
 //chek if the request have a cookie
-if(array_key_exists('HTTP_COOKIE',$_SERVER)) {
+/**if(array_key_exists('HTTP_COOKIE',$_SERVER)) {
     //echo("Key exist");
     $tokenExt=explode('=',$_SERVER['HTTP_COOKIE']);
     $token=$tokenExt[1];
+
+}
+ **/
+if($_COOKIE['token']){
+    $token="notAuthenticated";
+    $token=$_COOKIE['token'];
+
 
 }
 else{ //if the request dosent have a cookie, we set the token to not authenticated
@@ -61,8 +68,9 @@ if((new controller())->authentication($dividedUri,$token)){
 }
 else{
     http_response_code(403); //sets the responseheader to 404
-    print("\nSYou are not allowed to acccess this resource, Please chek if the roken provided is ok ");
+    print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
 }
+
 
 
 

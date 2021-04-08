@@ -16,7 +16,7 @@ class AuthenticationEndpoint {
 
         //Find what department ore if the user is a customer based on the token:
         $usertype = (new AuthenticationModel())->findUsertype($token);
-        print("\n usertype: " . $usertype);
+        //print("\n usertype: " . $usertype);
 
         //Send respons if the user is allowed to procede with the request
         if($dividedUri[0] =="public"){ //Everyone shuld be allowed to access the public API.
@@ -61,7 +61,7 @@ class AuthenticationEndpoint {
         //Cheking the request baset on the api uri and the ACL list and returns true if the api and user match allow
 
         if(array_search($usertype,$orders) !== false && $dividedUri[0] == "orders"){
-            echo("key exist");
+           // echo("key exist");
             return true;
         }
         elseif (array_search($usertype,$customer) !== false && $dividedUri[0] == "customer"){
@@ -71,7 +71,7 @@ class AuthenticationEndpoint {
             return true;
         }
         elseif (array_search($usertype,$storekeeper) !== false && $dividedUri[0] == "storekeeper"){
-            echo("storekeeper key exist");
+           // echo("storekeeper key exist");
             return true;
         }
         elseif (array_search($usertype,$productionPlans) !== false && $dividedUri[0] == "production-plans"){
