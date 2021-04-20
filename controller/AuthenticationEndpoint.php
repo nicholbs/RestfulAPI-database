@@ -56,6 +56,7 @@ class AuthenticationEndpoint {
         $shipment[]="storekeeper";
         $storekeeper[]="storekeeper";
         $productionPlans[]="production-plans";
+        $customerRep[]="customer-rep";
 
 
         //Cheking the request baset on the api uri and the ACL list and returns true if the api and user match allow

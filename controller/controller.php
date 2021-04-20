@@ -46,7 +46,7 @@ class controller{
 
                 break;
             case "customer-rep":
-                //echo "vi er i customer-rep";
+                echo "vi er i customer-rep";
                 return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
             default: return "error no url";

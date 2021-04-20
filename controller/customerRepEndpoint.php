@@ -10,7 +10,8 @@ class customerRepEndpoint
         {
             case 'orders':
                 if($requestType == 'GET')
-                return $this ->retrieveOrders();
+                //return $this ->retrieveOrders();
+                    return $this->customerRepFilter($specificQuery);
                 break;
             case 'ski':
                 if($requestType == 'POST')
@@ -21,6 +22,17 @@ class customerRepEndpoint
     private function retrieveOrders(): array
     {
         return (new customerRepModel())->retrieveOrders();
+    }
+    /**
+     * This function determ witch filter is in used
+     * @param $
+     * @see customerRepModel()) -> getOrdersFilter()
+     */
+    public  function customerRepFilter(array $specificQuery){
+        if (array_key_exists('status',$specificQuery)){
+            return(new customerRepModel()) ->getOrdersFilter($specificQuery);
+
+        }
     }
 
 }
