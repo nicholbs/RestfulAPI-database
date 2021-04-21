@@ -2,23 +2,33 @@
 //require_once 'RESTConstants.php';
 // require_once 'db/StorekeeperModel.php';
 
+use Codeception\Application;
 use Codeception\Command\Console;
 
 require_once 'db/CustomerModel.php';
 
 class CustomerEndpoint
 {
-    public function handleRequest(array $uri,$specificQuery,$requestType)
+    public function handleRequest(array $uri,$specificQuery,$requestType, $requestBody)
     {
+
+        // echo $requestBody;
+        print_r($requestBody);
+        $arr = array("customer_id", "ski_quantity");
+        foreach ($arr as &$value) {
+            
+            if (!array_key_exists($value, $requestBody)) {
+                $reason = "Request was not processed due to missing the value: ";
+                $reason .= $value;
+                throw new BusinessException(400, $reason);
+            } 
+        }
+
+        
 
     if(in_array("plansummary", $uri) && $requestType=="GET")
         return $this->retrievePlan();
 
-        // echo json_encode($specificQuery);
-        // echo json_encode($uri);
-        // echo("Dette er CustomerEndpoint med uri: " + strval($uri));
-        // echo("Dette er CustomerEndpoint med query: " + strval($specificQuery));
-        // echo("Dette er CustomerEndpoint med req: " + strval($requestType));
         switch($uri[2])
         {
             case 'order':
