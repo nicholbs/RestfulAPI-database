@@ -23,13 +23,13 @@ class controller{
      */
 
 
-    public  function request(array $dividedUri,array $specificQuery,string $requestType,array $requestBodyJson){
+    public  function request(array $dividedUri,array $specificQuery,string $requestType, $requestBodyJson){
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
         switch ($witchEndpoint){
             case "orders": echo "orderS endpoint"; break;
             case "customer" : 
-                return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
+                return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $requestBodyJson);
                 break;
             case "shipment" : 
                 return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
