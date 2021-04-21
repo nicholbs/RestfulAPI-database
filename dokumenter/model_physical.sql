@@ -73,8 +73,6 @@ CREATE TABLE transporters (
 
 CREATE TABLE orders (
     order_nr int AUTO_INCREMENT,
-    ski_type int(11) NOT NULL,
-    ski_quantity int DEFAULT 1,
     price int NOT NULL,
     state ENUM ('new', 'open', 'skis-available') DEFAULT 'new',
     customer_id int NOT NULL,
@@ -116,6 +114,12 @@ CREATE TABLE production_plans (
     PRIMARY KEY (ski_type, day)
 );
 
+CREATE TABLE sub_orders (
+    order_nr int NOT NULL,
+    type_id int NOT NULL,
+    ski_quantity int DEFAULT 1,
+    PRIMARY KEY (order_nr, type_id)
+);
 ALTER TABLE skis 
 ADD CONSTRAINT skis_skitypes_fk 
 FOREIGN KEY (ski_type) 
@@ -152,11 +156,6 @@ FOREIGN KEY(customer_id)
 REFERENCES customers(customer_id) 
 ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE orders 
-ADD CONSTRAINT orders_ski_types_fk 
-FOREIGN KEY(ski_type) 
-REFERENCES ski_types(type_id) 
-ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE orders 
 ADD CONSTRAINT orders_customers_fk 
@@ -206,6 +205,18 @@ FOREIGN KEY(ski_type)
 REFERENCES ski_types(type_id) 
 ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE sub_orders 
+ADD CONSTRAINT sub_orders_order_fk
+FOREIGN KEY (order_nr) 
+REFERENCES orders(order_nr) 
+ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE sub_orders 
+ADD CONSTRAINT sub_orders_ski_types_fk
+FOREIGN KEY (type_id) 
+REFERENCES ski_types(type_id) 
+ON DELETE CASCADE ON UPDATE CASCADE;
+
 INSERT INTO `ski_types` (`model`, `type`, `temperature`, `grip`, `size`, `weight_class`, `description`, `historical`, `msrp`) VALUES 
 ('Active Pro', 'Skate', 'cold', 'IntelliWax', '182', '50-60', 'Good skis.', '0', '3200'),
 ('Redline', 'Classic', 'warm', 'Grippers', '167', '40-50', 'Slightly small skis.', '0', '1800'),
@@ -232,9 +243,9 @@ VALUES ('Flyttegutta A/S'), ('Reposisjoneringspatruljen');
 INSERT INTO `order_aggregates`(`customer_id`)
 VALUES (2);
 
-INSERT INTO `orders`(`ski_type`, `ski_quantity`, `price`, `state`, `customer_id`, `order_aggregate`, `date_placed`) VALUES
-(1, 100, 208000, 'new', 2, 1, '2021-03-22'), (2, 50, 58500, 'new', 2, 1, '2021-03-22'), (3, 30, 32175, 'open', 3, NULL, '2021-03-19'), 
-(2, 5, 7200, 'skis-available', 4, NULL, '2021-03-15'), (1, 3, 9600, 'skis-available', 1, NULL, '2021-03-17');
+INSERT INTO `orders`(`price`, `state`, `customer_id`, `order_aggregate`, `date_placed`) VALUES
+(208000, 'new', 2, 1, '2021-03-22'), (58500, 'new', 2, 1, '2021-03-22'), (32175, 'open', 3, NULL, '2021-03-19'), 
+(7200, 'skis-available', 4, NULL, '2021-03-15'), (9600, 'skis-available', 1, NULL, '2021-03-17');
 
 INSERT INTO `order_history`(`order_nr`,`state`, `customer_rep`, `changed_date`) 
 VALUES (3, 'open', 1, '2021-03-12'), (4, 'open', 1, '2021-03-19'), (4, 'skis-available', 1, '2021-03-20'), (5, 'open', 1, '2021-03-22'),
@@ -249,3 +260,6 @@ INSERT INTO `skis`(`ski_type`, `manufactured_date`, `order_assigned`) VALUES
 (2, '2021-01-29', 4), (2, '2021-01-29', 4), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL), (2, '2021-01-29', NULL),
 (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL),
 (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL);
+
+INSERT INTO `sub_orders`(`order_nr`, `type_id`,`ski_quantity` )
+VALUES (1,1,100), (2,2,50), (3,3,30),(4,2,5),(5,1,3);
