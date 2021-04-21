@@ -9,10 +9,10 @@ require_once 'db/CustomerModel.php';
 
 class CustomerEndpoint
 {
-    public function handleRequest(array $uri,$specificQuery,$requestType, $requestBody)
+    public function handleRequest(array $uri, $specificQuery, $requestType, array $requestBody)
     {
 
-        // echo $requestBody;
+        /*
         print_r($requestBody);
         $arr = array("customer_id", "ski_quantity");
         foreach ($arr as &$value) {
@@ -22,12 +22,7 @@ class CustomerEndpoint
                 $reason .= $value;
                 throw new BusinessException(400, $reason);
             } 
-        }
-
-        
-
-    if(in_array("plansummary", $uri) && $requestType=="GET")
-        return $this->retrievePlan();
+        }*/
 
         switch($uri[2])
         {
@@ -39,7 +34,7 @@ class CustomerEndpoint
                     return $this->deleteOrder($uri[1], $uri[3]);
                 }
                 else if($requestType == 'POST') {
-                    return $this->createOrder($uri[1]);
+                    return $this->createOrder($requestBody);
                 }
                 break;
         }
@@ -63,9 +58,9 @@ class CustomerEndpoint
         return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
     }
     // create an order
-    private function createOrder($customerId)
+    private function createOrder(array $requestBody)
     {
-        return (new CustomerModel())->postCustomerOrder($customerId);
+        return (new CustomerModel())->postCustomerOrder($requestBody);
     }
 }
 

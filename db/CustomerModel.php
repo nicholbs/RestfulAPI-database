@@ -45,23 +45,40 @@ class CustomerModel extends DB
         return "Success";
     }
     // create an order
-    public function postCustomerOrder($customer_id)
+    public function postCustomerOrder($requestBody)
     {
+        // Get customer's buying price
         $stmt = $this->db->prepare('SELECT `buying_price` FROM `customers` WHERE `customer_id` = :customerId');
-        $stmt->bindValue(':customerID', $customer_id);
+        $stmt->bindValue(':customerId', $requestBody['customer']);
         $stmt->execute();
-        $buyingPrice = $stmt->fetch();
+        $buying_price = $stmt->fetch()['buying_price'];
 
-        
+        $skis = $requestBody['skis']; //For ease of reading
 
-        //$stmt = $this->db->prepare('INSERT INTO orders(customer_id, ski_type, price) VALUES (?,2,70)');
-        // $stmt->execute([$order_nr, $customer_nr]);
-        //$stmt->execute([$customer_nr]);
+        // Creates list of ski types in format (2, 3, ...) for query
+        $ski_types = "(" . strval($skis[0]['type']); //Note to self: strval() = toString()
+        for($i = 1; $i < count($skis); $i++)
+            $ski_types .= ", " . strval($skis[$i]['type']);
+        $ski_types .= ")";
 
-        // INSERT INTO orders(customer_id, ski_type, price) VALUES (4,2,69)
-        // $res = $stmt->fetch();
-        //return "Success";
-        
+        // Get msrp of relevant ski types
+        $stmt = $this->db->prepare('SELECT `msrp` FROM `ski_types` WHERE `type_id` IN ' . $ski_types);
+        $stmt->execute();
+        $msrp = $stmt->fetchColumn('msrp');
+
+        // Calculate total price of order
+        $price = 0;
+        for($i = 0; $i < count($skis); $i++)
+            $price += $msrp[$i]['msrp'] * $skis[$i]['quantity'];
+        $price *= $buying_price;
+
+        return $msrp;
+
+        //      TODO 
+        //       - Start transaction
+        //       - Insert order
+        //       - Insert sub orders (loop)
+        //       - Commit transaction
     }
     
 

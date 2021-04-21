@@ -23,31 +23,27 @@ class controller{
      */
 
 
-    public  function request(array $dividedUri,array $specificQuery,string $requestType, $requestBodyJson){
+    public  function request(array $dividedUri,array $specificQuery,string $requestType, array $requestBody){
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
-        switch ($witchEndpoint){
+        switch ($dividedUri[0]){
             case "orders": echo "orderS endpoint"; break;
             case "customer" : 
-<<<<<<< HEAD
-                return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
-=======
-                return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $requestBodyJson);
->>>>>>> c121acc80ca17379736c019cb0ea9050964b80b7
+                return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $requestBody);
                 break;
             case "shipment" : 
                 return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "storekeeper": 
-                return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+                return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
                 break;
             case "production-.plans": echo "production-plans";break;
             case "public":
-               return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+               return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
 
                 break;
             case "customer-rep":
-                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
                 break;
             default: throw new APIException(404, "The URL given does not match any endpoints");
 

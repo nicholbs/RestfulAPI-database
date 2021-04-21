@@ -22,25 +22,24 @@ unset($specificQuery['request']); // removes request from specific Query.
 
 //Working with the body of the request
 $requestBody= file_get_contents('php://input'); //getting the body content
-return file_get_contents('php://input');
+
 //This code is directely copyed from Rune Hjertsvold repo:
 if(strlen($requestBody)>0){
-    $requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
+    $requestBody = json_decode($requestBody,true); // converting the body to JSON object
 }
 else{
-    $requestBodyJson = array(); //Making an empty array
+    $requestBody = array(); //Making an empty array
 }
 
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : 'notAuthenticated';
 
-<<<<<<< HEAD
-//if((new controller())->authentication($dividedUri,$token)){
+if((new controller())->authentication($dividedUri,$token)){
     //sends the information to the controller
     $controller = new controller();
     try {
-        //$res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
-        $res = "rBody:\t" + $requestBody + "\n\nrBJSON:\t" + $requestBodyJson;
-        echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
+        $res = $controller->request($dividedUri,$specificQuery,$requestType,$requestBody);
+        //$res = $requestBody;
+        echo json_encode($res); //send the respons back to frontend
 
     } catch (APIException $event) {
         http_response_code($event->getCode());
@@ -49,39 +48,10 @@ $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : 'notAuthenticated';
         http_response_code($event->getCode());
         echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
     }
-/*}
+}
 else{
     http_response_code(403); 
     print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
-}*/
-
-
-=======
-//Ikke slett nedenunder, denne skal aktiveres så snart alle er klare for authentisering. Fungerende autentisering - Odd
-//procede with the request
->>>>>>> c121acc80ca17379736c019cb0ea9050964b80b7
-
-try {
-    if((new controller())->authentication($dividedUri,$token)){
-        //print("\nVi er autnetisert \n");
-
-        //sends the information to the controller
-        $controller = new controller();
-        
-            $res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
-            echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
-
-    }
-    else{
-        http_response_code(403); //sets the responseheader to 404
-        print("\nAuthentication is needed, please check if the token provided is valid");
-    }
-} catch (APIException $event) {
-    http_response_code($event->getCode());
-    echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
-} catch (BusinessException $event) {
-    http_response_code($event->getCode());
-    echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
 }
 
 /**
