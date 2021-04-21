@@ -1,65 +1,40 @@
 <?php
 //require_once 'RESTConstants.php';
 // require_once 'db/StorekeeperModel.php';
+
+use Codeception\Command\Console;
+
 require_once 'db/CustomerModel.php';
 
 class CustomerEndpoint
 {
-      /**
-     * Checks wether the requested resource/controller is defined/valid
-     *
-     * @param string $request
-     * @return bool
-     * @author Rune Hjelsvol
-     */
-    public function isValidRequest(string $request): bool
-    {
-        return in_array($request, $this->validRequests);
-    }
-
-
-    public function handleRequest($uri,$specificQuery,$requestType)
+    public function handleRequest(array $uri,$specificQuery,$requestType)
     {
 
-    if($uri[1] == "plansummary")
+    if(in_array("plansummary", $uri) && $requestType=="GET")
         return $this->retrievePlan();
 
-        // print("Dette er CustomerEndpoint med uri: " + $uri);
+        // echo json_encode($specificQuery);
+        // echo json_encode($uri);
+        // echo("Dette er CustomerEndpoint med uri: " + strval($uri));
+        // echo("Dette er CustomerEndpoint med query: " + strval($specificQuery));
+        // echo("Dette er CustomerEndpoint med req: " + strval($requestType));
         switch($uri[2])
         {
-            // case 'plansummary':
-            //     if($requestType == 'GET')
-            //         echo("\n CustomerEndpoint plansummary");
-            //         return $this->retrievePlan();
-            //     break;
             case 'order':
-                if($requestType == 'GET') {
+                if($requestType == 'GET' && is_numeric($uri[1]) && is_numeric($uri[3])) {
                     return $this->getOrder($uri[1], $uri[3]);
                 }
-                if($requestType == 'DELETE') {
+                if($requestType == 'DELETE'&& is_numeric($uri[1]) && is_numeric($uri[3])) {
                     return $this->deleteOrder($uri[1], $uri[3]);
                 }
-                if($requestType == 'POST') {
-                    return $this->createOrder($uri[1]);
+                if($requestType == 'POST'&& is_numeric($uri[1]) && is_numeric($uri[3])) {
+                    return $this->createOrder($uri[1], $uri[3]);
                 }
-                break;
-            // // gir det noe mening å ha orders??
-            // // case 'orders':
-            // //     if($requestType == 'GET') {
-            // //         return $this->getOrders();
-            // //     }
-            // //     if($requestType == 'DELETE') {
-            // //         return $this->deleteOrders();
-            // //     }
-                
-            // //     if($requestType == 'POST') {
-            // //         return $this->createOrders();
-            // //     }
-            // //     break;
-            // case 'splitorder':
-            //     if($requestType == 'POST')
-            //         $this->createSki();
-            //     break;
+                default: 
+                    throw new BusinessException(400, "Request was not processed due to an apparent client error, for example malformed request syntax");
+               
+
         }
     }
 
@@ -81,29 +56,9 @@ class CustomerEndpoint
         return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
     }
     // create an order
-    private function createOrder($customerId)
+    private function createOrder($customerId, $orderNr)
     {
-        return (new CustomerModel())->postCustomerOrder($customerId);
+        return (new CustomerModel())->postCustomerOrder($customerId, $orderNr);
     }
-
-    // Trenger vi disse engang??
-    // // // retrieve orders
-    // // private function getOrders($customerId, $orderNr)
-    // // {
-    // //     return (new CustomerModel())->retrieveCustomerOrder($customerId, $orderNr);
-    // // }
-    // // // delete orders
-    // // private function deleteOrders($customerId, $orderNr)
-    // // {
-    // //     return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
-    // // }
-    // // // create orders
-    // // private function createOrders($customerId, $orderNr)
-    // // {
-    // //     return (new CustomerModel())->postCustomerOrder($customerId, $orderNr);
-    // // }
-
-
-
 }
 

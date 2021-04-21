@@ -82,7 +82,8 @@ class AuthenticationEndpoint {
             return true;
         }
         else {
-            return false; //If nothing matches the ACL we return false
+            throw new APIException(404, "The URL given does not match any endpoints");
+            // return false; //If nothing matches the ACL we return false
         }
 
     }
