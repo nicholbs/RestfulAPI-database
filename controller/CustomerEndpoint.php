@@ -5,6 +5,19 @@ require_once 'db/CustomerModel.php';
 
 class CustomerEndpoint
 {
+      /**
+     * Checks wether the requested resource/controller is defined/valid
+     *
+     * @param string $request
+     * @return bool
+     * @author Rune Hjelsvol
+     */
+    public function isValidRequest(string $request): bool
+    {
+        return in_array($request, $this->validRequests);
+    }
+
+
     public function handleRequest($uri,$specificQuery,$requestType)
     {
 
@@ -27,7 +40,7 @@ class CustomerEndpoint
                     return $this->deleteOrder($uri[1], $uri[3]);
                 }
                 if($requestType == 'POST') {
-                    return $this->createOrder($uri[1], $uri[3]);
+                    return $this->createOrder($uri[1]);
                 }
                 break;
             // // gir det noe mening å ha orders??
@@ -68,9 +81,9 @@ class CustomerEndpoint
         return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
     }
     // create an order
-    private function createOrder($customerId, $orderNr)
+    private function createOrder($customerId)
     {
-        return (new CustomerModel())->postCustomerOrder($customerId, $orderNr);
+        return (new CustomerModel())->postCustomerOrder($customerId);
     }
 
     // Trenger vi disse engang??
@@ -93,3 +106,4 @@ class CustomerEndpoint
 
 
 }
+
