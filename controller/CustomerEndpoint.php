@@ -1,39 +1,38 @@
 <?php
 //require_once 'RESTConstants.php';
 // require_once 'db/StorekeeperModel.php';
+
+use Codeception\Application;
+use Codeception\Command\Console;
+
 require_once 'db/CustomerModel.php';
 
 class CustomerEndpoint
 {
-      /**
-     * Checks wether the requested resource/controller is defined/valid
-     *
-     * @param string $request
-     * @return bool
-     * @author Rune Hjelsvol
-     */
-    /*public function isValidRequest(string $request): bool
-    {
-        return in_array($request, $this->validRequests);
-    }*/
-
-
-    public function handleRequest($uri,$specificQuery,$requestType)
+    public function handleRequest(array $uri,$specificQuery,$requestType, $requestBody)
     {
 
-    if($uri[1] == "plansummary")
+        // echo $requestBody;
+        print_r($requestBody);
+        $arr = array("customer_id", "ski_quantity");
+        foreach ($arr as &$value) {
+            
+            if (!array_key_exists($value, $requestBody)) {
+                $reason = "Request was not processed due to missing the value: ";
+                $reason .= $value;
+                throw new BusinessException(400, $reason);
+            } 
+        }
+
+        
+
+    if(in_array("plansummary", $uri) && $requestType=="GET")
         return $this->retrievePlan();
 
-        // print("Dette er CustomerEndpoint med uri: " + $uri);
         switch($uri[2])
         {
-            // case 'plansummary':
-            //     if($requestType == 'GET')
-            //         echo("\n CustomerEndpoint plansummary");
-            //         return $this->retrievePlan();
-            //     break;
             case 'order':
-                if($requestType == 'GET') {
+                if($requestType == 'GET' && is_numeric($uri[1]) && is_numeric($uri[3])) {
                     return $this->getOrder($uri[1], $uri[3]);
                 }
                 else if($requestType == 'DELETE') {
@@ -68,25 +67,5 @@ class CustomerEndpoint
     {
         return (new CustomerModel())->postCustomerOrder($customerId);
     }
-
-    // Trenger vi disse engang??
-    // // // retrieve orders
-    // // private function getOrders($customerId, $orderNr)
-    // // {
-    // //     return (new CustomerModel())->retrieveCustomerOrder($customerId, $orderNr);
-    // // }
-    // // // delete orders
-    // // private function deleteOrders($customerId, $orderNr)
-    // // {
-    // //     return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
-    // // }
-    // // // create orders
-    // // private function createOrders($customerId, $orderNr)
-    // // {
-    // //     return (new CustomerModel())->postCustomerOrder($customerId, $orderNr);
-    // // }
-
-
-
 }
 

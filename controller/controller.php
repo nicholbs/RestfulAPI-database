@@ -23,13 +23,17 @@ class controller{
      */
 
 
-    public  function request(array $dividedUri,array $specificQuery,string $requestType,array $requestBodyJson){
+    public  function request(array $dividedUri,array $specificQuery,string $requestType, $requestBodyJson){
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
         switch ($witchEndpoint){
             case "orders": echo "orderS endpoint"; break;
             case "customer" : 
+<<<<<<< HEAD
                 return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
+=======
+                return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $requestBodyJson);
+>>>>>>> c121acc80ca17379736c019cb0ea9050964b80b7
                 break;
             case "shipment" : 
                 return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
@@ -45,7 +49,7 @@ class controller{
             case "customer-rep":
                 return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
-            default: throw new APIException(404, "The URL given does not match any endpoints");;
+            default: throw new APIException(404, "The URL given does not match any endpoints");
 
         }
     }

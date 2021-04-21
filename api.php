@@ -33,6 +33,7 @@ else{
 
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : 'notAuthenticated';
 
+<<<<<<< HEAD
 //if((new controller())->authentication($dividedUri,$token)){
     //sends the information to the controller
     $controller = new controller();
@@ -55,25 +56,39 @@ else{
 }*/
 
 
+=======
+//Ikke slett nedenunder, denne skal aktiveres så snart alle er klare for authentisering. Fungerende autentisering - Odd
+//procede with the request
+>>>>>>> c121acc80ca17379736c019cb0ea9050964b80b7
 
+try {
+    if((new controller())->authentication($dividedUri,$token)){
+        //print("\nVi er autnetisert \n");
 
+        //sends the information to the controller
+        $controller = new controller();
+        
+            $res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+            echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
 
-//Gammel metode, fjernes så snart vi er klar for authentisering
-//sends the information to the controller
-/*$controller = new controller();
-$res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
-echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller*/
-
-
+    }
+    else{
+        http_response_code(403); //sets the responseheader to 404
+        print("\nAuthentication is needed, please check if the token provided is valid");
+    }
+} catch (APIException $event) {
+    http_response_code($event->getCode());
+    echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
+} catch (BusinessException $event) {
+    http_response_code($event->getCode());
+    echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
+}
 
 /**
  * Generates an array holding the information to be passed to the client.
  * @param int $error_code the HTTP error code causing the error
  * @param string $reason the URI of the resource detecting the error
- * @param int $detailCode the code of the specific type of error
- * @param Throwable $e the exception that caused the error - if applicable
- * @return array an array of the form array("error-code": nn, "title": "...", "detail": "...", "reason": "...")
- * @global array ERROR_MESSAGES
+ * @param string $error declares what type of error was generated
  * @author Rune Hjelsvol
  */
 function generateErrorResponseContent(int $error_code, string $reason, string $error): array {

@@ -12,16 +12,18 @@ class BusinessException extends Exception
      */
     protected $reason;
     /**
-     * @var string $detailCode of web request
+     * @var int $detailCode of web request
      */
+
     protected $detailCode;
+
     /**
-     * @var string $detailCode of web request
+     * @var string $exception type
      */
     protected $except;
 
 
-    public function __construct($code, $reason)
+    public function __construct(int $code, string $reason)
     {
         $this->detailCode = $code;
         $this->reason = $reason;
