@@ -30,7 +30,7 @@ class customerRepEndpoint
      */
     public  function customerRepFilter(array $specificQuery){
         if (array_key_exists('status',$specificQuery)){
-            return(new customerRepModel()) ->getOrdersFilter($specificQuery);
+            return(new customerRepModel()) ->getOrdersFilter2($specificQuery);
 
         }
     }
