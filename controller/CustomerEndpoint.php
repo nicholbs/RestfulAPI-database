@@ -12,10 +12,10 @@ class CustomerEndpoint
      * @return bool
      * @author Rune Hjelsvol
      */
-    public function isValidRequest(string $request): bool
+    /*public function isValidRequest(string $request): bool
     {
         return in_array($request, $this->validRequests);
-    }
+    }*/
 
 
     public function handleRequest($uri,$specificQuery,$requestType)
@@ -36,30 +36,13 @@ class CustomerEndpoint
                 if($requestType == 'GET') {
                     return $this->getOrder($uri[1], $uri[3]);
                 }
-                if($requestType == 'DELETE') {
+                else if($requestType == 'DELETE') {
                     return $this->deleteOrder($uri[1], $uri[3]);
                 }
-                if($requestType == 'POST') {
+                else if($requestType == 'POST') {
                     return $this->createOrder($uri[1]);
                 }
                 break;
-            // // gir det noe mening å ha orders??
-            // // case 'orders':
-            // //     if($requestType == 'GET') {
-            // //         return $this->getOrders();
-            // //     }
-            // //     if($requestType == 'DELETE') {
-            // //         return $this->deleteOrders();
-            // //     }
-                
-            // //     if($requestType == 'POST') {
-            // //         return $this->createOrders();
-            // //     }
-            // //     break;
-            // case 'splitorder':
-            //     if($requestType == 'POST')
-            //         $this->createSki();
-            //     break;
         }
     }
 

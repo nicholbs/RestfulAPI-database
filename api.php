@@ -22,29 +22,23 @@ unset($specificQuery['request']); // removes request from specific Query.
 
 //Working with the body of the request
 $requestBody= file_get_contents('php://input'); //getting the body content
-
-//linjen under er kommentert bort midlertidig og erstattet av if else rett under Odd 202010402
-//$requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
-
-//This code is directely copyed from Rune Hjertsvold repo, We have to give him credit:
+return file_get_contents('php://input');
+//This code is directely copyed from Rune Hjertsvold repo:
 if(strlen($requestBody)>0){
     $requestBodyJson = json_decode($requestBody,true); // converting the body to JSON object
 }
 else{
     $requestBodyJson = array(); //Making an empty array
-}//End of copy paste
+}
 
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : 'notAuthenticated';
 
-//Ikke slett nedenunder, denne skal aktiveres så snart alle er klare for authentisering. Fungerende autentisering - Odd
-//procede with the request
-if((new controller())->authentication($dividedUri,$token)){
-    //print("\nVi er autnetisert \n");
-
+//if((new controller())->authentication($dividedUri,$token)){
     //sends the information to the controller
     $controller = new controller();
     try {
-        $res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+        //$res = $controller ->request($dividedUri,$specificQuery,$requestType,$requestBodyJson);
+        $res = "rBody:\t" + $requestBody + "\n\nrBJSON:\t" + $requestBodyJson;
         echo json_encode($res); //send the respons back to frontend. Viser pr nå meldingen vi er i controller
 
     } catch (APIException $event) {
@@ -54,11 +48,11 @@ if((new controller())->authentication($dividedUri,$token)){
         http_response_code($event->getCode());
         echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
     }
-}
+/*}
 else{
-    http_response_code(403); //sets the responseheader to 404
+    http_response_code(403); 
     print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
-}
+}*/
 
 
 

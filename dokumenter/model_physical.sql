@@ -75,7 +75,7 @@ CREATE TABLE orders (
     price int NOT NULL,
     state ENUM ('new', 'open', 'skis-available') DEFAULT 'new',
     customer_id int NOT NULL,
-    date_placed date DEFAULT CURRENT_TIMESTAMP,
+    date_placed timestamp DEFAULT CURRENT_TIMESTAMP,
     order_aggregate int,
     PRIMARY KEY (order_nr)
 );

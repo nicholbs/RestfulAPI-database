@@ -29,8 +29,6 @@ class controller{
         switch ($witchEndpoint){
             case "orders": echo "orderS endpoint"; break;
             case "customer" : 
-                throw new BusinessException(404, "The URL given does not match any endpoints");
-                throw new APIException(404, "The URL given does not match any endpoints");
                 return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "shipment" : 

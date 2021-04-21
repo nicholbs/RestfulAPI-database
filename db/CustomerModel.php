@@ -52,7 +52,7 @@ class CustomerModel extends DB
         $stmt->execute();
         $buyingPrice = $stmt->fetch();
 
-        return $buyingPrice;
+        
 
         //$stmt = $this->db->prepare('INSERT INTO orders(customer_id, ski_type, price) VALUES (?,2,70)');
         // $stmt->execute([$order_nr, $customer_nr]);
