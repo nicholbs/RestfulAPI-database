@@ -32,7 +32,7 @@ class CustomerModel extends DB
         $stmt->bindValue(':orderNr', $order_nr);
         $stmt->execute();
         
-        $res =$stmt->fetchAll();
+        $res = $stmt->fetchAll();
         return $res;
     }
     // delete an order
@@ -45,18 +45,22 @@ class CustomerModel extends DB
         return "Success";
     }
     // create an order
-    public function postCustomerOrder($customer_nr, $order_nr)
+    public function postCustomerOrder($customer_id)
     {
-        // echo "\npostCustomerOrder\n";
-        // echo $customer_nr;
-        // echo $order_nr;
-        $stmt = $this->db->prepare('INSERT INTO orders(customer_id, ski_type, price) VALUES (?,2,70)');
+        $stmt = $this->db->prepare('SELECT `buying_price` FROM `customers` WHERE `customer_id` = :customerId');
+        $stmt->bindValue(':customerID', $customer_id);
+        $stmt->execute();
+        $buyingPrice = $stmt->fetch();
+
+        return $buyingPrice;
+
+        //$stmt = $this->db->prepare('INSERT INTO orders(customer_id, ski_type, price) VALUES (?,2,70)');
         // $stmt->execute([$order_nr, $customer_nr]);
-        $stmt->execute([$customer_nr]);
+        //$stmt->execute([$customer_nr]);
 
         // INSERT INTO orders(customer_id, ski_type, price) VALUES (4,2,69)
         // $res = $stmt->fetch();
-        return "Success";
+        //return "Success";
         
     }
     
