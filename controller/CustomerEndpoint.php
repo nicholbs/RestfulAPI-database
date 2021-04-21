@@ -14,7 +14,7 @@ class CustomerEndpoint
 
         // echo $requestBody;
         print_r($requestBody);
-        $arr = array("customer_id", "ski_quantity", "price");
+        $arr = array("customer_id", "ski_quantity");
         foreach ($arr as &$value) {
             
             if (!array_key_exists($value, $requestBody)) {
