@@ -5,6 +5,19 @@ require_once 'db/CustomerModel.php';
 
 class CustomerEndpoint
 {
+      /**
+     * Checks wether the requested resource/controller is defined/valid
+     *
+     * @param string $request
+     * @return bool
+     * @author Rune Hjelsvol
+     */
+    public function isValidRequest(string $request): bool
+    {
+        return in_array($request, $this->validRequests);
+    }
+
+
     public function handleRequest($uri,$specificQuery,$requestType)
     {
 
@@ -93,3 +106,4 @@ class CustomerEndpoint
 
 
 }
+

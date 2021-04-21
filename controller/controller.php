@@ -29,15 +29,14 @@ class controller{
         switch ($witchEndpoint){
             case "orders": echo "orderS endpoint"; break;
             case "customer" : 
-                // echo "customer endpoint\n";
+                throw new BusinessException(404, "The URL given does not match any endpoints");
+                throw new APIException(404, "The URL given does not match any endpoints");
                 return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "shipment" : 
-                // echo "customer endpoint\n";
                 return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
                 break;
             case "storekeeper": 
-               // echo "storekeeper endpoint";
                 return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
             case "production-.plans": echo "production-plans";break;
@@ -46,13 +45,11 @@ class controller{
 
                 break;
             case "customer-rep":
-                echo "vi er i customer-rep";
                 return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBodyJson);
                 break;
-            default: return "error no url";
+            default: throw new APIException(404, "The URL given does not match any endpoints");;
 
         }
-
     }
 
     /**
