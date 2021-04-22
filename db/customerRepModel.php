@@ -14,46 +14,13 @@ class customerRepModel extends DB
     }
 
     /**
-     * This function find orders based on a certan status
+     * This function return all orders of certan(s) status
+     *
+     * @param array $specificQuery - The query data from frontend
+     * @see this -> getAllSubordersWithInfromation()
+     * @return array - Return an array with all skis of certan(s) status
      */
     public function getOrdersFilter(array $specificQuery) :array{
-        echo("\n Status getOrdersFilter");
-        $filter = explode(',', $specificQuery['status']); //divde the filter and save the result to a query
-
-        /**
-        $query="SELECT orders.order_nr, orders.ski_quantity, orders.state, ski_types.type_id, ski_types.model, ski_types.type FROM orders
-LEFT JOIN skis on orders.order_nr = skis.order_assigned LEFT JOIN ski_types on skis.ski_type = ski_types.type_id
-WHERE state LIKE 'skis-available'";
-**/
-        $query= "SELECT orders.order_nr, orders.price FROM `orders` WHERE state like 'skis-available'";
-
-        $kommando = $this ->db ->query($query);
-        //$res = $kommando ->fetchAll(PDO::FETCH_ASSOC);
-
-
-
-        $res2 = array();
-        print("\n");
-        while ($row = $kommando ->fetch(PDO::FETCH_ASSOC)){
-            print($row['order_nr']);
-            $res2['order_nr'] = $row['order_nr'];
-            $res2['testmeg'] = "test";
-
-            $res2[]=array('order_nr');
-            print("\n");
-
-        }
-    $res = array();
-        print("\n Se2: \n");
-        print_r($res2);
-        print_r($res);
-
-        return $res2;
-
-    }
-
-
-    public function getOrdersFilter2(array $specificQuery) :array{
         echo("\n Status getOrdersFilter");
         $filter = explode(',', $specificQuery['status']); //divde the filter and save the result to a query
 
@@ -106,8 +73,8 @@ WHERE state LIKE 'skis-available'";
 
     /**
      * This function returns all skis in a order
-     * @param int $ordernr
-     * @return array
+     * @param int $ordernr - The ordernumber
+     * @return array - All skis of a specific order.
      */
 
     public function getAllSubordersWithInformation(int $ordernr) : array{

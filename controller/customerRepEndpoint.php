@@ -4,6 +4,15 @@ require_once 'db/customerRepModel.php';
 
 class customerRepEndpoint
 {
+    /**
+     * This function handles the publicEndpoit requests
+     * @param array $uri    - Array divded into / in this case skis
+     * @param array $specificQuery  -   An array with the content afther ? mark
+     * @param string $requestType   -   get/post/put etc..
+     * @param array $requestBodyJson    -   If there is a json body we recive tath in an array.
+     * @return array    -   returning the results
+     * @see this -> customerRepFilter()
+     */
     public function handleRequest($uri,$specificQuery,$requestType,$requestBodyJson)
     {
         switch($uri[1])
@@ -25,12 +34,13 @@ class customerRepEndpoint
     }
     /**
      * This function determ witch filter is in used
-     * @param $
+     * @param $specificQuery - Array with qquery sendt frontebd
      * @see customerRepModel()) -> getOrdersFilter()
+     * $return an array with a all skis of a folters
      */
     public  function customerRepFilter(array $specificQuery){
         if (array_key_exists('status',$specificQuery)){
-            return(new customerRepModel()) ->getOrdersFilter2($specificQuery);
+            return(new customerRepModel()) ->getOrdersFilter($specificQuery);
 
         }
     }
