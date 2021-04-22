@@ -8,6 +8,7 @@ require_once 'customerRepEndpoint.php';
 require_once 'TransporterEndpoint.php';
 require_once 'PublicEndpoint.php';
 require_once 'AuthenticationEndpoint.php';
+require_once 'constants.php';
 class controller{
     public function __construct(){
 
@@ -38,7 +39,7 @@ class controller{
                 return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
                 break;
             case "production-.plans": echo "production-plans";break;
-            case "public":
+            case uriConst::public:
                return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
 
                 break;
