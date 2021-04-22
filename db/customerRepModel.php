@@ -99,7 +99,7 @@ WHERE state LIKE 'skis-available'";
             }
 
         }
-        
+
         return $resultArray;
 
     }
