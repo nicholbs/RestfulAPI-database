@@ -33,25 +33,26 @@ else{
 
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : 'notAuthenticated';
 
-if((new controller())->authentication($dividedUri,$token)){
-    //sends the information to the controller
+try {
     $controller = new controller();
-    try {
         $res = $controller->request($dividedUri,$specificQuery,$requestType,$requestBody);
         //$res = $requestBody;
         echo json_encode($res); //send the respons back to frontend
 
+        if((new controller())->authentication($dividedUri,$token)){
+            //sends the information to the controller
+            
+        }
+        else{
+            http_response_code(403); 
+            print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
+        }
     } catch (APIException $event) {
-        http_response_code($event->getCode());
-        echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
-    } catch (BusinessException $event) {
-        http_response_code($event->getCode());
-        echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
-    }
-}
-else{
-    http_response_code(403); 
-    print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
+    http_response_code($event->getCode());
+    echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
+} catch (BusinessException $event) {
+    http_response_code($event->getCode());
+    echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
 }
 
 /**
