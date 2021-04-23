@@ -34,20 +34,16 @@ else{
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : 'notAuthenticated';
 
 try {
-    $controller = new controller();
+    if((new controller())->authentication($dividedUri,$token)){
+        //sends the information to the controller
+        $controller = new controller();
         $res = $controller->request($dividedUri,$specificQuery,$requestType,$requestBody);
-        //$res = $requestBody;
         echo json_encode($res); //send the respons back to frontend
-
-        if((new controller())->authentication($dividedUri,$token)){
-            //sends the information to the controller
-            
-        }
-        else{
-            http_response_code(403); 
-            print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
-        }
-    } catch (APIException $event) {
+    }
+    else{
+        http_response_code(403); 
+        print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
+    } } catch (APIException $event) {
     http_response_code($event->getCode());
     echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
 } catch (BusinessException $event) {

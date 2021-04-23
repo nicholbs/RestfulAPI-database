@@ -46,7 +46,8 @@ class controller{
             case "customer-rep":
                 return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
                 break;
-            default: throw new APIException(404, "The URL given does not match any endpoints");
+            default: 
+            throw new APIException(404, "The URL given does not match any endpoints");
 
         }
     }
