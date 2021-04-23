@@ -113,6 +113,7 @@ class CustomerModel extends DB
         $res['total'] = $price;
         $res['sub_orders'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        print_r($res);
         return $res;
     }
     
