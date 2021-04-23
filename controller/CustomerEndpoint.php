@@ -12,16 +12,21 @@ class CustomerEndpoint
     public function handleRequest(array $uri,$specificQuery,$requestType, $requestBody)
     {
 
-        // echo $requestBody;
-        print_r($requestBody);
-        $arr = array("customer_id", "ski_quantity");
-        foreach ($arr as &$value) {
-            
-            if (!array_key_exists($value, $requestBody)) {
-                $reason = "Request was not processed due to missing the value: ";
-                $reason .= $value;
-                throw new BusinessException(400, $reason);
-            } 
+        // print_r($requestBody);
+        // Check that content of request contains the values needed
+        if (is_array($requestBody)) {
+
+            $arr = array("customer_id", "ski_quantity");
+            foreach ($arr as &$value) {
+                
+                if (!array_key_exists($value, $requestBody)) {
+                    $reason = "Request was not processed due to missing the value: ";
+                    $reason .= $value;
+                    throw new BusinessException(400, $reason);
+                } 
+            }
+        } else {
+            throw new BusinessException(400, "Request was not processed due to an apparent client error, for example malformed syntax in body");
         }
 
         
