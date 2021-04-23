@@ -82,7 +82,7 @@ class AuthenticationEndpoint {
             return true;
         }
         else {
-            throw new APIException(404, "The URL given does not match any endpoints");
+            throw new APIException(404, "Token is not valid for the resource you are trying to access");
             // return false; //If nothing matches the ACL we return false
         }
 
