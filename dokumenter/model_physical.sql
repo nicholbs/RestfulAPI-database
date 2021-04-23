@@ -72,10 +72,10 @@ CREATE TABLE transporters (
 
 CREATE TABLE orders (
     order_nr int AUTO_INCREMENT,
-    price int NOT NULL,
+    price float NOT NULL,
     state ENUM ('new', 'open', 'skis-available') DEFAULT 'new',
     customer_id int NOT NULL,
-    date_placed date DEFAULT CURRENT_TIMESTAMP,
+    date_placed timestamp DEFAULT CURRENT_TIMESTAMP,
     order_aggregate int,
     PRIMARY KEY (order_nr)
 );
@@ -119,6 +119,7 @@ CREATE TABLE sub_orders (
     ski_quantity int DEFAULT 1,
     PRIMARY KEY (order_nr, type_id)
 );
+
 ALTER TABLE skis 
 ADD CONSTRAINT skis_skitypes_fk 
 FOREIGN KEY (ski_type) 
