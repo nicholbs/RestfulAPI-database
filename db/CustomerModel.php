@@ -1,49 +1,112 @@
 <?php
 //require_once 'RESTConstants.php';
 // require_once 'db/OrderModel.php';
+// require_once 'constants.php';
+
+use Symfony\Component\CssSelector\Parser\Token;
 
 class CustomerModel extends DB
 {
-    // get 4 week product plan
+     /**
+    * Retrieve all production plans from database in a four week intervall
+    *
+    * @author Nicholas Bodvin Sellevåg
+    */ 
     public function retrieveProdPlan(): array
     {
+        // Body - endpoint
+        // eksisterer tingen i databasen
+        // sjekk at resultat fra query inneholder det det skal.
         // echo "retrieveProdPlan";
+
+        // Prepare and send request to database which retrieves production plans
         $stmt = $this ->db ->query('SELECT * FROM `production_plans` WHERE day >= DATE_ADD(
             DATE_ADD(CURDATE(), INTERVAL - WEEKDAY(CURDATE()) DAY),
             INTERVAL - 4 WEEK)');
         $res =$stmt ->fetchAll();
         
+         // If request is empty no record was found
+         if (empty($res)) {
+            return $res;
+        } 
+
+        // If request is not empty check that response contains all attributes expected from database
+        else {
+            $arr = array("ski_type", "day", "quantity");
+            $this->validateRespone($arr, $res);
+            return $res;
+        }
         return $res;
     }
     
     
-    // retrieve an order
+    /**
+    * Retrieve an order and validates content of response
+    *
+    * @param int $customer_nr id of customer
+    * @param int $order_nr id of order
+    * @author Nicholas Bodvin Sellevåg
+    */ 
     public function retrieveCustomerOrder($customer_nr, $order_nr)
     {
-        // // echo "\nretrieveCustomerOrder\n";
-        // // echo $customer_nr;
-        // // echo "\n";
-        // // echo $order_nr;
-        // // echo "\n";
-        // 
-        // $stmt = $this ->db ->prepare('SELECT * FROM `orders` WHERE `customer_id` = :customerId');
-        $stmt = $this ->db ->prepare('SELECT * FROM `orders` WHERE `customer_id` = :customerId AND `order_nr` = :orderNr');
+        // Prepare and send request to database which retrieves appropriate order
+        $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price, order_aggregate FROM `orders` WHERE `customer_id` = :customerId AND `order_nr` = :orderNr');
         $stmt->bindValue(':customerId', $customer_nr);
         $stmt->bindValue(':orderNr', $order_nr);
-        $stmt->execute();
+        $stmt->execute();   
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-        $res = $stmt->fetchAll();
-        return $res;
+        // If request is empty no record was found
+        if (empty($res)) {
+            return $res;
+        } 
+        // If request is not empty check that response contains all attributes expected from database
+        else {
+            $arr = array("order_nr", "state", "date_placed", "price");
+            $this->validateRespone($arr, $res);
+            return $res;
+        }
+        
     }
-    // delete an order
+    
+        
+    /**
+    * Delete an order and validates content of response
+    *
+    * Firstly a check of wether record exist
+    * Then deletes record
+    * Lastly checks if record was successfully deleted
+    *
+    * @param int $customer_nr id of customer
+    * @param int $order_nr id of order
+    * @see CustomerModel::retrieveCustomerOrder()
+    * @author Nicholas Bodvin Sellevåg
+    */ 
     public function deleteCustomerOrder($customer_nr, $order_nr)
     {
-        // echo "\ndeleteCustomerOrder\n";
-        $stmt = $this->db->prepare('DELETE FROM orders WHERE order_nr = ?');
-        $stmt->execute([$order_nr]);
-        // $res = $stmt->fetch();
-        return "Success";
+        $customerOrder = $this->retrieveCustomerOrder($customer_nr, $order_nr);
+        $res = array();
+        $res['order_nr'] = $order_nr;
+        $res['customer'] = $customer_nr;
+
+
+        if (empty($customerOrder)) {
+            throw new BusinessException(httpErrorConst::notFound, "Record was not found");
+        } else {
+            $stmt = $this->db->prepare('DELETE FROM orders WHERE order_nr = ?');
+            $stmt->execute([$order_nr]);
+
+            $customerOrder = $this->retrieveCustomerOrder($customer_nr, $order_nr);
+            if (empty($customerOrder)) {
+                $res['status'] = "Deleted";
+                return $res;
+            }
+            else {
+                throw new APIException(httpErrorConst::serverError, "Was not able to delete the record");
+            }
+        }
     }
+
     // create an order
     public function postCustomerOrder($requestBody)
     {
@@ -116,7 +179,30 @@ class CustomerModel extends DB
         print_r($res);
         return $res;
     }
-    
+
+
+        
+    /**
+    * Validates that response from database contains the appropriate keys
+    *
+    * @param array $arr - array containing keys to check for
+    * @param $response - array which keys is checked
+    * @author Nicholas Bodvin Sellevåg
+    */ 
+    private function validateRespone(array $arr, array $response) {
+
+        foreach ($response as &$value) {
+            $index = 0;
+            foreach ($arr as &$value) {
+                if (!array_key_exists($value, $response[$index])) {
+                    $reason = "Request was not processed due to missing the value: ";
+                    $reason .= $value;
+                    throw new BusinessException(httpErrorConst::badRequest, $reason);
+                } 
+            }
+            $index++;
+        }
+    }
 
     // Gir det noe mening å ha orders??
     // get specific orders

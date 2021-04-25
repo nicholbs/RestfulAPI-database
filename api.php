@@ -42,13 +42,38 @@ try {
     }
     else{
         http_response_code(403); 
-        print("\nYou are not allowed to acccess this resource, Please chek if the token provided is ok Ore somthing bad thing has happend ");
-    } } catch (APIException $event) {
+        print("\nYou are not allowed to acccess this resource, please check if the token provided is valid");
+    } 
+} 
+/**
+ * Handles APIExceptions thrown throughout each transaction
+ * 
+ * @param APIException $event - the generated exeption 
+ * @author Nicholas Bodvin Sellevåg 
+ */
+catch (APIException $event) {
     http_response_code($event->getCode());
     echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
-} catch (BusinessException $event) {
+} 
+/**
+ * Handles BusinessExceptions thrown throughout each transaction
+ * 
+ * @param BusinessException $event - the generated exeption 
+ * @author Nicholas Bodvin Sellevåg 
+ */
+catch (BusinessException $event) {
     http_response_code($event->getCode());
     echo json_encode(generateErrorResponseContent($event->getDetailCode(), $event->getReason(), $event->getExcept()));
+} 
+/**
+ * Handles errors generated from using methods through the PDO object
+ * 
+ * @param PDOException $event - the generated exeption 
+ * @author Nicholas Bodvin Sellevåg 
+ */
+catch (PDOException $event) {
+    http_response_code(httpErrorConst::serverError);
+    echo json_encode(generateErrorResponseContent($event->getCode(), $event->getMessage(), "PDOException"));
 }
 
 /**
@@ -58,7 +83,7 @@ try {
  * @param string $error declares what type of error was generated
  * @author Rune Hjelsvol
  */
-function generateErrorResponseContent(int $error_code, string $reason, string $error): array {
+function generateErrorResponseContent($error_code, string $reason, string $error): array {
     $res = array();
 
     $res['error_code'] = $error_code;

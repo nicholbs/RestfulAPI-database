@@ -2,8 +2,8 @@
 
 
 /**
- * Class BusinessException an exception class thrown whenever the database request was flawed.
- * @author Rune Hjelsvol, Nicholas Sellevåg
+ * Class BusinessException is an unusual condition within a business process that warrants investigation or external review.
+ * @author Nicholas Sellevåg - Inspiration from Rune Hjelsvol
  */
 class BusinessException extends Exception
 {

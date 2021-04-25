@@ -3,7 +3,9 @@
 
 /**
  * Class APIException an exception class thrown whenever the request could not be successfully handled by the API.
- * @author Rune Hjelsvol, Nicholas Sellevåg
+ * Something was wrong in request or handling that the API couldn't parse the passed data
+ * 
+ * @author Nicholas Sellevåg - inspiration Rune Hjelsvol 
  */
 class APIException extends Exception
 {

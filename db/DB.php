@@ -13,9 +13,14 @@ abstract class DB
 
     public function __construct()
     {
-       $this->db = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8',
-                DB_USER, DB_PWD,
-                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        try {
+            $this->db = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8',
+            DB_USER, DB_PWD,
+            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        } catch (PDOException $e) {
+            $reason = 'Connection to database failed: ' . $e->getMessage();
+            throw new APIException(500, $reason);
+        }
     }
 
 }
