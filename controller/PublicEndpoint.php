@@ -26,6 +26,7 @@ class publicEndpoint
                 echo ("\n Vi er i test på skifilter");
                return $this ->skifilter($specificQuery);
                 break;
+            default: throw new BusinessException(404, "The URL given does not match the business logic, check endpoint documentation");
         }
     }
     private function retrieveOrders(): array
@@ -61,6 +62,7 @@ class publicEndpoint
         }
         //If the filter dosent exist
         else{
+        throw new BusinessException(404, "Filters you have provided dos not exist please chek tath all the filters is spelld rigtht eg grip ore model");
             return "filter not found";
         }
 
