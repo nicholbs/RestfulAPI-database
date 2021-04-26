@@ -5,6 +5,12 @@
  */
 class uriConst{
     const public = "public";
+    const orders ="orders";
+    const customer="customer";
+    const shipment="shipment";
+    const storekeeper="storekeeper";
+    const productionPlans="production-plans";
+
 }
 
 /**
