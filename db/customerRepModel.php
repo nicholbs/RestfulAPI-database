@@ -6,13 +6,7 @@ require_once 'AuthenticationModel.php'; //In use in the function ChangeOrderStat
 
 class customerRepModel extends DB
 {
-    public function retrieveOrders(): array
-    {
-        $stmt = $this ->db ->query("SELECT * FROM orders");
-        $res =$stmt ->fetchAll();
 
-        return $res;
-    }
 
     /**
      * This function return all orders of certan(s) status

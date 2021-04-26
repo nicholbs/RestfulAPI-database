@@ -29,10 +29,7 @@ class customerRepEndpoint
             default: throw new BusinessException(404, "The URL given does not match the business logic, check endpoint documentation");
         }
     }
-    private function retrieveOrders(): array
-    {
-        return (new customerRepModel())->retrieveOrders();
-    }
+
     /**
      * This function determ witch filter is in used
      * @param $specificQuery - Array with qquery sendt frontebd
