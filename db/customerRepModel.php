@@ -197,7 +197,6 @@ WHERE order_nr LIKE :arg0";
         $statement ->bindValue(':arg0',$ordernumber);
         $statement ->execute();
         $res = $statement ->fetchAll(PDO::FETCH_COLUMN);
-        print_r($res);
         return $res[0];
 
     }

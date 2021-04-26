@@ -19,15 +19,14 @@ class customerRepEndpoint
         {
             case 'orders':
                 if($requestType == 'GET')
-                //return $this ->retrieveOrders();
                     return $this->customerRepFilter($specificQuery);
                 break;
-            case 'ski':
-                if($requestType == 'POST')
-                    echo  "post customer-rep";
+            case 'state':
+                if($requestType =='PUT') {
+                    return (new customerRepModel())->changeOrderState($specificQuery, $requestBodyJson, $token);
+                }
                 break;
-            case 'test':
-                return (new customerRepModel()) ->changeOrderState($specificQuery, $requestBodyJson, $token);
+            default: throw new BusinessException(404, "The URL given does not match the business logic, check endpoint documentation");
         }
     }
     private function retrieveOrders(): array
