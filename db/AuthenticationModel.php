@@ -52,5 +52,28 @@ class AuthenticationModel extends DB {
 
     }
 
+    /**
+     * This function find a employee id and returns the employeeid
+     * @param $token    - token from the authenticated user
+     * @return int  -    employee id
+     */
+    public function findEmployeeId($token) :int{
+        $queryEmployeeDepartment= "SELECT employee_id FROM employees WHERE token LIKE :token";
+        $statementEmployeeDepartment= $this ->db->prepare($queryEmployeeDepartment);
+        $statementEmployeeDepartment ->bindValue(':token',$token);
+        $statementEmployeeDepartment ->execute();
+        $department = $statementEmployeeDepartment ->fetchAll(PDO::FETCH_COLUMN);
+        return $department[0]; //Retuns employee id
+
+        //todo create an exeption if there is no employee with the token found.
+
+    }
+
 
 }//End of AuthenticationModel class
+/**
+$token ="022224c9a11805494a77796d671bec4c5bae495af78e906694018dbbc39bf2cd";
+$user = new  AuthenticationModel();
+$userid = $user ->findEmployeeId($token);
+print("Userid of a employee is: " . $userid);
+**/

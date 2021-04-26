@@ -66,7 +66,7 @@ class customerRepModel extends DB
             }
 
         }
-
+       // print_r($resultArray);
         return $resultArray;
 
     }
@@ -91,6 +91,10 @@ WHERE order_nr LIKE :arg0";
 
 
 
+    }
+    public function changeOrderState(array $specificQuery, array $requestBodyJson, string $token ){
+        //implement
+      print("\n Token er: " . $token . "\n");
     }
 
     public function createSki()
