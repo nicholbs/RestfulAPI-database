@@ -24,7 +24,7 @@ class controller{
      */
 
 
-    public  function request(array $dividedUri,array $specificQuery,string $requestType, array $requestBody){
+    public  function request(array $dividedUri,array $specificQuery,string $requestType, array $requestBody, string $token){
         $witchEndpoint = $dividedUri[0]; //Extracting the endpoint
 
         switch ($dividedUri[0]){
@@ -44,7 +44,7 @@ class controller{
 
                 break;
             case "customer-rep":
-                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
+                return (new customerRepEndpoint()) ->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody, $token);
                 break;
             default: 
             throw new APIException(404, "The URL given does not match any endpoints");

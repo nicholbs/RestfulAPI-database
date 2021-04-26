@@ -37,7 +37,7 @@ try {
     if((new controller())->authentication($dividedUri,$token)){
         //sends the information to the controller
         $controller = new controller();
-        $res = $controller->request($dividedUri,$specificQuery,$requestType,$requestBody);
+        $res = $controller->request($dividedUri,$specificQuery,$requestType,$requestBody, $token);
         echo json_encode($res); //send the respons back to frontend
     }
     else{

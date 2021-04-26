@@ -13,7 +13,7 @@ class customerRepEndpoint
      * @return array    -   returning the results
      * @see this -> customerRepFilter()
      */
-    public function handleRequest($uri,$specificQuery,$requestType,$requestBodyJson)
+    public function handleRequest($uri,$specificQuery,$requestType,$requestBodyJson, $token)
     {
         switch($uri[1])
         {
@@ -26,6 +26,8 @@ class customerRepEndpoint
                 if($requestType == 'POST')
                     echo  "post customer-rep";
                 break;
+            case 'test':
+                return (new customerRepModel()) ->changeOrderState($specificQuery, $requestBodyJson, $token);
         }
     }
     private function retrieveOrders(): array
