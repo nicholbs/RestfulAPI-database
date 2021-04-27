@@ -28,17 +28,31 @@ class CustomerEndpoint
             case 'order':
                 if($requestType == 'GET') {
                     $this->validateURI($uri);
-                    $this->validateBody($requestBody);
+                    $arr = array("customer_id", "ski_quantity");
+                    $this->validateBody($requestBody, $arr);
                     return $this->getOrder($uri[1], $uri[3]);
                 }
                 else if($requestType == 'DELETE') {
                     $this->validateURI($uri);
-                    $this->validateBody($requestBody);
+                    $arr = array("customer_id", "ski_quantity");
+                    $this->validateBody($requestBody, $arr);
                     return $this->deleteOrder($uri[1], $uri[3]);
                 }
                 else if($requestType == 'POST') {
                     return $this->createOrder($requestBody);
                 }
+                break;
+                case 'orderSince':
+                    if(!$requestType == 'GET') {
+                        throw new BusinessException(httpErrorConst::badRequest, "users can only retrieve orders with filter");
+                    }
+                    $antQueryKeyelements= count($specificQuery);
+                    if (array_key_exists('since',$specificQuery) && $antQueryKeyelements ==1 ){
+                        return $this->getOrderSince($uri[1], $specificQuery['since']);
+                    } else {
+                        throw new BusinessException(httpErrorConst::badRequest, "request is missing 'since' filter");
+                    }
+                break;
                 default: 
                 throw new BusinessException(404, "The URL given does not match the business logic, check endpoint documentation");
         }
@@ -62,8 +76,8 @@ class CustomerEndpoint
             throw new BusinessException(400, "Endpoint expected customer id to be a number");
         };
     }
-    private function validateBody($requestBody) {
-        $arr = array("customer_id", "ski_quantity");
+    private function validateBody($requestBody, array $arr) {
+       
         foreach ($arr as &$value) {
             
             if (!array_key_exists($value, $requestBody)) {
@@ -77,6 +91,11 @@ class CustomerEndpoint
     private function retrievePlan(): array
     {
         return (new CustomerModel())->retrieveProdPlan();
+        
+    }
+    private function getOrderSince($customerId, $since): array
+    {
+        return (new CustomerModel())->retrieveCustomerOrderSince($customerId, $since);
         
     }
 

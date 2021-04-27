@@ -33,12 +33,13 @@ class controller{
                 return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $requestBody);
                 break;
             case "shipment" : 
-                return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType);
+                return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $token, $requestBody);
                 break;
             case "storekeeper": 
                 return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
                 break;
-            case "production-.plans": echo "production-plans";break;
+            case "production-.plans": echo "production-plans";
+                break;
             case uriConst::public:
                return (new publicEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);
 
