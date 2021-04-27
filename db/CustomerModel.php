@@ -140,7 +140,13 @@ class CustomerModel extends DB
     // create an order
     public function postCustomerOrder($requestBody)
     {
-        // TODO - Rollback minefelt for når ting er fucky + exceptions
+        // Checks validity of request body
+        if(!array_key_exists('customer', $requestBody) || !array_key_exists('skis', $requestBody))
+            throw new APIException(403, "Incomplete request body");
+
+        $skis = $requestBody['skis']; //For ease of reading
+        if(!array_key_exists(0, $skis))
+            throw new APIException(403, "No skis in request body");
 
         // Get customer's buying price
         $stmt = $this->db->prepare('SELECT `buying_price` FROM `customers` WHERE `customer_id` = :customerId');
@@ -148,7 +154,8 @@ class CustomerModel extends DB
         $stmt->execute();
         $buying_price = $stmt->fetch(PDO::FETCH_ASSOC)['buying_price'];
 
-        $skis = $requestBody['skis']; //For ease of reading
+        if($buying_price == null)
+            throw new BusinessException(403, "Customer does not exist");
 
         // Creates list of ski types in format (2, 3, ...) for query
         $ski_types = "(" . strval($skis[0]['type']); //Note to self: strval() = toString()
@@ -160,6 +167,9 @@ class CustomerModel extends DB
         $stmt = $this->db->prepare('SELECT `msrp` FROM `ski_types` WHERE `type_id` IN ' . $ski_types);
         $stmt->execute();
         $msrp = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(count($msrp) < count($skis))
+            throw new APIException(403, "One or more ski types does not exist");
 
         // Calculate total price of order
         $price = 0;
@@ -190,7 +200,7 @@ class CustomerModel extends DB
         $stmt->execute();
 
         // Gets order view for inserted order
-        $query = 'SELECT type_id, ski_quantity, msrp, subtotal FROM order_view WHERE order_nr = :order_nr';
+        $query = 'SELECT type_id, ski_quantity, msrp, subtotal FROM order_view WHERE order_nr = 15';
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':order_nr', $order_nr);
         $stmt->execute();
@@ -210,8 +220,6 @@ class CustomerModel extends DB
         return $res;
     }
 
-
-        
     /**
     * Validates that response from database contains the appropriate keys
     *
