@@ -200,7 +200,7 @@ class CustomerModel extends DB
         $stmt->execute();
 
         // Gets order view for inserted order
-        $query = 'SELECT type_id, ski_quantity, msrp, subtotal FROM order_view WHERE order_nr = 15';
+        $query = 'SELECT type_id, ski_quantity, msrp, subtotal FROM suborder_view WHERE order_nr = 15';
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':order_nr', $order_nr);
         $stmt->execute();
