@@ -58,7 +58,7 @@ class CustomerModel extends DB
         
         // If request is empty no record was found
         if (empty($res)) {
-            return $res;
+            throw new BusinessException(httpErrorConst::notFound, "Record was not found");
         } 
         // If request is not empty check that response contains all attributes expected from database
         else {
@@ -88,6 +88,7 @@ class CustomerModel extends DB
         
         // If request is empty no record was found
         if (empty($res)) {
+            throw new BusinessException(httpErrorConst::notFound, "Record was not found");
             return $res;
         } 
         // If request is not empty check that response contains all attributes expected from database
