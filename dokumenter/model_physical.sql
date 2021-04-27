@@ -84,7 +84,7 @@ CREATE TABLE order_history (
     order_nr int AUTO_INCREMENT,
     state ENUM ('open', 'skis-available', 'shipped') NOT NULL,
     customer_rep int NOT NULL,
-    changed_date datetime DEFAULT CURRENT_TIMESTAMP,
+    changed_date timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (order_nr, state)
 ); 
 
@@ -98,7 +98,7 @@ CREATE TABLE shipments (
     shipment_nr int AUTO_INCREMENT,
     customer_id int NOT NULL,
     shipping_address varchar(255) NOT NULL,
-    scheduled_pickup datetime NOT NULL,
+    scheduled_pickup timestamp NOT NULL,
     state ENUM ('ready', 'picked-up') DEFAULT 'ready',
     order_nr int NOT NULL,
     transporter varchar(255) NOT NULL,
