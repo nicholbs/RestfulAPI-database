@@ -69,6 +69,36 @@ class CustomerModel extends DB
         
     }
     
+    /**
+    * Retrieve an order and validates content of response
+    *
+    * @param int $customer_nr id of customer
+    * @param int $order_nr id of order
+    * @author Nicholas Bodvin Sellevåg
+    */ 
+    public function retrieveCustomerOrderSince($customer_nr, $since)
+    {
+        // Prepare and send request to database which retrieves appropriate order
+        // SELECT `order_nr`, `price`, `state`, `customer_id`, `date_placed`, `order_aggregate` FROM `orders` WHERE date_placed > 2018-01-01
+        $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price, order_aggregate FROM `orders` WHERE `customer_id` = :customerId AND date_placed > :since');
+        $stmt->bindValue(':customerId', $customer_nr);
+        $stmt->bindValue(':since', $since);
+        $stmt->execute();   
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // If request is empty no record was found
+        if (empty($res)) {
+            return $res;
+        } 
+        // If request is not empty check that response contains all attributes expected from database
+        else {
+            $arr = array("order_nr", "state", "date_placed", "price");
+            $this->validateRespone($arr, $res);
+            return $res;
+        }
+        
+    }
+    
         
     /**
     * Delete an order and validates content of response
