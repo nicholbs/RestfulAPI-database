@@ -116,7 +116,7 @@ CREATE TABLE production_plans (
 CREATE TABLE sub_orders (
     order_nr int NOT NULL,
     type_id int NOT NULL,
-    ski_quantity int DEFAULT 1,
+    ski_quantity int NOT NULL,
     PRIMARY KEY (order_nr, type_id)
 );
 
