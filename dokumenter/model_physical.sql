@@ -246,7 +246,7 @@ VALUES (2);
 
 INSERT INTO `orders`(`price`, `state`, `customer_id`, `order_aggregate`, `date_placed`) VALUES
 (208000, 'new', 2, 1, '2021-03-22'), (58500, 'new', 2, 1, '2021-03-22'), (32175, 'open', 3, NULL, '2021-03-19'), 
-(7200, 'skis-available', 4, NULL, '2021-03-15'), (9600, 'skis-available', 1, NULL, '2021-03-17');
+(7200, 'skis-available', 4, NULL, '2021-03-15'), (9600, 'skis-available', 1, NULL, '2021-03-17'),(5330, 'new', 2, NULL, '2021-03-17');
 
 INSERT INTO `order_history`(`order_nr`,`state`, `customer_rep`, `changed_date`) 
 VALUES (3, 'open', 1, '2021-03-12'), (4, 'open', 1, '2021-03-19'), (4, 'skis-available', 1, '2021-03-20'), (5, 'open', 1, '2021-03-22'),
@@ -263,4 +263,4 @@ INSERT INTO `skis`(`ski_type`, `manufactured_date`, `order_assigned`) VALUES
 (3, '2021-03-02', NULL), (3, '2021-03-02', NULL), (3, '2021-03-02', NULL);
 
 INSERT INTO `sub_orders`(`order_nr`, `type_id`,`ski_quantity` )
-VALUES (1,1,100), (2,2,50), (3,3,30),(4,2,5),(5,1,3);
+VALUES (1,1,100), (2,2,50), (3,3,30),(4,2,5),(5,1,3),(6,1,2),(6,2,1);
