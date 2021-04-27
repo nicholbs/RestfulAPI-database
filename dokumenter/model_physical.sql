@@ -73,7 +73,7 @@ CREATE TABLE transporters (
 CREATE TABLE orders (
     order_nr int AUTO_INCREMENT,
     price float NOT NULL,
-    state ENUM ('new', 'open', 'skis-available', 'shipped') DEFAULT 'new',
+    state ENUM ('new', 'open', 'skis-available', 'ready-for-shipping', 'shipped') DEFAULT 'new',
     customer_id int NOT NULL,
     date_placed timestamp DEFAULT CURRENT_TIMESTAMP,
     order_aggregate int,
