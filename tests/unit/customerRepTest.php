@@ -1,7 +1,7 @@
 <?php
-//require_once 'db/customerRepModel.php';
 require_once 'controller\customerRepEndpoint.php';
-//require_once 'api.php';
+require_once 'controller/APIException.php';
+// require_once 'controller/api '
 class customerRepTest extends \Codeception\Test\Unit
 {
     /**
@@ -22,7 +22,7 @@ class customerRepTest extends \Codeception\Test\Unit
     {
 
     }
-    public  function testChangeOrderState(){
+    public function testChangeOrderState(){
         $token = "839d6517ec104e2c70ce1da1d86b1d89c5f547b666adcdd824456c9756c7e261";
        $uri=array();
         // $uri = [('customer-rep'), ('state')];
@@ -34,9 +34,13 @@ class customerRepTest extends \Codeception\Test\Unit
         $requestBodyJson['orderNumber'] = 1;
         $requestBodyJson['status'] = "open";
 
-        $test = new customerRepEndpoint();
-        $test ->handleRequest($uri,$specificQuery,$requestMethod,$requestBodyJson,$token);
-        $this ->tester->seeInDatabase('orders',['order_nr' =>'1','state' =>'open']);
+        try {
+          $test = new customerRepEndpoint();
+          $test ->handleRequest($uri,$specificQuery,$requestMethod,$requestBodyJson,$token); 
+          $this ->tester->seeInDatabase('orders',['order_nr' =>'1','state' =>'open']); 
+        } catch (APIException $event) {
+          
+        }
        // $this->tester->seeInDatabase('order_history',['order_nr' =>'1','state' => 'open']);
 
 
