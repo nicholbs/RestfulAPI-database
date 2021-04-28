@@ -195,7 +195,7 @@ WHERE order_nr LIKE :arg0";
             return $res[0];
         }
         else{
-            $message = "No order found";
+            $message = "No order found with ordernumber: " . $ordernumber;
             throw new BusinessException(404, $message);
         }
 
