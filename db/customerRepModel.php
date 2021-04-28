@@ -191,7 +191,14 @@ WHERE order_nr LIKE :arg0";
         $statement ->bindValue(':arg0',$ordernumber);
         $statement ->execute();
         $res = $statement ->fetchAll(PDO::FETCH_COLUMN);
-        return $res[0];
+        if(!empty($res[0])){
+            return $res[0];
+        }
+        else{
+            $message = "No order found";
+            throw new BusinessException(404, $message);
+        }
+
 
     }
     public function createSki()
