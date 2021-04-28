@@ -1,6 +1,8 @@
 <?php
 require_once 'controller\customerRepEndpoint.php';
 require_once 'controller/APIException.php';
+require_once 'controller/BusinessException.php';
+require_once 'constants.php';
 // require_once 'controller/api '
 class customerRepTest extends \Codeception\Test\Unit
 {
@@ -22,7 +24,7 @@ class customerRepTest extends \Codeception\Test\Unit
     {
 
     }
-    public function testChangeOrderState(){
+    public function testChangeOrderState(){   //Test som skal generere en feil
         $token = "839d6517ec104e2c70ce1da1d86b1d89c5f547b666adcdd824456c9756c7e261";
        $uri=array();
         // $uri = [('customer-rep'), ('state')];
@@ -33,13 +35,20 @@ class customerRepTest extends \Codeception\Test\Unit
         $requestBodyJson = array();
         $requestBodyJson['orderNumber'] = 1;
         $requestBodyJson['status'] = "open";
-
+        
+        $Successfull = false;
         try {
           $test = new customerRepEndpoint();
           $test ->handleRequest($uri,$specificQuery,$requestMethod,$requestBodyJson,$token); 
           $this ->tester->seeInDatabase('orders',['order_nr' =>'1','state' =>'open']); 
         } catch (APIException $event) {
-          
+          $Successfull = true;
+        }
+
+        if ($Successfull == true) {
+          //testen er gått igjennom og er riktig
+        } else {
+          throw new APIException(httpErrorConst::badRequest, "Request generated an exception");
         }
        // $this->tester->seeInDatabase('order_history',['order_nr' =>'1','state' => 'open']);
 
