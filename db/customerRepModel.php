@@ -181,7 +181,7 @@ WHERE order_nr LIKE :arg0";
 
 
 
-           return $res;
+          // return $res;
 
        }
 
