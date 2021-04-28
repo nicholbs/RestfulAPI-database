@@ -1,6 +1,7 @@
 <?php
 //require_once 'db/customerRepModel.php';
 require_once 'controller\customerRepEndpoint.php';
+//require_once 'api.php';
 class customerRepTest extends \Codeception\Test\Unit
 {
     /**
