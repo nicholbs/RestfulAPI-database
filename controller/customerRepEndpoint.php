@@ -41,6 +41,9 @@ class customerRepEndpoint
             return(new customerRepModel()) ->getOrdersFilter($specificQuery);
 
         }
+        else{
+            throw new BusinessException(404, "The provided filter dosent match any. Example use status=new");
+        }
     }
 
 }
