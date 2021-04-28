@@ -30,7 +30,8 @@ class authenticationTestCest
        // $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
         $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_STOREKEEPER );
         $I->getClient()->getCookieJar()->set($cookie);
-        $I->sendGet('/storekeeper/orders');
+        //$I->sendGet('/storekeeper/orders');
+        $I->sendGet('/storekeeper/');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
     }
 
@@ -40,7 +41,7 @@ class authenticationTestCest
     public function StorekeeperUnauthorized(ApiTester $I){
         $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_PLANNER);
         $I->getClient()->getCookieJar()->set($cookie);
-        $I->sendGet('/storekeeper/orders');
+        $I->sendGet('/storekeeper/');
         $I->seeResponseCodeIs(403);
     }
     /**
