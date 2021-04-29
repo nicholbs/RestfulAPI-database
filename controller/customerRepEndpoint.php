@@ -26,6 +26,11 @@ class customerRepEndpoint
                     return (new customerRepModel())->changeOrderState($specificQuery, $requestBodyJson, $token);
                 }
                 break;
+            case 'authtest':
+                $testmessage = array();
+                $testmessage['status'] = "ok";
+                $testmessage['message'] = "You are atuhenticated in customer-rep";
+                return $testmessage;
             default: throw new BusinessException(404, "The URL given does not match the business logic, check endpoint documentation");
         }
     }
@@ -40,6 +45,9 @@ class customerRepEndpoint
         if (array_key_exists('status',$specificQuery)){
             return(new customerRepModel()) ->getOrdersFilter($specificQuery);
 
+        }
+        else{
+            throw new BusinessException(404, "The provided filter dosent match any. Example use status=new");
         }
     }
 

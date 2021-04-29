@@ -17,6 +17,11 @@ class StorekeeperEndpoint
                 if($requestType == 'POST')
                     return $this->createSki($requestBody);
                 break;
+            case 'transitionrecord':
+                if($requestType == 'PUT'){
+                    return (new StorekeeperModel()) ->transitionRecord($requestBodyJson);
+                }
+                break;
         }
     }
 

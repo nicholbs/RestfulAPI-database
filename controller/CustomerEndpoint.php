@@ -1,6 +1,4 @@
 <?php
-//require_once 'RESTConstants.php';
-// require_once 'db/StorekeeperModel.php';
 
 use Codeception\Application;
 use Codeception\Command\Console;
@@ -12,30 +10,22 @@ class CustomerEndpoint
     public function handleRequest(array $uri, $specificQuery, $requestType, array $requestBody)
     {
 
-        // print_r($uri);  
         $lengde = count($uri);
         if ($lengde == 3 && $uri[1] == "plansummary") {
             return $this->retrievePlan();
         }
-
-        // print_r($requestBody);
-        
-       
-    
 
         switch($uri[2])
         {
             case 'order':
                 if($requestType == 'GET') {
                     $this->validateURI($uri);
-                    $arr = array("customer_id", "ski_quantity");
-                    $this->validateBody($requestBody, $arr);
+                    // $arr = array("customer_id", "ski_quantity");
+                    // $this->validateBody($requestBody, $arr);
                     return $this->getOrder($uri[1], $uri[3]);
                 }
                 else if($requestType == 'DELETE') {
                     $this->validateURI($uri);
-                    $arr = array("customer_id", "ski_quantity");
-                    $this->validateBody($requestBody, $arr);
                     return $this->deleteOrder($uri[1], $uri[3]);
                 }
                 else if($requestType == 'POST') {
@@ -56,15 +46,6 @@ class CustomerEndpoint
                 default: 
                 throw new BusinessException(404, "The URL given does not match the business logic, check endpoint documentation");
         }
-    
-
-    // // get 4 week product plan
-    // private function retrievePlan(): array
-    // {
-    //     return (new CustomerModel())->retrieveProdPlan();
-        
-    // }
-    // get 4 week product plan
    
 }
 
@@ -88,11 +69,14 @@ class CustomerEndpoint
         }
     }
 
+    // retrieve plans up to four weeks ago
     private function retrievePlan(): array
     {
         return (new CustomerModel())->retrieveProdPlan();
         
     }
+
+    // retrieve an order with since filter
     private function getOrderSince($customerId, $since): array
     {
         return (new CustomerModel())->retrieveCustomerOrderSince($customerId, $since);
@@ -104,11 +88,13 @@ class CustomerEndpoint
     {
         return (new CustomerModel())->retrieveCustomerOrder($customerId, $orderNr);
     }
+
     // delete an order
     private function deleteOrder($customerId, $orderNr)
     {
         return (new CustomerModel())->deleteCustomerOrder($customerId, $orderNr);
     }
+
     // create an order
     private function createOrder(array $requestBody)
     {

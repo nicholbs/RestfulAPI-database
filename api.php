@@ -89,6 +89,7 @@ function generateErrorResponseContent($error_code, string $reason, string $error
     $res['error_code'] = $error_code;
     $res['reason'] = $reason;
     $res['exception'] = $error;
+    http_response_code($error_code); //Odd sette selve request header
 
     return $res;
 }

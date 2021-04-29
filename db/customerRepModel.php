@@ -16,7 +16,7 @@ class customerRepModel extends DB
      * @return array - Return an array with all skis of certan(s) status
      */
     public function getOrdersFilter(array $specificQuery) :array{
-        echo("\n Status getOrdersFilter");
+      //  echo("\n Status getOrdersFilter");
         $filter = explode(',', $specificQuery['status']); //divde the filter and save the result to a query
 
         //creating querystring for all the status elements
@@ -62,7 +62,17 @@ class customerRepModel extends DB
 
         }
        // print_r($resultArray);
-        return $resultArray;
+        //return $resultArray;
+        //if theere is no match pn the filter
+        if(empty($resultArray)){
+            $empty = array();
+            $message= "There wasent any order matching your filtertype";
+            $empty['message'] = $message;
+            return  $empty;
+        }
+        else{
+            return $resultArray;
+        }
 
     }
 
@@ -171,7 +181,7 @@ WHERE order_nr LIKE :arg0";
 
 
 
-           return $res;
+          // return $res;
 
        }
 
@@ -191,7 +201,14 @@ WHERE order_nr LIKE :arg0";
         $statement ->bindValue(':arg0',$ordernumber);
         $statement ->execute();
         $res = $statement ->fetchAll(PDO::FETCH_COLUMN);
-        return $res[0];
+        if(!empty($res[0])){
+            return $res[0];
+        }
+        else{
+            $message = "No order found with ordernumber: " . $ordernumber;
+            throw new BusinessException(404, $message);
+        }
+
 
     }
     public function createSki()

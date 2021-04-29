@@ -33,7 +33,7 @@ class controller{
                 return (new CustomerEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $requestBody);
                 break;
             case "shipment" : 
-                return (new TransporterEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType, $token, $requestBody);
+                return (new TransporterEndpoint())->handleRequest($dividedUri,$requestType, $requestBody);
                 break;
             case "storekeeper": 
                 return (new StorekeeperEndpoint())->handleRequest($dividedUri,$specificQuery,$requestType,$requestBody);

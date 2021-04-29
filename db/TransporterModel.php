@@ -1,48 +1,62 @@
 <?php
-//require_once 'RESTConstants.php';
-// require_once 'db/OrderModel.php';
 
 class TransporterModel extends DB
 {
-    // retrieve an order
-    public function updateShipment($order_nr, $token, $requestBody)
+        
+    /**
+    * Creates transition records for an order that is ready for shipping
+    * 
+    * 1. check and update status of order
+    * 2. create transition record in order_history detailing that the order is shipped
+    * 3. create transition record in shipment that the order is ready to be shipped
+    *
+    * @param int $order_nr id of order
+    * @param $requestBody information from employee sent with request
+    * @author Nicholas Bodvin Sellevåg
+    */ 
+    public function updateShipment($order_nr, $requestBody)
     {
+        $this->db->beginTransaction(); //Transactions does not currently work fully. Would require a lot of additional checks 
+        //and due to timeconstraint of project we have decided not to implement further.
+        
         // check if order exists
         $res = $this->retrieveCustomerOrder($order_nr);
         
+        // check if order has apropriate status for being shipped
         if ($res[0]["state"] == "skis-available") {
+            // update order
             $stmt = $this->db->prepare('UPDATE `orders` SET `state`="shipped" WHERE `order_nr` = :orderNr');
             $stmt->bindValue(':orderNr', $order_nr);  
             $stmt->execute();
-
+            
+            // check if order has been updated
             $isShipped = $this->retrieveCustomerOrder($order_nr);
-            print_r($isShipped);
             if ($isShipped[0]["state"]== "shipped") {
+                // create transaction record in order_history detailing that order has been shipped
                 $res = $this->updateOrderHistory($order_nr);
-                $customer_id = $isShipped[0]["customer_id"];
-                $res = $this->insertShipment($order_nr, $requestBody, $customer_id);
                 
+                // retrieve id for customer who owns the order
+                $customer_id = $isShipped[0]["customer_id"];
+
+                // create transaction record in shipment detailing that order is to be shipped
+                $res = $this->insertShipment($order_nr, $requestBody, $customer_id);
+
+                return $res;
             } else {
+                $this->db->rollBack(); //not functional, but in case of business error the transaction should be rolled back
                 throw new BusinessException(httpErrorConst::serverError, "Order was not properly updated");
             }
         } else {
             $reason = "The order given does not have status as 'skis-available', instead it is:";
             $reason .= $res[0]["state"];
+            $this->db->rollBack(); //not functional, but in case of business error the transaction should be rolled back
             throw new BusinessException(httpErrorConst::badRequest, $reason);
         }
-        // $stmt->bindValue(':orderNr', $order_nr);  
-        // $stmt->execute();   
-        // $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // // $res =$stmt->fetchAll();
-        // return "Success";
     }
  
     /**
     * Retrieve an order and validates content of response
     *
-    * @param int $customer_nr id of customer
     * @param int $order_nr id of order
     * @author Nicholas Bodvin Sellevåg
     */ 
@@ -67,15 +81,18 @@ class TransporterModel extends DB
         
     }
     /**
-    * Retrieve an order and validates content of response
+    * Create transition record in order_history for an order that is to be shipped 
     *
-    * @param int $customer_nr id of customer
+    * Retrieves id of customer rep for the order
+    * Creates transition record in order_history
+    * Verifies the newly created transition record exists
+    *
     * @param int $order_nr id of order
     * @author Nicholas Bodvin Sellevåg
     */ 
     public function updateOrderHistory($order_nr)
     {
-        // Prepare and send request to database which retrieves appropriate order
+        // Prepare and send request to database which retrieves id of customer rep
         $stmt = $this ->db ->prepare('SELECT customer_rep FROM `order_history` WHERE order_nr = :orderNr');
         $stmt->bindValue(':orderNr', $order_nr);  
         $stmt->execute();   
@@ -85,17 +102,20 @@ class TransporterModel extends DB
         if (empty($res)) {
             throw new BusinessException(httpErrorConst::badRequest, "Order history requested did not exist");
         } 
-        // If request is not empty check that response contains all attributes expected from database
+
         else {
+            // If request is not empty check that response contains all attributes expected from database
             $arr = array("customer_rep");
             $this->validateRespone($arr, $res);
             $customerRep_nr = $res[0]['customer_rep'];
+
+            // create transaction record in order_history detailing that order has been shipped
             $stmt = $this ->db ->prepare('INSERT INTO `order_history`(`order_nr`, `state`, `customer_rep`) VALUES (:orderNr,"shipped",:customerRep)');
             $stmt->bindValue(':orderNr', $order_nr);  
             $stmt->bindValue(':customerRep', $customerRep_nr);  
             $stmt->execute();   
             
-            
+            // Check that transaction record in order_history detailing that order has been shipped exists            
             $stmt = $this ->db ->prepare('SELECT `order_nr`, `state`, `customer_rep`, `changed_date` FROM `order_history` WHERE order_nr = :orderNr AND state = "shipped"');
             $stmt->bindValue(':orderNr', $order_nr);  
             $stmt->execute();   
@@ -115,24 +135,13 @@ class TransporterModel extends DB
     */ 
     public function insertShipment($order_nr, $requestBody, $customer_nr)
     {
-        echo "insertShipment";
         $address=$requestBody["shipping_address"];
         $pickup=$requestBody["scheduled_pickup"];
         $transporter=$requestBody["transporter"];
         $driverId=$requestBody["driver_id"];
-        print_r($requestBody);
-        
-        echo "\n\n";
-        echo $address;
-        echo $pickup;
-        echo $transporter;
-        echo $driverId;
-        echo $customer_nr;
-        echo $order_nr;
 
-        // // // // // // ser ut som problemet kommer av datetime variabelen
-        // Prepare and send request to database which retrieves appropriate order
-        $stmt = $this ->db ->prepare('INSERT INTO `shipments`(`customer_id`, `shipping_address`, `scheduled_pickup`, `state`, `order_nr`, `transporter`, `driver_id`) VALUES (:customerId, :shipping_address, :pickup, "shipped", :orderNr, :transporter, :driverId)');
+        // create transaction record in shipment detailing that order is to be shipped
+        $stmt = $this ->db ->prepare('INSERT INTO `shipments`(`customer_id`, `shipping_address`, `scheduled_pickup`, `state`, `order_nr`, `transporter`, `driver_id`) VALUES (:customerId, :shipping_address, :pickup, "ready", :orderNr, :transporter, :driverId)');
         $stmt->bindValue(':customerId', $customer_nr);
         $stmt->bindValue(':shipping_address', $address);
         $stmt->bindValue(':pickup', $pickup);
@@ -140,9 +149,9 @@ class TransporterModel extends DB
         $stmt->bindValue(':transporter', $transporter);
         $stmt->bindValue(':driverId', $driverId);
         $stmt->execute();   
-        echo "etter insert";
-
-
+        
+        
+        //Validate that transaction record in shipment detailing that order is to be shipped exists
         $stmt = $this ->db ->prepare('SELECT `shipment_nr`, `customer_id`, `shipping_address`, `scheduled_pickup`, `state`, `order_nr`, `transporter`, `driver_id` FROM `shipments` WHERE order_nr = :orderNr');
         $stmt->bindValue(':orderNr', $order_nr);  
         $stmt->execute();   
