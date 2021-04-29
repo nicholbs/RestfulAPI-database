@@ -1,10 +1,11 @@
 <?php
 //require_once 'RESTConstants.php';
 require_once 'db/StorekeeperModel.php';
+require_once 'constants.php';
 
 class StorekeeperEndpoint
 {
-    public function handleRequest($uri,$specificQuery,$requestType,$requestBodyJson)
+    public function handleRequest($uri,$specificQuery,$requestType,$requestBody)
     {
         switch($uri[1])
         {
@@ -14,7 +15,7 @@ class StorekeeperEndpoint
                 break;
             case 'ski':
                 if($requestType == 'POST')
-                    $this->createSki();
+                    return $this->createSki($requestBody);
                 break;
         }
     }
@@ -24,8 +25,8 @@ class StorekeeperEndpoint
         return (new StorekeeperModel())->retrieveOrders();
     }
 
-    private function createSki()
+    private function createSki($requestBody)
     {
-
+        return (new StorekeeperModel())->createSki($requestBody);
     }
 }
