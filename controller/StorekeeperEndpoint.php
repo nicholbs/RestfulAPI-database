@@ -19,7 +19,7 @@ class StorekeeperEndpoint
                 break;
             case 'transitionrecord':
                 if($requestType == 'PUT'){
-                    return (new StorekeeperModel()) ->transitionRecord($requestBodyJson);
+                    return (new StorekeeperModel()) ->transitionRecord($requestBody);
                 }
                 break;
         }
