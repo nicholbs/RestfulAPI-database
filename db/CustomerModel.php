@@ -140,6 +140,8 @@ class CustomerModel extends DB
     // create an order
     public function postCustomerOrder($requestBody)
     {
+        // TODO : Error codes
+        
         // Checks validity of request body
         if(!array_key_exists('customer', $requestBody) || !array_key_exists('skis', $requestBody))
             throw new APIException(403, "Incomplete request body");
@@ -200,7 +202,7 @@ class CustomerModel extends DB
         $stmt->execute();
 
         // Gets order view for inserted order
-        $query = 'SELECT type_id, ski_quantity, msrp, subtotal FROM suborder_view WHERE order_nr = 15';
+        $query = 'SELECT type_id, ski_quantity, msrp, subtotal FROM suborder_view WHERE order_nr = :order_nr';
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':order_nr', $order_nr);
         $stmt->execute();
@@ -216,7 +218,6 @@ class CustomerModel extends DB
         $res['total'] = $price;
         $res['sub_orders'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        print_r($res);
         return $res;
     }
 
