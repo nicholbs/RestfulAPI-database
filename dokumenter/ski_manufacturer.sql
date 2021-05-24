@@ -27,7 +27,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `customers`
 --
 
-CREATE TABLE `customers` (
+DROP TABLE IF EXISTS `customers`;
+CREATE TABLE IF NOT EXISTS `customers` (
   `customer_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `start_date` date DEFAULT current_timestamp(),
@@ -52,7 +53,8 @@ INSERT INTO `customers` (`customer_id`, `name`, `start_date`, `end_date`, `buyin
 -- Table structure for table `employees`
 --
 
-CREATE TABLE `employees` (
+DROP TABLE IF EXISTS `employees`;
+CREATE TABLE IF NOT EXISTS `employees` (
   `employee_id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -75,7 +77,8 @@ INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `department`,
 -- Table structure for table `franchises`
 --
 
-CREATE TABLE `franchises` (
+DROP TABLE IF EXISTS `franchises`;
+CREATE TABLE IF NOT EXISTS `franchises` (
   `customer_id` int(11) NOT NULL,
   `shipping_address` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -93,7 +96,8 @@ INSERT INTO `franchises` (`customer_id`, `shipping_address`) VALUES
 -- Table structure for table `orders`
 --
 
-CREATE TABLE `orders` (
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE IF NOT EXISTS `orders` (
   `order_nr` int(11) NOT NULL,
   `price` float NOT NULL,
   `state` enum('new','open','skis-available','ready-for-shipping','shipped') DEFAULT 'new',
@@ -120,7 +124,8 @@ INSERT INTO `orders` (`order_nr`, `price`, `state`, `customer_id`, `date_placed`
 -- Table structure for table `order_history`
 --
 
-CREATE TABLE `order_history` (
+DROP TABLE IF EXISTS `order_history`;
+CREATE TABLE IF NOT EXISTS `order_history` (
   `order_nr` int(11) NOT NULL,
   `state` enum('open','skis-available','shipped') NOT NULL,
   `customer_rep` int(11) NOT NULL,
@@ -144,7 +149,8 @@ INSERT INTO `order_history` (`order_nr`, `state`, `customer_rep`, `changed_date`
 -- Stand-in structure for view `order_view`
 -- (See below for the actual view)
 --
-CREATE TABLE `order_view` (
+DROP TABLE IF EXISTS `order_view`;
+CREATE TABLE IF NOT EXISTS `order_view` (
 `order_nr` int(11)
 ,`state` enum('new','open','skis-available','ready-for-shipping','shipped')
 ,`price` float
@@ -164,7 +170,8 @@ CREATE TABLE `order_view` (
 -- Table structure for table `production_plans`
 --
 
-CREATE TABLE `production_plans` (
+DROP TABLE IF EXISTS `production_plans`;
+CREATE TABLE IF NOT EXISTS `production_plans` (
   `ski_type` int(11) NOT NULL,
   `day` date NOT NULL,
   `quantity` int(11) NOT NULL
@@ -176,7 +183,8 @@ CREATE TABLE `production_plans` (
 -- Table structure for table `shipments`
 --
 
-CREATE TABLE `shipments` (
+DROP TABLE IF EXISTS `shipments`;
+CREATE TABLE IF NOT EXISTS `shipments` (
   `shipment_nr` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `shipping_address` varchar(255) NOT NULL,
@@ -202,7 +210,8 @@ INSERT INTO `shipments` (`shipment_nr`, `customer_id`, `shipping_address`, `sche
 -- Table structure for table `skis`
 --
 
-CREATE TABLE `skis` (
+DROP TABLE IF EXISTS `skis`;
+CREATE TABLE IF NOT EXISTS `skis` (
   `serial_nr` int(11) NOT NULL,
   `ski_type` int(11) NOT NULL,
   `manufactured_date` date DEFAULT current_timestamp(),
@@ -250,7 +259,8 @@ INSERT INTO `skis` (`serial_nr`, `ski_type`, `manufactured_date`, `order_assigne
 -- Table structure for table `ski_types`
 --
 
-CREATE TABLE `ski_types` (
+DROP TABLE IF EXISTS `ski_types`;
+CREATE TABLE IF NOT EXISTS `ski_types` (
   `type_id` int(11) NOT NULL,
   `model` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
@@ -279,7 +289,8 @@ INSERT INTO `ski_types` (`type_id`, `model`, `type`, `temperature`, `grip`, `siz
 -- Table structure for table `stores`
 --
 
-CREATE TABLE `stores` (
+DROP TABLE IF EXISTS `stores`;
+CREATE TABLE IF NOT EXISTS `stores` (
   `customer_id` int(11) NOT NULL,
   `shipping_address` varchar(255) NOT NULL,
   `franchise_id` int(11) DEFAULT NULL
@@ -299,7 +310,8 @@ INSERT INTO `stores` (`customer_id`, `shipping_address`, `franchise_id`) VALUES
 -- Stand-in structure for view `suborder_view`
 -- (See below for the actual view)
 --
-CREATE TABLE `suborder_view` (
+DROP TABLE IF EXISTS `suborder_view`;
+CREATE TABLE IF NOT EXISTS `suborder_view` (
 `order_nr` int(11)
 ,`customer_id` int(11)
 ,`name` varchar(255)
@@ -317,7 +329,8 @@ CREATE TABLE `suborder_view` (
 -- Table structure for table `sub_orders`
 --
 
-CREATE TABLE `sub_orders` (
+DROP TABLE IF EXISTS `sub_orders`;
+CREATE TABLE IF NOT EXISTS `sub_orders` (
   `order_nr` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
   `ski_quantity` int(11) DEFAULT 1
@@ -342,7 +355,8 @@ INSERT INTO `sub_orders` (`order_nr`, `type_id`, `ski_quantity`) VALUES
 -- Table structure for table `team_skiers`
 --
 
-CREATE TABLE `team_skiers` (
+DROP TABLE IF EXISTS `team_skiers`;
+CREATE TABLE IF NOT EXISTS `team_skiers` (
   `customer_id` int(11) NOT NULL,
   `birthdate` date NOT NULL,
   `club` varchar(255) NOT NULL,
@@ -362,7 +376,8 @@ INSERT INTO `team_skiers` (`customer_id`, `birthdate`, `club`, `skis_per_year`) 
 -- Table structure for table `transporters`
 --
 
-CREATE TABLE `transporters` (
+DROP TABLE IF EXISTS `transporters`;
+CREATE TABLE IF NOT EXISTS `transporters` (
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
