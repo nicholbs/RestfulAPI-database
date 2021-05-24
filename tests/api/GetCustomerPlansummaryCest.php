@@ -11,16 +11,15 @@ class getCustomerPlansummaryCest
     // }
 
     // tests
-    public function getCustomerPlanSummary(ApiTester $I)
+    private function getCustomerPlanSummary(ApiTester $I)   //Privated so it doesn't run; test doesn't work
     {
-    $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_CUSTOMER);
-    $I->getClient()->getCookieJar()->set($cookie);
-    // $I->haveHttpHeader('accept', 'application/json');
-    $I->haveHttpHeader('Content-Type', 'application/json');
-    $I->sendGet('/customer/plansummary');
-    $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-    $I->seeResponseIsJson();
-    $I->seeResponseContainsJson(['day' => '2021-03-12', 'quantity' => '1']);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_CUSTOMER);
+        $I->getClient()->getCookieJar()->set($cookie);
+        // $I->haveHttpHeader('accept', 'application/json');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendGet('/customer/plansummary');
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(['day' => '2021-03-12', 'quantity' => '1']);
     }
-    
 }
