@@ -71,9 +71,10 @@ class AuthenticationModel extends DB {
 
 
 }//End of AuthenticationModel class
-/**
+
+/*
 $token ="022224c9a11805494a77796d671bec4c5bae495af78e906694018dbbc39bf2cd";
 $user = new  AuthenticationModel();
 $userid = $user ->findEmployeeId($token);
 print("Userid of a employee is: " . $userid);
-**/
+*/
