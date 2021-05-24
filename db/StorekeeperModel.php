@@ -1,12 +1,11 @@
 <?php
 require_once 'db/DB.php';
-//require_once 'DB.php';
 
 class StorekeeperModel extends DB
 {
     public function retrieveOrders(): array
     {
-        // NB! Each row returns data for order and suborder, providing redundant order data for orders with multiple suborders
+        // NB! Each row returns data for order AND suborder, providing redundant order data for orders with multiple suborders
         $query = 'SELECT order_nr, name, state, buying_price, ROUND(price, 2) AS total, model, ski_quantity, msrp, subtotal FROM order_view';
         $stmt = $this->db->query($query);
         $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,6 +28,7 @@ class StorekeeperModel extends DB
 
             // Prints additional suborders
             $counter = 1;
+            //while($i in scope of $orders && next row has same order_nr)
             while($i + $counter < count($orders) && $orders[$i + $counter]['order_nr'] == $row['order_nr']){
                 $sub_count = count($row['sub_orders']);
                 $this->fillSubOrder($row, $sub_count, $orders[$i + $counter]);
@@ -81,6 +81,7 @@ class StorekeeperModel extends DB
 
         return $res;
     }
+
     /**
      * This function sets a storekeeper tranisiton record
      * @param array $requestBodyJson()  - the request from frontend with the ordernumber and ski serialnumber
