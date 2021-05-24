@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Apr 28, 2021 at 04:46 PM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.9
+-- Host: 127.0.0.1
+-- Generation Time: May 24, 2021 at 10:17 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `testdb`
+-- Database: `ski_manufacturer`
 --
 
 -- --------------------------------------------------------
@@ -29,14 +29,13 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `customers`;
 CREATE TABLE IF NOT EXISTS `customers` (
-  `customer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `start_date` date DEFAULT current_timestamp(),
   `end_date` date DEFAULT NULL,
   `buying_price` float DEFAULT 1,
-  `token` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`customer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `token` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `customers`
@@ -56,13 +55,12 @@ INSERT INTO `customers` (`customer_id`, `name`, `start_date`, `end_date`, `buyin
 
 DROP TABLE IF EXISTS `employees`;
 CREATE TABLE IF NOT EXISTS `employees` (
-  `employee_id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `department` enum('customer-rep','production-planner','storekeeper') NOT NULL,
-  `token` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `token` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `employees`
@@ -82,9 +80,8 @@ INSERT INTO `employees` (`employee_id`, `first_name`, `last_name`, `department`,
 DROP TABLE IF EXISTS `franchises`;
 CREATE TABLE IF NOT EXISTS `franchises` (
   `customer_id` int(11) NOT NULL,
-  `shipping_address` varchar(255) NOT NULL,
-  PRIMARY KEY (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `shipping_address` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `franchises`
@@ -101,49 +98,25 @@ INSERT INTO `franchises` (`customer_id`, `shipping_address`) VALUES
 
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
-  `order_nr` int(11) NOT NULL AUTO_INCREMENT,
+  `order_nr` int(11) NOT NULL,
   `price` float NOT NULL,
   `state` enum('new','open','skis-available','ready-for-shipping','shipped') DEFAULT 'new',
   `customer_id` int(11) NOT NULL,
-  `date_placed` timestamp NOT NULL DEFAULT current_timestamp(),
-  `order_aggregate` int(11) DEFAULT NULL,
-  PRIMARY KEY (`order_nr`),
-  KEY `orders_customers_fk` (`customer_id`),
-  KEY `orders_aggregates_fk` (`order_aggregate`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `date_placed` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_nr`, `price`, `state`, `customer_id`, `date_placed`, `order_aggregate`) VALUES
-(1, 208000, 'new', 2, '2021-03-21 23:00:00', 1),
-(2, 58500, 'new', 2, '2021-03-21 23:00:00', 1),
-(3, 32175, 'open', 3, '2021-03-18 23:00:00', NULL),
-(4, 7200, 'skis-available', 4, '2021-03-14 23:00:00', NULL),
-(5, 9600, 'skis-available', 1, '2021-03-16 23:00:00', NULL),
-(6, 5330, 'new', 2, '2021-03-16 23:00:00', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_aggregates`
---
-
-DROP TABLE IF EXISTS `order_aggregates`;
-CREATE TABLE IF NOT EXISTS `order_aggregates` (
-  `aggregate_id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` int(11) NOT NULL,
-  PRIMARY KEY (`aggregate_id`),
-  KEY `order_aggregates_customer_fk` (`customer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `order_aggregates`
---
-
-INSERT INTO `order_aggregates` (`aggregate_id`, `customer_id`) VALUES
-(1, 2);
+INSERT INTO `orders` (`order_nr`, `price`, `state`, `customer_id`, `date_placed`) VALUES
+(1, 208000, 'new', 2, '2021-03-21 23:00:00'),
+(2, 58500, 'new', 2, '2021-03-21 23:00:00'),
+(3, 32175, 'open', 3, '2021-03-18 23:00:00'),
+(4, 7200, 'skis-available', 4, '2021-03-14 23:00:00'),
+(5, 9600, 'skis-available', 1, '2021-03-16 23:00:00'),
+(6, 5330, 'new', 2, '2021-03-16 23:00:00'),
+(7, 10042.5, 'new', 2, '2021-04-27 11:47:39');
 
 -- --------------------------------------------------------
 
@@ -153,13 +126,11 @@ INSERT INTO `order_aggregates` (`aggregate_id`, `customer_id`) VALUES
 
 DROP TABLE IF EXISTS `order_history`;
 CREATE TABLE IF NOT EXISTS `order_history` (
-  `order_nr` int(11) NOT NULL AUTO_INCREMENT,
+  `order_nr` int(11) NOT NULL,
   `state` enum('open','skis-available','shipped') NOT NULL,
   `customer_rep` int(11) NOT NULL,
-  `changed_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`order_nr`,`state`),
-  KEY `order_history_employees_fk` (`customer_rep`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  `changed_date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_history`
@@ -175,6 +146,27 @@ INSERT INTO `order_history` (`order_nr`, `state`, `customer_rep`, `changed_date`
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `order_view`
+-- (See below for the actual view)
+--
+DROP TABLE IF EXISTS `order_view`;
+CREATE TABLE IF NOT EXISTS `order_view` (
+`order_nr` int(11)
+,`state` enum('new','open','skis-available','ready-for-shipping','shipped')
+,`price` float
+,`customer_id` int(11)
+,`name` varchar(255)
+,`buying_price` float
+,`type_id` int(11)
+,`model` varchar(255)
+,`ski_quantity` int(11)
+,`msrp` int(11)
+,`subtotal` double(19,2)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `production_plans`
 --
 
@@ -182,21 +174,8 @@ DROP TABLE IF EXISTS `production_plans`;
 CREATE TABLE IF NOT EXISTS `production_plans` (
   `ski_type` int(11) NOT NULL,
   `day` date NOT NULL,
-  `quantity` int(11) NOT NULL,
-  PRIMARY KEY (`ski_type`,`day`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `production_plans`
---
-
-INSERT INTO `production_plans` (`ski_type`, `day`, `quantity`) VALUES
-(2, '2021-04-28', 100),
-(2, '2021-03-28', 100),
-(2, '2021-02-28', 100),
-(2, '2021-01-28', 100),
-(2, '2020-01-28', 100),
-(2, '2021-05-28', 100);
+  `quantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -206,18 +185,15 @@ INSERT INTO `production_plans` (`ski_type`, `day`, `quantity`) VALUES
 
 DROP TABLE IF EXISTS `shipments`;
 CREATE TABLE IF NOT EXISTS `shipments` (
-  `shipment_nr` int(11) NOT NULL AUTO_INCREMENT,
+  `shipment_nr` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `shipping_address` varchar(255) NOT NULL,
   `scheduled_pickup` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `state` enum('ready','picked-up') DEFAULT 'ready',
   `order_nr` int(11) NOT NULL,
   `transporter` varchar(255) NOT NULL,
-  `driver_id` int(11) NOT NULL,
-  PRIMARY KEY (`shipment_nr`),
-  KEY `shipments_orders_fk` (`order_nr`),
-  KEY `shipments_transporters_fk` (`transporter`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `driver_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `shipments`
@@ -225,7 +201,8 @@ CREATE TABLE IF NOT EXISTS `shipments` (
 
 INSERT INTO `shipments` (`shipment_nr`, `customer_id`, `shipping_address`, `scheduled_pickup`, `state`, `order_nr`, `transporter`, `driver_id`) VALUES
 (1, 4, 'Gaten 41', '2021-03-26 23:00:00', 'picked-up', 4, 'Reposisjoneringspatruljen', 123167),
-(2, 1, 'Monsensgate 1', '2021-04-04 22:00:00', 'ready', 5, 'Flyttegutta A/S', 120943);
+(2, 1, 'Monsensgate 1', '2021-04-04 22:00:00', 'ready', 5, 'Flyttegutta A/S', 120943),
+(3, 2, 'Gata 1', '2021-03-21 23:00:00', 'ready', 6, 'Reposisjoneringspatruljen', 132452);
 
 -- --------------------------------------------------------
 
@@ -235,14 +212,11 @@ INSERT INTO `shipments` (`shipment_nr`, `customer_id`, `shipping_address`, `sche
 
 DROP TABLE IF EXISTS `skis`;
 CREATE TABLE IF NOT EXISTS `skis` (
-  `serial_nr` int(11) NOT NULL AUTO_INCREMENT,
+  `serial_nr` int(11) NOT NULL,
   `ski_type` int(11) NOT NULL,
   `manufactured_date` date DEFAULT current_timestamp(),
-  `order_assigned` int(11) DEFAULT NULL,
-  PRIMARY KEY (`serial_nr`),
-  KEY `skis_skitypes_fk` (`ski_type`),
-  KEY `skis_orders_fk` (`order_assigned`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+  `order_assigned` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `skis`
@@ -275,7 +249,9 @@ INSERT INTO `skis` (`serial_nr`, `ski_type`, `manufactured_date`, `order_assigne
 (24, 3, '2021-03-02', NULL),
 (25, 3, '2021-03-02', NULL),
 (26, 3, '2021-03-02', NULL),
-(27, 3, '2021-03-02', NULL);
+(27, 3, '2021-03-02', NULL),
+(33, 2, '2021-04-29', NULL),
+(34, 2, '2021-04-29', NULL);
 
 -- --------------------------------------------------------
 
@@ -285,7 +261,7 @@ INSERT INTO `skis` (`serial_nr`, `ski_type`, `manufactured_date`, `order_assigne
 
 DROP TABLE IF EXISTS `ski_types`;
 CREATE TABLE IF NOT EXISTS `ski_types` (
-  `type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type_id` int(11) NOT NULL,
   `model` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `temperature` enum('cold','warm') NOT NULL,
@@ -295,9 +271,8 @@ CREATE TABLE IF NOT EXISTS `ski_types` (
   `description` varchar(255) DEFAULT NULL,
   `historical` tinyint(1) DEFAULT 0,
   `photo_url` varchar(255) DEFAULT 'photo-url',
-  `msrp` int(11) NOT NULL,
-  PRIMARY KEY (`type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `msrp` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `ski_types`
@@ -318,10 +293,8 @@ DROP TABLE IF EXISTS `stores`;
 CREATE TABLE IF NOT EXISTS `stores` (
   `customer_id` int(11) NOT NULL,
   `shipping_address` varchar(255) NOT NULL,
-  `franchise_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`customer_id`),
-  KEY `stores_franchises_fk` (`franchise_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `franchise_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stores`
@@ -334,6 +307,25 @@ INSERT INTO `stores` (`customer_id`, `shipping_address`, `franchise_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `suborder_view`
+-- (See below for the actual view)
+--
+DROP TABLE IF EXISTS `suborder_view`;
+CREATE TABLE IF NOT EXISTS `suborder_view` (
+`order_nr` int(11)
+,`customer_id` int(11)
+,`name` varchar(255)
+,`buying_price` float
+,`type_id` int(11)
+,`model` varchar(255)
+,`ski_quantity` int(11)
+,`msrp` int(11)
+,`subtotal` double(19,2)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sub_orders`
 --
 
@@ -341,10 +333,8 @@ DROP TABLE IF EXISTS `sub_orders`;
 CREATE TABLE IF NOT EXISTS `sub_orders` (
   `order_nr` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
-  `ski_quantity` int(11) NOT NULL,
-  PRIMARY KEY (`order_nr`,`type_id`),
-  KEY `sub_orders_ski_types_fk` (`type_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `ski_quantity` int(11) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sub_orders`
@@ -370,9 +360,8 @@ CREATE TABLE IF NOT EXISTS `team_skiers` (
   `customer_id` int(11) NOT NULL,
   `birthdate` date NOT NULL,
   `club` varchar(255) NOT NULL,
-  `skis_per_year` int(11) NOT NULL,
-  PRIMARY KEY (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `skis_per_year` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `team_skiers`
@@ -389,9 +378,8 @@ INSERT INTO `team_skiers` (`customer_id`, `birthdate`, `club`, `skis_per_year`) 
 
 DROP TABLE IF EXISTS `transporters`;
 CREATE TABLE IF NOT EXISTS `transporters` (
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `transporters`
@@ -400,6 +388,226 @@ CREATE TABLE IF NOT EXISTS `transporters` (
 INSERT INTO `transporters` (`name`) VALUES
 ('Flyttegutta A/S'),
 ('Reposisjoneringspatruljen');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `order_view`
+--
+
+DROP TABLE IF EXISTS `order_view`;
+DROP VIEW IF EXISTS `order_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `order_view`  AS  select `orders`.`order_nr` AS `order_nr`,`orders`.`state` AS `state`,`orders`.`price` AS `price`,`customers`.`customer_id` AS `customer_id`,`customers`.`name` AS `name`,`customers`.`buying_price` AS `buying_price`,`t`.`type_id` AS `type_id`,`t`.`model` AS `model`,`t`.`ski_quantity` AS `ski_quantity`,`t`.`msrp` AS `msrp`,round(`t`.`ski_quantity` * `t`.`msrp` * `customers`.`buying_price`,2) AS `subtotal` from ((`orders` join `customers` on(`orders`.`customer_id` = `customers`.`customer_id`)) join (select `sub_orders`.`order_nr` AS `order_nr`,`sub_orders`.`type_id` AS `type_id`,`ski_types`.`model` AS `model`,`sub_orders`.`ski_quantity` AS `ski_quantity`,`ski_types`.`msrp` AS `msrp` from (`sub_orders` join `ski_types` on(`sub_orders`.`type_id` = `ski_types`.`type_id`))) `t` on(`orders`.`order_nr` = `t`.`order_nr`)) order by `orders`.`order_nr` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `suborder_view`
+--
+DROP TABLE IF EXISTS `suborder_view`;
+DROP VIEW IF EXISTS `suborder_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `suborder_view`  AS  select `orders`.`order_nr` AS `order_nr`,`customers`.`customer_id` AS `customer_id`,`customers`.`name` AS `name`,`customers`.`buying_price` AS `buying_price`,`t`.`type_id` AS `type_id`,`t`.`model` AS `model`,`t`.`ski_quantity` AS `ski_quantity`,`t`.`msrp` AS `msrp`,round(`t`.`ski_quantity` * `t`.`msrp` * `customers`.`buying_price`,2) AS `subtotal` from ((`orders` join `customers` on(`orders`.`customer_id` = `customers`.`customer_id`)) join (select `sub_orders`.`order_nr` AS `order_nr`,`sub_orders`.`type_id` AS `type_id`,`ski_types`.`model` AS `model`,`sub_orders`.`ski_quantity` AS `ski_quantity`,`ski_types`.`msrp` AS `msrp` from (`sub_orders` join `ski_types` on(`sub_orders`.`type_id` = `ski_types`.`type_id`))) `t` on(`orders`.`order_nr` = `t`.`order_nr`)) order by `orders`.`order_nr` ;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `customers`
+--
+ALTER TABLE `customers`
+  ADD PRIMARY KEY (`customer_id`);
+
+--
+-- Indexes for table `employees`
+--
+ALTER TABLE `employees`
+  ADD PRIMARY KEY (`employee_id`);
+
+--
+-- Indexes for table `franchises`
+--
+ALTER TABLE `franchises`
+  ADD PRIMARY KEY (`customer_id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_nr`),
+  ADD KEY `orders_customers_fk` (`customer_id`);
+
+--
+-- Indexes for table `order_history`
+--
+ALTER TABLE `order_history`
+  ADD PRIMARY KEY (`order_nr`,`state`),
+  ADD KEY `order_history_employees_fk` (`customer_rep`);
+
+--
+-- Indexes for table `production_plans`
+--
+ALTER TABLE `production_plans`
+  ADD PRIMARY KEY (`ski_type`,`day`);
+
+--
+-- Indexes for table `shipments`
+--
+ALTER TABLE `shipments`
+  ADD PRIMARY KEY (`shipment_nr`),
+  ADD KEY `shipments_orders_fk` (`order_nr`),
+  ADD KEY `shipments_transporters_fk` (`transporter`);
+
+--
+-- Indexes for table `skis`
+--
+ALTER TABLE `skis`
+  ADD PRIMARY KEY (`serial_nr`),
+  ADD KEY `skis_skitypes_fk` (`ski_type`),
+  ADD KEY `skis_orders_fk` (`order_assigned`);
+
+--
+-- Indexes for table `ski_types`
+--
+ALTER TABLE `ski_types`
+  ADD PRIMARY KEY (`type_id`);
+
+--
+-- Indexes for table `stores`
+--
+ALTER TABLE `stores`
+  ADD PRIMARY KEY (`customer_id`),
+  ADD KEY `stores_franchises_fk` (`franchise_id`);
+
+--
+-- Indexes for table `sub_orders`
+--
+ALTER TABLE `sub_orders`
+  ADD PRIMARY KEY (`order_nr`,`type_id`),
+  ADD KEY `sub_orders_ski_types_fk` (`type_id`);
+
+--
+-- Indexes for table `team_skiers`
+--
+ALTER TABLE `team_skiers`
+  ADD PRIMARY KEY (`customer_id`);
+
+--
+-- Indexes for table `transporters`
+--
+ALTER TABLE `transporters`
+  ADD PRIMARY KEY (`name`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `customers`
+--
+ALTER TABLE `customers`
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `employees`
+--
+ALTER TABLE `employees`
+  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `order_history`
+--
+ALTER TABLE `order_history`
+  MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `shipments`
+--
+ALTER TABLE `shipments`
+  MODIFY `shipment_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `skis`
+--
+ALTER TABLE `skis`
+  MODIFY `serial_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- AUTO_INCREMENT for table `ski_types`
+--
+ALTER TABLE `ski_types`
+  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `franchises`
+--
+ALTER TABLE `franchises`
+  ADD CONSTRAINT `franchises_customer_fk` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_customers_fk` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `order_history`
+--
+ALTER TABLE `order_history`
+  ADD CONSTRAINT `order_history_employees_fk` FOREIGN KEY (`customer_rep`) REFERENCES `employees` (`employee_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_history_orders_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `production_plans`
+--
+ALTER TABLE `production_plans`
+  ADD CONSTRAINT `production_plans_ski_types_fk` FOREIGN KEY (`ski_type`) REFERENCES `ski_types` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `shipments`
+--
+ALTER TABLE `shipments`
+  ADD CONSTRAINT `shipments_orders_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `shipments_transporters_fk` FOREIGN KEY (`transporter`) REFERENCES `transporters` (`name`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `skis`
+--
+ALTER TABLE `skis`
+  ADD CONSTRAINT `skis_orders_fk` FOREIGN KEY (`order_assigned`) REFERENCES `orders` (`order_nr`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `skis_skitypes_fk` FOREIGN KEY (`ski_type`) REFERENCES `ski_types` (`type_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `stores`
+--
+ALTER TABLE `stores`
+  ADD CONSTRAINT `stores_customer_fk` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `stores_franchises_fk` FOREIGN KEY (`franchise_id`) REFERENCES `franchises` (`customer_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sub_orders`
+--
+ALTER TABLE `sub_orders`
+  ADD CONSTRAINT `sub_orders_order_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sub_orders_ski_types_fk` FOREIGN KEY (`type_id`) REFERENCES `ski_types` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `team_skiers`
+--
+ALTER TABLE `team_skiers`
+  ADD CONSTRAINT `team_skiers_customers_fk` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
