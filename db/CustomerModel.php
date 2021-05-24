@@ -49,6 +49,7 @@ class CustomerModel extends DB
     */ 
     public function retrieveCustomerOrder($customer_nr, $order_nr)
     {
+        /*
         // Prepare and send request to database which retrieves appropriate order
         $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price, order_aggregate FROM `orders` WHERE `customer_id` = :customerId AND `order_nr` = :orderNr');
         $stmt->bindValue(':customerId', $customer_nr);
@@ -66,7 +67,35 @@ class CustomerModel extends DB
             $this->validateRespone($arr, $res);
             return $res;
         }
-        
+        */
+        // NB! Each row returns data for order AND suborder, providing redundant order data for orders with multiple suborders
+        $query = 'SELECT order_view.order_nr, name, order_view.state, buying_price, ROUND(order_view.price, 2) AS total, model, ski_quantity, msrp, subtotal, date_placed 
+                  FROM order_view INNER JOIN orders ON orders.order_nr = order_view.order_nr WHERE order_view.order_nr = :order_nr';
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(":order_nr", $order_nr);
+        $stmt->execute();
+        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($orders))
+            throw new BusinessException(httpErrorConst::notFound, "Record not found");
+
+        $row = array();
+
+        // Prints order
+        $row['order_nr']        = $orders[0]['order_nr'];
+        $row['name']            = $orders[0]['name'];
+        $row['date_placed']     = $orders[0]['date_placed'];
+        $row['buying_price']    = $orders[0]['buying_price'];
+        $row['state']           = $orders[0]['state'];
+        $row['total']           = $orders[0]['total'];
+
+        // Prints suborders
+        $row['sub_orders'] = array();
+        for($i = 0; $i < count($orders); $i++){
+            $this->fillSubOrder($row, $i, $orders[$i]);
+        }
+
+        return $row;
     }
     
     /**
@@ -242,6 +271,14 @@ class CustomerModel extends DB
             }
             $index++;
         }
+    }
+
+    private function fillSubOrder(&$target_array, $target_index, $source_array)
+    {
+        $target_array['sub_orders'][$target_index]['model']     = $source_array['model'];
+        $target_array['sub_orders'][$target_index]['msrp']      = $source_array['msrp'];
+        $target_array['sub_orders'][$target_index]['quantity']  = $source_array['ski_quantity'];
+        $target_array['sub_orders'][$target_index]['subtotal']  = $source_array['subtotal'];
     }
 
     // Gir det noe mening å ha orders??
