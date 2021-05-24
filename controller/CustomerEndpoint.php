@@ -51,11 +51,11 @@ class CustomerEndpoint
 
     private function validateURI(array $uri) {
         if (!is_numeric($uri[1])) {
-            throw new BusinessException(400, "Endpoint expected customer id to be a number");
-        }; 
+            throw new BusinessException(400, "Endpoint expected customer id to be a number - 1");
+        } 
         if (!is_numeric($uri[3])) {
-            throw new BusinessException(400, "Endpoint expected customer id to be a number");
-        };
+            throw new BusinessException(400, "Endpoint expected customer id to be a number - 2");
+        }
     }
     private function validateBody($requestBody, array $arr) {
        
