@@ -49,26 +49,6 @@ class CustomerModel extends DB
     */ 
     public function retrieveCustomerOrder($customer_nr, $order_nr)
     {
-        /*
-        // Prepare and send request to database which retrieves appropriate order
-        $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price, order_aggregate FROM `orders` WHERE `customer_id` = :customerId AND `order_nr` = :orderNr');
-        $stmt->bindValue(':customerId', $customer_nr);
-        $stmt->bindValue(':orderNr', $order_nr);
-        $stmt->execute();   
-        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        // If request is empty no record was found
-        if (empty($res)) {
-            throw new BusinessException(httpErrorConst::notFound, "Record was not found");
-        } 
-        // If request is not empty check that response contains all attributes expected from database
-        else {
-            $arr = array("order_nr", "state", "date_placed", "price");
-            $this->validateRespone($arr, $res);
-            return $res;
-        }
-        */
-        // NB! Each row returns data for order AND suborder, providing redundant order data for orders with multiple suborders
         $query = 'SELECT order_view.order_nr, name, order_view.state, buying_price, ROUND(order_view.price, 2) AS total, model, ski_quantity, msrp, subtotal, date_placed 
                   FROM order_view INNER JOIN orders ON orders.order_nr = order_view.order_nr WHERE order_view.order_nr = :order_nr';
         $stmt = $this->db->prepare($query);
@@ -128,8 +108,7 @@ class CustomerModel extends DB
         }
         
     }
-    
-        
+
     /**
     * Delete an order and validates content of response
     *
@@ -144,20 +123,13 @@ class CustomerModel extends DB
     */ 
     public function deleteCustomerOrder($customer_nr, $order_nr)
     {
-        $customerOrder = $this->retrieveCustomerOrder($customer_nr, $order_nr);
-        $res = array();
-        $res['order_nr'] = $order_nr;
-        $res['customer'] = $customer_nr;
-
-
-        if (empty($customerOrder)) {
+        if (!$this->orderExists($order_nr)) {
             throw new BusinessException(httpErrorConst::notFound, "Record was not found");
         } else {
             $stmt = $this->db->prepare('DELETE FROM orders WHERE order_nr = ?');
             $stmt->execute([$order_nr]);
 
-            $customerOrder = $this->retrieveCustomerOrder($customer_nr, $order_nr);
-            if (empty($customerOrder)) {
+            if (!$this->orderExists($order_nr)) {
                 $res['status'] = "Deleted";
                 return $res;
             }
@@ -273,6 +245,7 @@ class CustomerModel extends DB
         }
     }
 
+    //Helper functions
     private function fillSubOrder(&$target_array, $target_index, $source_array)
     {
         $target_array['sub_orders'][$target_index]['model']     = $source_array['model'];
@@ -281,32 +254,18 @@ class CustomerModel extends DB
         $target_array['sub_orders'][$target_index]['subtotal']  = $source_array['subtotal'];
     }
 
-    // Gir det noe mening å ha orders??
-    // get specific orders
-    public function getCustomerOrders()
-    {
-        echo "\ngetCustomerOrders\n";
-        
+    private function orderExists($order_nr){
+        $query = 'SELECT COUNT(1) FROM orders WHERE order_nr = :order_nr';
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(":order_nr", $order_nr);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_NUM)[0];
     }
-    // create orders
-    public function deleteCustomerOrders()
-    {
-        echo "\ndeleteCustomerOrders\n";
-        
-    }
-    // create orders
-    public function createCustomerOrders()
-    {
-        echo "\ncreateCustomerOrders\n";
-        
-    }    
-    
-    
-    // split an order
-    // trenger vi denn engang??
+
+    //TODO
     public function splitOrder()
     {
         echo "\nsplitCustomerOrders\n";
-
     }
 }
