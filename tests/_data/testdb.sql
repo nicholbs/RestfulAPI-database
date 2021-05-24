@@ -115,8 +115,7 @@ INSERT INTO `orders` (`order_nr`, `price`, `state`, `customer_id`, `date_placed`
 (3, 32175, 'open', 3, '2021-03-18 23:00:00'),
 (4, 7200, 'skis-available', 4, '2021-03-14 23:00:00'),
 (5, 9600, 'skis-available', 1, '2021-03-16 23:00:00'),
-(6, 5330, 'new', 2, '2021-03-16 23:00:00'),
-(7, 10042.5, 'new', 2, '2021-04-27 11:47:39');
+(6, 5330, 'new', 2, '2021-03-16 23:00:00');
 
 -- --------------------------------------------------------
 
@@ -520,7 +519,7 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `order_history`
