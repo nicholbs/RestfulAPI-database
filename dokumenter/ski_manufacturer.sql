@@ -98,42 +98,21 @@ CREATE TABLE `orders` (
   `price` float NOT NULL,
   `state` enum('new','open','skis-available','ready-for-shipping','shipped') DEFAULT 'new',
   `customer_id` int(11) NOT NULL,
-  `date_placed` timestamp NOT NULL DEFAULT current_timestamp(),
-  `order_aggregate` int(11) DEFAULT NULL
+  `date_placed` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_nr`, `price`, `state`, `customer_id`, `date_placed`, `order_aggregate`) VALUES
-(1, 208000, 'new', 2, '2021-03-21 23:00:00', 1),
-(2, 58500, 'new', 2, '2021-03-21 23:00:00', 1),
-(3, 32175, 'open', 3, '2021-03-18 23:00:00', NULL),
-(4, 7200, 'skis-available', 4, '2021-03-14 23:00:00', NULL),
-(5, 9600, 'skis-available', 1, '2021-03-16 23:00:00', NULL),
-(6, 5330, 'new', 2, '2021-03-16 23:00:00', NULL),
-(9, 10042.5, 'new', 2, '2021-04-27 11:47:39', NULL),
-(10, 10042.5, 'new', 2, '2021-04-29 09:49:53', NULL),
-(11, 10042.5, 'new', 2, '2021-04-29 09:51:39', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_aggregates`
---
-
-CREATE TABLE `order_aggregates` (
-  `aggregate_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `order_aggregates`
---
-
-INSERT INTO `order_aggregates` (`aggregate_id`, `customer_id`) VALUES
-(1, 2);
+INSERT INTO `orders` (`order_nr`, `price`, `state`, `customer_id`, `date_placed`) VALUES
+(1, 208000, 'new', 2, '2021-03-21 23:00:00'),
+(2, 58500, 'new', 2, '2021-03-21 23:00:00'),
+(3, 32175, 'open', 3, '2021-03-18 23:00:00'),
+(4, 7200, 'skis-available', 4, '2021-03-14 23:00:00'),
+(5, 9600, 'skis-available', 1, '2021-03-16 23:00:00'),
+(6, 5330, 'new', 2, '2021-03-16 23:00:00'),
+(7, 10042.5, 'new', 2, '2021-04-27 11:47:39');
 
 -- --------------------------------------------------------
 
@@ -355,13 +334,7 @@ INSERT INTO `sub_orders` (`order_nr`, `type_id`, `ski_quantity`) VALUES
 (4, 2, 5),
 (5, 1, 3),
 (6, 1, 2),
-(6, 2, 1),
-(9, 2, 4),
-(9, 3, 5),
-(10, 2, 4),
-(10, 3, 5),
-(11, 2, 4),
-(11, 3, 5);
+(6, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -446,15 +419,7 @@ ALTER TABLE `franchises`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_nr`),
-  ADD KEY `orders_customers_fk` (`customer_id`),
-  ADD KEY `orders_aggregates_fk` (`order_aggregate`);
-
---
--- Indexes for table `order_aggregates`
---
-ALTER TABLE `order_aggregates`
-  ADD PRIMARY KEY (`aggregate_id`),
-  ADD KEY `order_aggregates_customer_fk` (`customer_id`);
+  ADD KEY `orders_customers_fk` (`customer_id`);
 
 --
 -- Indexes for table `order_history`
@@ -540,12 +505,6 @@ ALTER TABLE `orders`
   MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `order_aggregates`
---
-ALTER TABLE `order_aggregates`
-  MODIFY `aggregate_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT for table `order_history`
 --
 ALTER TABLE `order_history`
@@ -583,14 +542,7 @@ ALTER TABLE `franchises`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_aggregates_fk` FOREIGN KEY (`order_aggregate`) REFERENCES `order_aggregates` (`aggregate_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_customers_fk` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `order_aggregates`
---
-ALTER TABLE `order_aggregates`
-  ADD CONSTRAINT `order_aggregates_customer_fk` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_history`
