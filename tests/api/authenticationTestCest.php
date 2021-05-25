@@ -88,7 +88,8 @@ class authenticationTestCest
     public  function shipmentAuth(ApiTester $I){
         $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_STOREKEEPER);
         $I->getClient()->getCookieJar()->set($cookie);
-        $I->sendGet('/shipment');
+        //$I->sendGet('/shipment');
+        $I->sendPost('/shipment/1/state-to-shipped');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
 
     }
