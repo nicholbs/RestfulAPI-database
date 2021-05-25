@@ -323,7 +323,7 @@ class CustomerModel extends DB
             $row['quantity'] = intval($assignedSkiCount[$ski['type']]);
             array_push($orderToShip['skis'], $row);
         }
-        $res['rest_order'] = $orderToShip;
+        $res['ship_order'] = $orderToShip;
 
         //Create post request body for remaining order
         $orderToNew = array();
@@ -335,7 +335,7 @@ class CustomerModel extends DB
             $row['quantity'] = intval($ski['quantity']);
             array_push($orderToNew['skis'], $row);
         }
-        $res['ship_order'] = $orderToNew;
+        $res['rest_order'] = $orderToNew;
 
         $this->postCustomerOrder($orderToShip);
         $this->postCustomerOrder($orderToNew);

@@ -13,15 +13,17 @@ class UpdateShipmentCest
     // tests
     public function updateShipMent(ApiTester $I)
     {
-    $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_STOREKEEPER);
-    $I->getClient()->getCookieJar()->set($cookie);
-    // $I->haveHttpHeader('accept', 'application/json');
-    $I->haveHttpHeader('Content-Type', 'application/json');
-    $I->sendPost('/shipment/1/state-to-shipped');
-    $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-    // $I->seeResponseIsJson();
-    $I->seeResponseContains('Success');
-    $I->seeInDatabase('shipments', ['shipment_nr' => '1', 'state' => 'picked-up']);
-    // $I->seeResponseContainsJson(['order_nr' => '1', 'customer_id' => '1']);
+        $reqBody = array();
+        $reqBody['shipping_address'] = "testAddresse";
+        $reqBody['scheduled_pickup']= '2021-04-05';
+        $reqBody['transporter']= "Flyttegutta A/S";
+        $reqBody['driver_id']= 1;
+        $coded = json_encode($reqBody); //encode the body to json
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_STOREKEEPER);
+        $I->getClient()->getCookieJar()->set($cookie);
+        $I ->sendPost('/shipment/4',$coded); //Send the request
+    
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseContainsJson(array('customer_id' => '4'));
     }
 }

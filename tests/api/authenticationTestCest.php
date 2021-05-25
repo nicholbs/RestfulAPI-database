@@ -4,14 +4,13 @@ const TOKEN_STOREKEEPER = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca4959
 const TOKEN_PLANNER = "022224c9a11805494a77796d671bec4c5bae495af78e906694018dbbc39bf2cd";       // Belongs to Njalle Nøysom in employees table
 const TOKEN_REP = "839d6517ec104e2c70ce1da1d86b1d89c5f547b666adcdd824456c9756c7e261";           // Belongs to Sylvester Sølvtunge in employees
 const TOKEN_CUSTOMER = "2927ebdf56c20cbb90fbd85cac5be30d60e3dfb9f9c9eda869d0fdce36043a85";      // Belongs to Lars Monsen in customer table
-const TOKEN_CustomerRep ="839d6517ec104e2c70ce1da1d86b1d89c5f547b666adcdd824456c9756c7e261";
+
 class authenticationTestCest
-    /**
-     * The code:
-     $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+    /* The code:
+      $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
       $I->getClient()->getCookieJar()->set($cookie);
       is taken from Rune Hjertsvol
-     *
+     
      */
 
 {
@@ -87,7 +86,7 @@ class authenticationTestCest
      * This test thath we can acess the customerrep with vailid token
      */
     public function customerRepAuthorized(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_CustomerRep);
+        $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_REP);
         $I->getClient()->getCookieJar()->set($cookie);
         $I->sendGet('/customer-rep/authtest');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
