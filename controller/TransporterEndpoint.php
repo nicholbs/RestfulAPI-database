@@ -6,7 +6,7 @@ class TransporterEndpoint
     public function handleRequest($uri, $requestType, $requestBody)
     {
         $lengde = count($uri);
-        if ($lengde == 2 && $requestType == "GET") {
+        if ($lengde == 2 && $requestType == "POST") {
             $this->validateURI($uri);
             $arr = array('shipping_address', 'scheduled_pickup', 'transporter', 'driver_id');
             $this->validateBody($requestBody, $arr);

@@ -23,7 +23,7 @@ class CustomerModel extends DB
         $stmt = $this ->db ->query('SELECT * FROM `production_plans` WHERE day >= DATE_ADD(
             DATE_ADD(CURDATE(), INTERVAL - WEEKDAY(CURDATE()) DAY),
             INTERVAL - 4 WEEK)');
-        $res =$stmt ->fetchAll();
+        $res =$stmt ->fetchAll(PDO::FETCH_ASSOC);
         
          // If request is empty no record was found
          if (empty($res)) {
@@ -39,13 +39,11 @@ class CustomerModel extends DB
         return $res;
     }
     
-    
     /**
-    * Retrieve an order and validates content of response
+    * Returns data for a single order
     *
-    * @param int $customer_nr id of customer
-    * @param int $order_nr id of order
-    * @author Nicholas Bodvin Sellevåg
+    * @param int $customer_nr   - id of customer
+    * @param int $order_nr      - id of order
     */ 
     public function retrieveCustomerOrder($customer_nr, $order_nr)
     {
@@ -79,10 +77,10 @@ class CustomerModel extends DB
     }
     
     /**
-    * Retrieve an order and validates content of response
+    * Retrieve orders since a given date and validates content of response
     *
-    * @param int $customer_nr id of customer
-    * @param int $order_nr id of order
+    * @param int $customer_nr   - id of customer
+    * @param int $since         - date given
     * @author Nicholas Bodvin Sellevåg
     */ 
     public function retrieveCustomerOrderSince($customer_nr, $since)
@@ -139,10 +137,14 @@ class CustomerModel extends DB
         }
     }
 
-    // create an order
+    /** 
+     * Creates a new order for a customer
+     *  
+     * @param $requestBody - array containing customer id and an array of sub_orders, optional state   
+     */ 
     public function postCustomerOrder($requestBody)
     {
-        // TODO : Error codes
+        $LegalStates = array('new', 'open', 'ready-for-shipping', 'shipped');
         
         // Checks validity of request body
         if(!array_key_exists('customer', $requestBody) || !array_key_exists('skis', $requestBody))
@@ -185,12 +187,22 @@ class CustomerModel extends DB
         $this->db->beginTransaction();
 
         // Insert order
-        $query = 'INSERT INTO orders (price, customer_id) VALUES (:price, :customer_id)';
+        $query = 'INSERT INTO orders (price, customer_id, state) VALUES (:price, :customer_id, :state)';
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':price', $price);
         $stmt->bindValue(':customer_id', $requestBody['customer']);
+
+        // Apply state if specified, otherwise 'new'
+        if(array_key_exists('state', $requestBody)){                // Is there state field in request?
+            if(!in_array($requestBody['state'], $LegalStates))      // Is state value valid?
+                throw new BusinessException(400, "Invalid state in request");
+            $stmt->bindValue(":state", $requestBody['state']);
+        } 
+        else
+            $stmt->bindValue(":state", 'new');
+
+        // Execute and save new order id
         $stmt->execute();
-        
         $order_nr = $this->db->lastInsertId();
 
         // Insert sub orders
@@ -264,8 +276,54 @@ class CustomerModel extends DB
     }
 
     //TODO
-    public function splitOrder()
+    public function splitOrder($order_nr)
     {
-        echo "\nsplitCustomerOrders\n";
+        $res = array();
+
+        //Does order exist?
+        if(!$this->orderExists($order_nr))
+            throw new BusinessException(404, "Order with order nr " . $order_nr . " does not exist.");
+
+        //Get order ski types and quantites
+        $query = "SELECT type_id AS type, ski_quantity AS quantity FROM sub_orders WHERE order_nr = :order";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(":order", $order_nr);
+        $stmt->execute();
+        $orderSkiCount = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res['order_counts'] = $orderSkiCount;
+
+        //Get ski types and quantites currently assigned to order
+        $query = "SELECT ski_type AS type, COUNT(serial_nr) AS quantity FROM `skis` WHERE order_assigned = :order GROUP BY ski_type";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(":order", $order_nr);
+        $stmt->execute();
+        $assignedSkiCount = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+        $res['assigned_counts'] = $assignedSkiCount;
+
+        //Subtract assigned quantities from order quantities
+        $newQuantities = array();
+        for($i = 0; $i < count($orderSkiCount); $i++){
+            if(key_exists($orderSkiCount[$i]['type'], $assignedSkiCount))
+                array_push($newQuantities, $orderSkiCount[$i]['quantity'] - $assignedSkiCount[$orderSkiCount[$i]['type']]);
+        }
+        $res['new_order_counts'] = $newQuantities;
+
+        //Get customer id
+        $query = "SELECT customer_id AS id FROM `orders` WHERE order_nr = :order";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(":order", $order_nr);
+        $stmt->execute();
+        $customerID = $stmt->fetch(PDO::FETCH_NUM)[0];
+
+        $postRequest = array();
+        $postRequest['customer'] = $customerID;
+        $postRequest['state'] = 'ready-to-be-shipped';
+        $postRequest['skis'] = array();
+        
+        foreach($orderSkiCount as $ski){
+            $row = array();
+        }
+
+        return $res;
     }
 }

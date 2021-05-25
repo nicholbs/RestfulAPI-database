@@ -48,7 +48,7 @@ class CustomerCest
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
         
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGet('/customer/2/order/7');
+        $I->sendGet('/customer/2/order/8');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(["buying_price" => "0.65", "total" => "10042.50", "name" => "Snowy Plains Inc."]);

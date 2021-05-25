@@ -3,6 +3,12 @@ require_once 'db/DB.php';
 
 class StorekeeperModel extends DB
 {
+    /**
+     * Returns a JSON object containing data of all orders and associated sub_orders
+     * 
+     * @return array $res - array to be returned
+     * @see $this -> fillSubOrder()
+     */
     public function retrieveOrders(): array
     {
         // NB! Each row returns data for order AND suborder, providing redundant order data for orders with multiple suborders
@@ -40,6 +46,14 @@ class StorekeeperModel extends DB
         return $res;
     }
 
+    /**
+     * Fills an order's sub_order array
+     * 
+     * @param array $target_array - order array in which to insert sub_order data
+     * @param int   $target_index - index of appropriate sub_order within the order
+     * @param array $source_array - sub_order array from which to extract sub_order data
+     * @see $this -> retrieveOrders()
+     */
     private function fillSubOrder(&$target_array, $target_index, $source_array)
     {
         $target_array['sub_orders'][$target_index]['model']     = $source_array['model'];
@@ -114,23 +128,19 @@ class StorekeeperModel extends DB
         }
         //If the ordernumber dosent exist
         elseif (!$this->orderExist($orderNumber) ){
-            $message= "Ordernumber: " . $orderNumber . " Dosent exist";
+            $message= "Order with order nr " . $orderNumber . " doesn't exist!";
             throw new APIException(404, $message);
         }
         //If the sli serialnumber dosent exist
         elseif (!$this->skiExist($serialNr)){
-            $message = "Ski with the serialnumber: " . $serialNr . " dosent exist";
+            $message = "Ski with with serial nr " . $serialNr . " doesn't exist!";
             throw new APIException(404, $message);
         }
         //If we somhow dosent match the code
         else{
-            $message="Somthing wrong happend, No case match";
+            $message="Something's real wrong here, may the Gods have mercy on your soul";
             throw new APIException(500, $message);
         }
-
-
-
-
     }
 
     /**

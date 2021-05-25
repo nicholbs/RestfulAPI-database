@@ -11,7 +11,7 @@ class CustomerEndpoint
     {
 
         $lengde = count($uri);
-        if ($lengde == 3 && $uri[1] == "plansummary") {
+        if ($lengde == 2 && $uri[1] == "plansummary") {
             return $this->retrievePlan();
         }
 
@@ -32,7 +32,7 @@ class CustomerEndpoint
                     return $this->createOrder($requestBody);
                 }
                 break;
-                case 'orderSince':
+            case 'orderSince':
                     if(!$requestType == 'GET') {
                         throw new BusinessException(httpErrorConst::badRequest, "users can only retrieve orders with filter");
                     }
@@ -43,11 +43,14 @@ class CustomerEndpoint
                         throw new BusinessException(httpErrorConst::badRequest, "request is missing 'since' filter");
                     }
                 break;
-                default: 
+            case 'split':
+                return $this->splitOrder($uri[3]);
+                break;
+            default: 
                 throw new BusinessException(404, "The URL given does not match the business logic, check endpoint documentation");
         }
    
-}
+    }
 
     private function validateURI(array $uri) {
         if (!is_numeric($uri[1])) {
@@ -99,6 +102,12 @@ class CustomerEndpoint
     private function createOrder(array $requestBody)
     {
         return (new CustomerModel())->postCustomerOrder($requestBody);
+    }
+
+    // split an order
+    private function splitOrder($orderNr)
+    {  
+        return (new CustomerModel())->splitOrder($orderNr); 
     }
 }
 

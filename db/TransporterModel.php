@@ -63,10 +63,10 @@ class TransporterModel extends DB
     public function retrieveCustomerOrder($order_nr)
     {
         // Prepare and send request to database which retrieves appropriate order
-        $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price, order_aggregate, customer_id FROM `orders` WHERE `order_nr` = :orderNr');
+        $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price, customer_id FROM `orders` WHERE `order_nr` = :orderNr');
         $stmt->bindValue(':orderNr', $order_nr);  
         $stmt->execute();   
-        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = $stmt->fetchAll();
         
         // If request is empty no record was found
         if (empty($res)) {
