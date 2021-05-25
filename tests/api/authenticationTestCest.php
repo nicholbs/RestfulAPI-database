@@ -82,26 +82,7 @@ class authenticationTestCest
         $I->sendGet('/customer');
         $I->seeResponseCodeIs(403);
     }
-    /**
-     * This function tests if we can access the shipment api with a storekeeper token
-     */
-    public  function shipmentAuth(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_STOREKEEPER);
-        $I->getClient()->getCookieJar()->set($cookie);
-        //$I->sendGet('/shipment');
-        $I->sendPost('/shipment/1');
-        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
 
-    }
-    /**
-     * This function tests thath we are not autorized to acess the endpoint from a production-planner
-     */
-    public function shipmentUnauthorized(ApiTester $I){
-        $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_PLANNER);
-        $I->getClient()->getCookieJar()->set($cookie);
-        $I->sendGet('/customer');
-        $I->seeResponseCodeIs(403);
-    }
     /**
      * This test thath we can acess the customerrep with vailid token
      */
