@@ -36,11 +36,10 @@ class CustomerEndpoint
                     if(!$requestType == 'GET') {
                         throw new BusinessException(httpErrorConst::badRequest, "users can only retrieve orders with filter");
                     }
-                    $antQueryKeyelements= count($specificQuery);
-                    if (array_key_exists('since',$specificQuery) && $antQueryKeyelements ==1 ){
+                    if (array_key_exists('since', $specificQuery) && count($specificQuery) == 1 ){
                         return $this->getOrderSince($uri[1], $specificQuery['since']);
                     } else {
-                        throw new BusinessException(httpErrorConst::badRequest, "request is missing 'since' filter");
+                        throw new BusinessException(httpErrorConst::badRequest, "Request is missing 'since' filter");
                     }
                 break;
             case 'split':

@@ -87,7 +87,7 @@ class CustomerModel extends DB
     {
         // Prepare and send request to database which retrieves appropriate order
         // SELECT `order_nr`, `price`, `state`, `customer_id`, `date_placed`, `order_aggregate` FROM `orders` WHERE date_placed > 2018-01-01
-        $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price, order_aggregate FROM `orders` WHERE `customer_id` = :customerId AND date_placed > :since');
+        $stmt = $this ->db ->prepare('SELECT order_nr, state, date_placed, price FROM `orders` WHERE `customer_id` = :customerId AND date_placed > :since');
         $stmt->bindValue(':customerId', $customer_nr);
         $stmt->bindValue(':since', $since);
         $stmt->execute();   
@@ -337,9 +337,12 @@ class CustomerModel extends DB
         }
         $res['rest_order'] = $orderToNew;
 
+        //Create new orders, delete old
         $this->postCustomerOrder($orderToShip);
         $this->postCustomerOrder($orderToNew);
         $this->deleteCustomerOrder(1, $order_nr);
+
+
 
         return $res;
     }
