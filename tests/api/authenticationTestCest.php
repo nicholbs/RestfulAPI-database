@@ -69,7 +69,8 @@ class authenticationTestCest
     public  function customersAuth(ApiTester $I){
         $cookie = new Symfony\Component\BrowserKit\Cookie('token', TOKEN_CUSTOMER);
         $I->getClient()->getCookieJar()->set($cookie);
-        $I->sendGet('/customer');
+        //$I->sendGet('/customer');
+        $I->sendGet('/customer/2/order/6');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
     }
     /**
