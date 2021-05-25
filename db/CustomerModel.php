@@ -338,11 +338,16 @@ class CustomerModel extends DB
         $res['rest_order'] = $orderToNew;
 
         //Create new orders, delete old
-        $this->postCustomerOrder($orderToShip);
         $this->postCustomerOrder($orderToNew);
+        $shipOrderRes = $this->postCustomerOrder($orderToShip);
         $this->deleteCustomerOrder(1, $order_nr);
 
-
+        //Assign skis to newly created order to be shipped
+        $query = "UPDATE skis SET order_assigned = :new_order WHERE order_assigned = :old_order";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(":new_order", intval($shipOrderRes['order_nr']));
+        $stmt->bindValue(":old_order", $order_nr);
+        $stmt->execute();
 
         return $res;
     }
