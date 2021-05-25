@@ -290,7 +290,6 @@ class CustomerModel extends DB
         $stmt->bindValue(":order", $order_nr);
         $stmt->execute();
         $orderSkiCount = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $res['order_counts'] = $orderSkiCount;
 
         //Get ski types and quantites currently assigned to order
         $query = "SELECT ski_type AS type, COUNT(serial_nr) AS quantity FROM `skis` WHERE order_assigned = :order GROUP BY ski_type";
@@ -298,31 +297,49 @@ class CustomerModel extends DB
         $stmt->bindValue(":order", $order_nr);
         $stmt->execute();
         $assignedSkiCount = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-        $res['assigned_counts'] = $assignedSkiCount;
 
         //Subtract assigned quantities from order quantities
-        $newQuantities = array();
         for($i = 0; $i < count($orderSkiCount); $i++){
-            if(key_exists($orderSkiCount[$i]['type'], $assignedSkiCount))
-                array_push($newQuantities, $orderSkiCount[$i]['quantity'] - $assignedSkiCount[$orderSkiCount[$i]['type']]);
+            if(key_exists($orderSkiCount[$i]['type'], $assignedSkiCount)){
+                $orderSkiCount[$i]['quantity'] -= $assignedSkiCount[$orderSkiCount[$i]['type']];
+            }    
         }
-        $res['new_order_counts'] = $newQuantities;
 
         //Get customer id
         $query = "SELECT customer_id AS id FROM `orders` WHERE order_nr = :order";
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(":order", $order_nr);
         $stmt->execute();
-        $customerID = $stmt->fetch(PDO::FETCH_NUM)[0];
+        $customerID = intval($stmt->fetch(PDO::FETCH_NUM)[0]);
 
-        $postRequest = array();
-        $postRequest['customer'] = $customerID;
-        $postRequest['state'] = 'ready-to-be-shipped';
-        $postRequest['skis'] = array();
-        
+        //Create post request body for order to ship
+        $orderToShip = array();
+        $orderToShip['customer'] = $customerID;
+        $orderToShip['state'] = 'ready-for-shipping';
+        $orderToShip['skis'] = array();
         foreach($orderSkiCount as $ski){
             $row = array();
+            $row['type'] = intval($ski['type']);
+            $row['quantity'] = intval($assignedSkiCount[$ski['type']]);
+            array_push($orderToShip['skis'], $row);
         }
+        $res['rest_order'] = $orderToShip;
+
+        //Create post request body for remaining order
+        $orderToNew = array();
+        $orderToNew['customer'] = $customerID;
+        $orderToNew['skis'] = array();
+        foreach($orderSkiCount as $ski){
+            $row = array();
+            $row['type'] = intval($ski['type']);
+            $row['quantity'] = intval($ski['quantity']);
+            array_push($orderToNew['skis'], $row);
+        }
+        $res['ship_order'] = $orderToNew;
+
+        $this->postCustomerOrder($orderToShip);
+        $this->postCustomerOrder($orderToNew);
+        $this->deleteCustomerOrder(1, $order_nr);
 
         return $res;
     }
